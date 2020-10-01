@@ -14,5 +14,7 @@ public class SQLQuery {
 	public static final String SIGN_IN = "SELECT * FROM users WHERE login = ?";
 	public static final String SIGN_UP = "INSERT INTO users(name, surname, login, password, email, id_user_status, id_user_role) VALUES (?,?,?,?,?,?,?)";
 	public static final String CHECK_LOGIN = "CALL check_login(?)";
+	public static final String LIST_MODELS  = "select m.*, c.name as category, p.name as producer from models m, producers p, categories c where c.id=m.id_category and p.id=m.id_producer limit ? offset ?";
+	
 
 }

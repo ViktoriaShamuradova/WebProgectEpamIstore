@@ -1,7 +1,12 @@
 package by.epamtc.shamuradova.ishop.bean;
 
 import java.io.Serializable;
+import java.util.Arrays;
 
+/**
+ * @author Бегенч
+ *
+ */
 public class User implements Serializable {
 
 	private static final long serialVersionUID = -8615684563693732069L;
@@ -10,7 +15,7 @@ public class User implements Serializable {
 	private String name;
 	private String surname;
 	private String login;
-	private String password;
+	private char[] password;
 	private String email;
 	private int userStatus;
 	private int userRole;
@@ -19,7 +24,8 @@ public class User implements Serializable {
 	}
 	
 
-	public User(int id, String name, String surname, String login, String password, String email, int userStatus,
+
+	public User(int id, String name, String surname, String login, char[] password, String email, int userStatus,
 			int userRole) {
 		super();
 		this.id = id;
@@ -31,6 +37,17 @@ public class User implements Serializable {
 		this.userStatus = userStatus;
 		this.userRole = userRole;
 	}
+
+
+
+	public char[] getPassword() {
+		return password;
+	}
+
+	public void setPassword(char[] password) {
+		this.password = password;
+	}
+
 
 
 	public int getId() {
@@ -65,13 +82,6 @@ public class User implements Serializable {
 		this.login = login;
 	}
 
-	public String getPassword() {
-		return password;
-	}
-
-	public void setPassword(String password) {
-		this.password = password;
-	}
 
 	public String getEmail() {
 		return email;
@@ -107,12 +117,13 @@ public class User implements Serializable {
 		result = prime * result + id;
 		result = prime * result + ((login == null) ? 0 : login.hashCode());
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		result = prime * result + ((password == null) ? 0 : password.hashCode());
+		result = prime * result + Arrays.hashCode(password);
 		result = prime * result + ((surname == null) ? 0 : surname.hashCode());
 		result = prime * result + userRole;
 		result = prime * result + userStatus;
 		return result;
 	}
+
 
 
 	@Override
@@ -141,10 +152,7 @@ public class User implements Serializable {
 				return false;
 		} else if (!name.equals(other.name))
 			return false;
-		if (password == null) {
-			if (other.password != null)
-				return false;
-		} else if (!password.equals(other.password))
+		if (!Arrays.equals(password, other.password))
 			return false;
 		if (surname == null) {
 			if (other.surname != null)
@@ -159,10 +167,18 @@ public class User implements Serializable {
 	}
 
 
+
 	@Override
 	public String toString() {
 		return "User [id=" + id + ", name=" + name + ", surname=" + surname + ", login=" + login + ", password="
-				+ password + ", email=" + email + ", userStatus=" + userStatus + ", userRole=" + userRole + "]";
+				+ Arrays.toString(password) + ", email=" + email + ", userStatus=" + userStatus + ", userRole="
+				+ userRole + "]";
 	}
 
+
+
+
+
+
+	
 }

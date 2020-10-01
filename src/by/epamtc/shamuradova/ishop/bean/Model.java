@@ -12,8 +12,8 @@ public class Model implements Serializable{
 	private String description;
 	private BigDecimal price;
 	private String imageLink;
-	private int idCategory;
-	private int idProducer;
+	private String category;
+	private String producer;
 	private int count;
 
 	public Model() {}
@@ -58,21 +58,7 @@ public class Model implements Serializable{
 		this.imageLink = imageLink;
 	}
 
-	public int getIdCategory() {
-		return idCategory;
-	}
-
-	public void setIdCategory(int idCategory) {
-		this.idCategory = idCategory;
-	}
-
-	public int getIdProducer() {
-		return idProducer;
-	}
-
-	public void setIdProducer(int idProducer) {
-		this.idProducer = idProducer;
-	}
+	
 
 	public int getCount() {
 		return count;
@@ -82,18 +68,34 @@ public class Model implements Serializable{
 		this.count = count;
 	}
 
+	public String getCategory() {
+		return category;
+	}
+
+	public void setCategory(String category) {
+		this.category = category;
+	}
+
+	public String getProducer() {
+		return producer;
+	}
+
+	public void setProducer(String producer) {
+		this.producer = producer;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + ((category == null) ? 0 : category.hashCode());
 		result = prime * result + count;
 		result = prime * result + ((description == null) ? 0 : description.hashCode());
 		result = prime * result + id;
-		result = prime * result + idCategory;
-		result = prime * result + idProducer;
 		result = prime * result + ((imageLink == null) ? 0 : imageLink.hashCode());
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		result = prime * result + ((price == null) ? 0 : price.hashCode());
+		result = prime * result + ((producer == null) ? 0 : producer.hashCode());
 		return result;
 	}
 
@@ -106,6 +108,11 @@ public class Model implements Serializable{
 		if (getClass() != obj.getClass())
 			return false;
 		Model other = (Model) obj;
+		if (category == null) {
+			if (other.category != null)
+				return false;
+		} else if (!category.equals(other.category))
+			return false;
 		if (count != other.count)
 			return false;
 		if (description == null) {
@@ -114,10 +121,6 @@ public class Model implements Serializable{
 		} else if (!description.equals(other.description))
 			return false;
 		if (id != other.id)
-			return false;
-		if (idCategory != other.idCategory)
-			return false;
-		if (idProducer != other.idProducer)
 			return false;
 		if (imageLink == null) {
 			if (other.imageLink != null)
@@ -134,17 +137,20 @@ public class Model implements Serializable{
 				return false;
 		} else if (!price.equals(other.price))
 			return false;
+		if (producer == null) {
+			if (other.producer != null)
+				return false;
+		} else if (!producer.equals(other.producer))
+			return false;
 		return true;
 	}
 
 	@Override
 	public String toString() {
 		return "Model [id=" + id + ", name=" + name + ", description=" + description + ", price=" + price
-				+ ", imageLink=" + imageLink + ", idCategory=" + idCategory + ", idProducer=" + idProducer + ", count="
-				+ count + "]";
+				+ ", imageLink=" + imageLink + ", category=" + category + ", producer=" + producer + ", count=" + count
+				+ "]";
 	}
-	
-	
-	
 
+	
 }

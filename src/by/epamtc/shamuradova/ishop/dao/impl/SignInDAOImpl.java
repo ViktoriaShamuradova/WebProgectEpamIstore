@@ -34,7 +34,9 @@ public class SignInDAOImpl implements SignInDAO {
 			ResultSet resultSet = preparedStatement.executeQuery();
 			User user = null;
 			if (resultSet.next()) {
-				if (data.getPassword().equals(resultSet.getString(DataBaseColumnName.PASSWORD))) {
+				String password = new String(data.getPassword());
+				if (password.equals(resultSet.getString(DataBaseColumnName.PASSWORD))) {
+					password=null;
 					int id = resultSet.getInt(DataBaseColumnName.ID);
 					String name = resultSet.getString(DataBaseColumnName.NAME);
 					String surname = resultSet.getString(DataBaseColumnName.SURNAME);
@@ -42,9 +44,7 @@ public class SignInDAOImpl implements SignInDAO {
 					int idUserStatus = resultSet.getInt(DataBaseColumnName.ID_USER_STATUS);
 					int idUserRole = resultSet.getInt(DataBaseColumnName.ID_USER_ROLE);
 					String login = data.getLogin();
-					String password = new String(data.getPassword());
-					user = new User(id, name, surname, login, password, email, idUserStatus, idUserRole);
-					password=null;
+					user = new User(id, name, surname, login, data.getPassword(), email, idUserStatus, idUserRole);
 					data.deletePassword();
 					return user;
 				} else {
