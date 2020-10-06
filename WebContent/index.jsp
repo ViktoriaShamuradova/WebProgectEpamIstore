@@ -8,7 +8,7 @@
 </head>
 <body>
 
-<c:redirect url="/main.jsp" />
+<c:redirect url="controller?command=GET_MAIN_ALL_MODELS_PAGE" />
 
 
 </body>

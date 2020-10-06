@@ -9,8 +9,7 @@ import javax.servlet.http.HttpSession;
 
 import by.epamtc.shamuradova.ishop.bean.AuthData;
 import by.epamtc.shamuradova.ishop.bean.User;
-import by.epamtc.shamuradova.ishop.constant.ParameterName;
-import by.epamtc.shamuradova.ishop.constant.UserRoleId;
+import by.epamtc.shamuradova.ishop.constant.UserRole;
 import by.epamtc.shamuradova.ishop.controller.command.Command;
 import by.epamtc.shamuradova.ishop.service.SignInService;
 import by.epamtc.shamuradova.ishop.service.exception.ServiceException;
@@ -22,7 +21,7 @@ import by.epamtc.shamuradova.ishop.service.impl.SignInServiceImpl;
  * @author Виктория Шамурадова 2020
  */
 
-//брать маг значения
+//yбрать маг значения
 public class SignInCommand implements Command {
 	private static final String GET_ADMIN_COMMAND = "controller?command=GET_ADMIN_PAGE";
 	private static final String GET_SHOPPER_COMMAND = "controller?command=GET_SHOPPER_PAGE";
@@ -48,13 +47,13 @@ public class SignInCommand implements Command {
 
 			String url = null;
 
-			switch (user.getUserRole()) {
-			case UserRoleId.ADMIN:
-				url = GET_ADMIN_COMMAND;
-				break;
-			case UserRoleId.SHOPPER:
-				url = GET_SHOPPER_COMMAND;
-				break;
+			switch (user.getRole()) {
+				case UserRole.ADMIN:
+					url = GET_ADMIN_COMMAND;
+					break;
+				case UserRole.SHOPPER:
+					url = GET_SHOPPER_COMMAND;
+					break;
 			}
 			resp.sendRedirect(url);
 

@@ -11,10 +11,14 @@ public class SQLQuery {
 
 	public static final String ADD_NEW_USER = "INSERT INTO users(name, surname, login, password, email, id_user_status, id_user_role) VALUES (?,?,?,?,?,?,?)";
 	public static final String ADD_NEW_MODEL = "INSERT INTO models(name, description, price, id_category, id_producer, image_link, count) VALUES (?,?,?,?,?,?,?)";
-	public static final String SIGN_IN = "SELECT * FROM users WHERE login = ?";
+	public static final String SIGN_IN = "select u.*, r.name as role, s.name as stat from users u, roles r, statuses s \r\n"
+			+ "where r.id=u.id_user_role and s.id=u.id_user_status and login= ?";
 	public static final String SIGN_UP = "INSERT INTO users(name, surname, login, password, email, id_user_status, id_user_role) VALUES (?,?,?,?,?,?,?)";
 	public static final String CHECK_LOGIN = "CALL check_login(?)";
-	public static final String LIST_MODELS  = "select m.*, c.name as category, p.name as producer from models m, producers p, categories c where c.id=m.id_category and p.id=m.id_producer limit ? offset ?";
-	
+	public static final String LIST_MODELS = "select m.*, c.name as category, p.name as producer from models m, producers p, categories c where c.id=m.id_category and p.id=m.id_producer limit ? offset ?";
+	public static final String LIST_MODELS_BY_CATEGORY = "select m.*, c.name as category, pr.name as producer from models m, categories c, producers pr \r\n"
+			+ "where c.name=? and pr.id=m.id_producer and c.id=m.id_category \r\n"
+			+ "order by m.id limit ? offset ?";
+	public static final String LIST_CATEGORY = "select c.* from  categories c";
 
 }

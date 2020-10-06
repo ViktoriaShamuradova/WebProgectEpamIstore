@@ -4,6 +4,7 @@ public final class ErrorMessage {
 
 	public static final String USER_LOGIN_IS_ALREADY_EXISTS = "user login is alredy exists";
 	public static final String UNABLE_TO_CLOSE_STATEMENT = "unable to close statement";
+	public static final String UNABLE_TO_CLOSE_RESULTSET = "unable to close ResultSet";
 	public static final String DATABASE_ERROR = "some problems in database";
 	public static final String CONNECTION_ERROR = "Error connecting to the data source ";
 	public static final String DRIVER_LOAD_ERROR = "Can't find driver class";

@@ -5,7 +5,7 @@ import by.epamtc.shamuradova.ishop.bean.User;
 import by.epamtc.shamuradova.ishop.constant.ErrorMessage;
 import by.epamtc.shamuradova.ishop.dao.SignInDAO;
 import by.epamtc.shamuradova.ishop.dao.exception.DAOException;
-import by.epamtc.shamuradova.ishop.dao.impl.SignInDAOImpl;
+import by.epamtc.shamuradova.ishop.dao.impl.SignInDAOImpl2;
 import by.epamtc.shamuradova.ishop.service.SignInService;
 import by.epamtc.shamuradova.ishop.service.exception.ServiceException;
 import by.epamtc.shamuradova.ishop.service.exception.ValidationException;
@@ -20,7 +20,7 @@ public class SignInServiceImpl implements SignInService {
 		try {
 			validate(data);
 			// фабрика
-			SignInDAO signIn = new SignInDAOImpl();
+			SignInDAO signIn = new SignInDAOImpl2();
 			User user = signIn.signIn(data);
 			return user;
 

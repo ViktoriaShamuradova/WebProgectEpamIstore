@@ -1,9 +1,6 @@
 package by.epamtc.shamuradova.ishop.controller.command.impl;
 
 import java.io.IOException;
-import java.util.Collection;
-import java.util.Enumeration;
-import java.util.Iterator;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -13,8 +10,8 @@ import javax.servlet.http.HttpSession;
 import by.epamtc.shamuradova.ishop.bean.RegInfo;
 import by.epamtc.shamuradova.ishop.bean.User;
 import by.epamtc.shamuradova.ishop.constant.ParameterName;
-import by.epamtc.shamuradova.ishop.constant.UserRoleId;
-import by.epamtc.shamuradova.ishop.constant.UserStatusId;
+import by.epamtc.shamuradova.ishop.constant.UserRole;
+import by.epamtc.shamuradova.ishop.constant.UserStatus;
 import by.epamtc.shamuradova.ishop.controller.command.Command;
 import by.epamtc.shamuradova.ishop.service.SignUpService;
 import by.epamtc.shamuradova.ishop.service.exception.ServiceException;
@@ -41,8 +38,8 @@ public class SignUpShopperCommand implements Command {
 		regInfo.setLogin(req.getParameter(ParameterName.USER_LOGIN));
 		regInfo.setPassword(req.getParameter(ParameterName.USER_PASSWORD).toCharArray());
 		regInfo.setEmail(req.getParameter(ParameterName.USER_EMAIL));
-		regInfo.setIdUserStatus(UserStatusId.NEW);
-		regInfo.setIdUserRole(UserRoleId.SHOPPER);
+		regInfo.setStatus(UserStatus.NEW);
+		regInfo.setRole(UserRole.SHOPPER);
 
 		SignUpService signUpService = new SignUpServiceImpl();
 

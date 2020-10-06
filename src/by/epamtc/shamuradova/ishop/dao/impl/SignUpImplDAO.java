@@ -1,18 +1,21 @@
 package by.epamtc.shamuradova.ishop.dao.impl;
 
-import java.sql.CallableStatement;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import by.epamtc.shamuradova.ishop.bean.RegInfo;
 import by.epamtc.shamuradova.ishop.constant.ErrorMessage;
 import by.epamtc.shamuradova.ishop.constant.SQLQuery;
+import by.epamtc.shamuradova.ishop.constant.UserRole;
+import by.epamtc.shamuradova.ishop.constant.UserStatus;
 import by.epamtc.shamuradova.ishop.dao.SignUpDAO;
 import by.epamtc.shamuradova.ishop.dao.exception.ConnectionPoolException;
 import by.epamtc.shamuradova.ishop.dao.exception.DAOException;
+import by.epamtc.shamuradova.ishop.dao.handler.ResultSetHandler;
+import by.epamtc.shamuradova.ishop.dao.handler.impl.ResultSetHandlerUser;
 import by.epamtc.shamuradova.ishop.dao.pool.ConnectionPool;
+import by.epamtc.shamuradova.ishop.dao.util.JDBCUtil;
 
 /**
  * Класс для проверки данных пользователя в базе данных и регистрации
@@ -25,11 +28,15 @@ import by.epamtc.shamuradova.ishop.dao.pool.ConnectionPool;
 
 public class SignUpImplDAO implements SignUpDAO {
 
+	private ResultSetHandler resultSetHandlerUser;
+
+	public SignUpImplDAO() {
+		resultSetHandlerUser = new ResultSetHandlerUser();
+	}
+
 	@Override
 	public void signUp(RegInfo regInfo) throws DAOException {
-
 		ConnectionPool connectionPool = ConnectionPool.getInstance();
-		PreparedStatement preparedStatement = null;
 		Connection connection = null;
 
 		try {
@@ -37,18 +44,14 @@ public class SignUpImplDAO implements SignUpDAO {
 			connection = connectionPool.getConnection();
 
 			if (!checkLoginInBase(regInfo.getLogin(), connection)) {
-				preparedStatement = connection.prepareStatement(SQLQuery.SIGN_UP);
-				preparedStatement.setString(1, regInfo.getName());
-				preparedStatement.setString(2, regInfo.getSurname());
-				preparedStatement.setString(3, regInfo.getLogin());
-				String password = new String(regInfo.getPassword());
+				String sql = SQLQuery.SIGN_UP;
+				int statusId = UserStatus.statusesId.get(regInfo.getStatus().toUpperCase());
+				int roleId = UserRole.rolesId.get(regInfo.getRole().toUpperCase());
+
+				JDBCUtil.insert(connection, sql, regInfo.getName(), regInfo.getSurname(), regInfo.getLogin(),
+						regInfo.getPassword(), regInfo.getEmail(), statusId, roleId);
+
 				regInfo.deletePassword();
-				preparedStatement.setString(4, password);
-				password = null;
-				preparedStatement.setString(5, regInfo.getEmail());
-				preparedStatement.setInt(6, regInfo.getIdUserStatus());
-				preparedStatement.setInt(7, regInfo.getIdUserRole());;
-				preparedStatement.executeUpdate();
 
 			} else {
 				throw new DAOException(ErrorMessage.USER_LOGIN_IS_ALREADY_EXISTS + " " + regInfo.getLogin());
@@ -58,13 +61,6 @@ public class SignUpImplDAO implements SignUpDAO {
 			throw new DAOException(e);
 		} finally {
 
-			if (preparedStatement != null) {
-				try {
-					preparedStatement.close();
-				} catch (SQLException e) {
-					throw new DAOException(ErrorMessage.UNABLE_TO_CLOSE_STATEMENT, e);
-				}
-			}
 			if (connection != null) {
 				try {
 					connectionPool.free(connection);
@@ -73,15 +69,14 @@ public class SignUpImplDAO implements SignUpDAO {
 				}
 			}
 		}
-
 	}
 
 	private boolean checkLoginInBase(String login, Connection connection) throws DAOException {
-		CallableStatement callableStatement = null;
+		String sql = SQLQuery.CHECK_LOGIN;
+		ResultSet results = null;
 		try {
-			callableStatement = connection.prepareCall(SQLQuery.CHECK_LOGIN);
-			callableStatement.setString(1, login);
-			ResultSet results = callableStatement.executeQuery();
+			results = JDBCUtil.call(connection, sql, login);
+
 			if (results.next()) {
 				String answer = results.getString(1);
 				if (answer.equals("yes"))
@@ -91,14 +86,14 @@ public class SignUpImplDAO implements SignUpDAO {
 			}
 			return false;
 		} catch (SQLException e) {
-			throw new DAOException(ErrorMessage.DATABASE_ERROR);
+			throw new DAOException(ErrorMessage.DATABASE_ERROR, e);
 		} finally {
-			try {
-				if (callableStatement != null && !callableStatement.isClosed()) {
-					callableStatement.close();
+			if (results != null) {
+				try {
+					results.close();
+				} catch (SQLException e) {
+					throw new DAOException(ErrorMessage.UNABLE_TO_CLOSE_RESULTSET, e);
 				}
-			} catch (SQLException e) {
-				throw new DAOException(ErrorMessage.DATABASE_ERROR);
 			}
 		}
 	}

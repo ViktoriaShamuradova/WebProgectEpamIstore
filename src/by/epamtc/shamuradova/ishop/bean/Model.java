@@ -1,13 +1,11 @@
 package by.epamtc.shamuradova.ishop.bean;
 
-import java.io.Serializable;
 import java.math.BigDecimal;
 
-public class Model implements Serializable{
-	
+public class Model extends AbstractEntity<Integer> {
+
 	private static final long serialVersionUID = 8928391057379672914L;
-	
-	private int id;
+
 	private String name;
 	private String description;
 	private BigDecimal price;
@@ -16,14 +14,7 @@ public class Model implements Serializable{
 	private String producer;
 	private int count;
 
-	public Model() {}
-
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
+	public Model() {
 	}
 
 	public String getName() {
@@ -58,8 +49,6 @@ public class Model implements Serializable{
 		this.imageLink = imageLink;
 	}
 
-	
-
 	public int getCount() {
 		return count;
 	}
@@ -91,7 +80,7 @@ public class Model implements Serializable{
 		result = prime * result + ((category == null) ? 0 : category.hashCode());
 		result = prime * result + count;
 		result = prime * result + ((description == null) ? 0 : description.hashCode());
-		result = prime * result + id;
+		result = prime * result + getId();
 		result = prime * result + ((imageLink == null) ? 0 : imageLink.hashCode());
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		result = prime * result + ((price == null) ? 0 : price.hashCode());
@@ -152,5 +141,4 @@ public class Model implements Serializable{
 				+ "]";
 	}
 
-	
 }

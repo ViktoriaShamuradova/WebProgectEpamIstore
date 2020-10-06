@@ -3,76 +3,89 @@ package by.epamtc.shamuradova.ishop.bean;
 import java.io.Serializable;
 import java.util.Arrays;
 
-public class RegInfo implements Serializable{
-	
+public class RegInfo implements Serializable {
+
 	private static final long serialVersionUID = -1027252463562606394L;
-	
+
 	private String name;
 	private String surname;
 	private String login;
 	private String email;
 	private char[] password;
-	private int idUserStatus;
-	private int idUserRole;
-	
+	private String status;
+	private String role;
 
-	public RegInfo(String name, String surname, String login, String email, char[] password, int idUserStatus,
-			int idUserRole) {
+	public RegInfo() {
+	}
+
+	public RegInfo(String name, String surname, String login, String email, char[] password, String status,
+			String role) {
 		super();
 		this.name = name;
 		this.surname = surname;
 		this.login = login;
 		this.email = email;
 		this.password = password;
-		this.idUserStatus = idUserStatus;
-		this.idUserRole = idUserRole;
+		this.status = status;
+		this.role = role;
 	}
 
-	public RegInfo() {}
-	
-	
 	public String getLogin() {
 		return login;
 	}
+
 	public void setLogin(String login) {
 		this.login = login;
 	}
+
 	public String getName() {
 		return name;
 	}
+
 	public void setName(String name) {
 		this.name = name;
 	}
+
 	public String getSurname() {
 		return surname;
 	}
+
 	public void setSurname(String surname) {
 		this.surname = surname;
 	}
+
 	public String getEmail() {
 		return email;
 	}
+
 	public void setEmail(String email) {
 		this.email = email;
 	}
+
 	public char[] getPassword() {
 		return password;
 	}
+
 	public void setPassword(char[] password) {
 		this.password = password;
 	}
-	public int getIdUserStatus() {
-		return idUserStatus;
+
+	public String getStatus() {
+		return status;
 	}
-	public void setIdUserStatus(int idUserStatus) {
-		this.idUserStatus = idUserStatus;
+
+	public void setStatus(String status) {
+		this.status = status;
 	}
-	public int getIdUserRole() {
-		return idUserRole;
+
+	public String getRole() {
+		return role;
 	}
-	public void setIdUserRole(int idUserRole) {
-		this.idUserRole = idUserRole;
+
+	public void setRole(String role) {
+		this.role = role;
 	}
+
 	public void deletePassword() {
 		Arrays.fill(password, ' ');
 	}
@@ -82,11 +95,11 @@ public class RegInfo implements Serializable{
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((email == null) ? 0 : email.hashCode());
-		result = prime * result + idUserRole;
-		result = prime * result + idUserStatus;
 		result = prime * result + ((login == null) ? 0 : login.hashCode());
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		result = prime * result + Arrays.hashCode(password);
+		result = prime * result + ((role == null) ? 0 : role.hashCode());
+		result = prime * result + ((status == null) ? 0 : status.hashCode());
 		result = prime * result + ((surname == null) ? 0 : surname.hashCode());
 		return result;
 	}
@@ -105,10 +118,6 @@ public class RegInfo implements Serializable{
 				return false;
 		} else if (!email.equals(other.email))
 			return false;
-		if (idUserRole != other.idUserRole)
-			return false;
-		if (idUserStatus != other.idUserStatus)
-			return false;
 		if (login == null) {
 			if (other.login != null)
 				return false;
@@ -121,6 +130,16 @@ public class RegInfo implements Serializable{
 			return false;
 		if (!Arrays.equals(password, other.password))
 			return false;
+		if (role == null) {
+			if (other.role != null)
+				return false;
+		} else if (!role.equals(other.role))
+			return false;
+		if (status == null) {
+			if (other.status != null)
+				return false;
+		} else if (!status.equals(other.status))
+			return false;
 		if (surname == null) {
 			if (other.surname != null)
 				return false;
@@ -132,8 +151,7 @@ public class RegInfo implements Serializable{
 	@Override
 	public String toString() {
 		return "RegInfo [name=" + name + ", surname=" + surname + ", login=" + login + ", email=" + email
-				+ ", password=" + Arrays.toString(password) + ", idUserStatus=" + idUserStatus + ", idUserRole="
-				+ idUserRole + "]";
+				+ ", password=" + Arrays.toString(password) + ", status=" + status + ", role=" + role + "]";
 	}
-	
+
 }

@@ -3,39 +3,54 @@ package by.epamtc.shamuradova.ishop.bean;
 import java.io.Serializable;
 import java.util.Arrays;
 
-/**
- * @author Бегенч
- *
- */
-public class User implements Serializable {
+
+public class User extends AbstractEntity<Integer> {
 
 	private static final long serialVersionUID = -8615684563693732069L;
 
-	private int id;
+
 	private String name;
 	private String surname;
 	private String login;
 	private char[] password;
 	private String email;
-	private int userStatus;
-	private int userRole;
+	private String status;
+	private String role;
 
 	public User() {
 	}
 	
 
-
-	public User(int id, String name, String surname, String login, char[] password, String email, int userStatus,
-			int userRole) {
+	public User(String name, String surname, String login, char[] password, String email, String status, String role) {
 		super();
-		this.id = id;
 		this.name = name;
 		this.surname = surname;
 		this.login = login;
 		this.password = password;
 		this.email = email;
-		this.userStatus = userStatus;
-		this.userRole = userRole;
+		this.status = status;
+		this.role = role;
+	}
+
+
+	public String getStatus() {
+		return status;
+	}
+
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+
+	public String getRole() {
+		return role;
+	}
+
+
+
+	public void setRole(String role) {
+		this.role = role;
 	}
 
 
@@ -49,14 +64,6 @@ public class User implements Serializable {
 	}
 
 
-
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
 
 	public String getName() {
 		return name;
@@ -91,46 +98,27 @@ public class User implements Serializable {
 		this.email = email;
 	}
 
-	public int getUserStatus() {
-		return userStatus;
-	}
-
-	public void setUserStatus(int userStatus) {
-		this.userStatus = userStatus;
-	}
-
-	public int getUserRole() {
-		return userRole;
-	}
-
-	public void setUserRole(int userRole) {
-		this.userRole = userRole;
-	}
-
-
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
-		int result = 1;
+		int result = super.hashCode();
 		result = prime * result + ((email == null) ? 0 : email.hashCode());
-		result = prime * result + id;
 		result = prime * result + ((login == null) ? 0 : login.hashCode());
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		result = prime * result + Arrays.hashCode(password);
+		result = prime * result + ((role == null) ? 0 : role.hashCode());
+		result = prime * result + ((status == null) ? 0 : status.hashCode());
 		result = prime * result + ((surname == null) ? 0 : surname.hashCode());
-		result = prime * result + userRole;
-		result = prime * result + userStatus;
 		return result;
 	}
-
 
 
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
-		if (obj == null)
+		if (!super.equals(obj))
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
@@ -139,8 +127,6 @@ public class User implements Serializable {
 			if (other.email != null)
 				return false;
 		} else if (!email.equals(other.email))
-			return false;
-		if (id != other.id)
 			return false;
 		if (login == null) {
 			if (other.login != null)
@@ -154,31 +140,31 @@ public class User implements Serializable {
 			return false;
 		if (!Arrays.equals(password, other.password))
 			return false;
+		if (role == null) {
+			if (other.role != null)
+				return false;
+		} else if (!role.equals(other.role))
+			return false;
+		if (status == null) {
+			if (other.status != null)
+				return false;
+		} else if (!status.equals(other.status))
+			return false;
 		if (surname == null) {
 			if (other.surname != null)
 				return false;
 		} else if (!surname.equals(other.surname))
 			return false;
-		if (userRole != other.userRole)
-			return false;
-		if (userStatus != other.userStatus)
-			return false;
 		return true;
 	}
 
 
-
 	@Override
 	public String toString() {
-		return "User [id=" + id + ", name=" + name + ", surname=" + surname + ", login=" + login + ", password="
-				+ Arrays.toString(password) + ", email=" + email + ", userStatus=" + userStatus + ", userRole="
-				+ userRole + "]";
+		return "User [name=" + name + ", surname=" + surname + ", login=" + login + ", password="
+				+ Arrays.toString(password) + ", email=" + email + ", status=" + status + ", role=" + role + "]";
 	}
 
-
-
-
-
-
 	
+
 }

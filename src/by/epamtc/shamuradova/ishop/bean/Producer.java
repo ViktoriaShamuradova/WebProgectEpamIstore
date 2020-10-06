@@ -1,17 +1,10 @@
 package by.epamtc.shamuradova.ishop.bean;
 
-import java.io.Serializable;
 
-public class Producer implements Serializable {
+public class Producer extends AbstractEntity<Integer> {
 
-	private int id;
 	private String name;
 
-	public Producer(int id, String name) {
-		super();
-		this.id = id;
-		this.name = name;
-	}
 
 	public Producer() {
 	}
@@ -24,19 +17,10 @@ public class Producer implements Serializable {
 		this.name = name;
 	}
 
-	public int getId() {
-		return id;
-	}
-
-	public void setId(int id) {
-		this.id = id;
-	}
-
 	@Override
 	public int hashCode() {
 		final int prime = 31;
-		int result = 1;
-		result = prime * result + id;
+		int result = super.hashCode();
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		return result;
 	}
@@ -45,13 +29,11 @@ public class Producer implements Serializable {
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
-		if (obj == null)
+		if (!super.equals(obj))
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
 		Producer other = (Producer) obj;
-		if (id != other.id)
-			return false;
 		if (name == null) {
 			if (other.name != null)
 				return false;
@@ -62,7 +44,7 @@ public class Producer implements Serializable {
 
 	@Override
 	public String toString() {
-		return "Producer [id=" + id + ", name=" + name + "]";
+		return "Producer [name=" + name + "]";
 	}
 
 }

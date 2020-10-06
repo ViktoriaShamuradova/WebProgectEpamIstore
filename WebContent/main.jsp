@@ -19,10 +19,12 @@
 <fmt:message bundle="${loc}" key="message.sighUp" var="signUp" />
 <fmt:message bundle="${loc}" key="button.send" var="send_button" />
 
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
 </head>
 <body> 
 
-<%@ include file = "../WEB-INF/jsp/ruEn.jsp" %>
+<%@ include file = "../WEB-INF/jsp/ruEn.jsp" %> 
 
 	<form action="controller" method="post">
 			<input type="hidden" name="command" value="sign_in" />
@@ -37,6 +39,17 @@
 		<h2>
 			<a href="controller?command=registration_page"><c:out value="${signUp}" /></a>
 		</h2>
+		
+	
+		
+	<div id="modelList">
+		<%@ include file = "../WEB-INF/jsp/model_list.jsp" %> 
+		
+		<form action="controller" method="post">
+			<input type="hidden" name="command" value="load_more_models" />		
+			<input type="submit"  value="Load more models"><br />
+		</form>
+	</div>
 	
 	
 </body>

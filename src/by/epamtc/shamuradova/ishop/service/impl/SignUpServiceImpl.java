@@ -73,12 +73,12 @@ public class SignUpServiceImpl implements SignUpService {
 		}
 	}
 
-	public static void main(String[] args) throws ServiceException {
-		char[] password = new char[] { 'v', 'd', 'e', 'a', '2', '5' };
-		String pass = new String(password);
-		RegInfo regInfo = new RegInfo("Roman", "Rom", "RomRom34", "rom@gmail.com", password, 1, 2);
-		SignUpServiceImpl sign = new SignUpServiceImpl();
-		sign.signUp(regInfo);
-	}
+//	public static void main(String[] args) throws ServiceException {
+//		char[] password = new char[] { 'v', 'd', 'e', 'a', '2', '5' };
+//		String pass = new String(password);
+//		RegInfo regInfo = new RegInfo("Roman", "Rom", "RomRom34", "rom@gmail.com", password, 1, 2);
+//		SignUpServiceImpl sign = new SignUpServiceImpl();
+//		sign.signUp(regInfo);
+//	}
 
 }

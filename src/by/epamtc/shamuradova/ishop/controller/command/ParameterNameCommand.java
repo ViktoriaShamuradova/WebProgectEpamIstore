@@ -1,6 +1,6 @@
 package by.epamtc.shamuradova.ishop.controller.command;
 
-public enum ParameterName {
+public enum ParameterNameCommand {
 	SAVE_NEW_SHOPPER, 
 	WELCOME_USER, 
 	SIGN_IN, 
@@ -8,6 +8,8 @@ public enum ParameterName {
 	REGISTRATION_PAGE, 
 	GET_SHOPPER_PAGE, 
 	GET_ERROR_PAGE,
-	GET_ADMIN_PAGE	
+	GET_ADMIN_PAGE,
+	GET_MAIN_ALL_MODELS_PAGE,
+	LOAD_MORE_MODELS
 
 }
