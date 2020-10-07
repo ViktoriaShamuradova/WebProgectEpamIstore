@@ -72,15 +72,15 @@ public final class JDBCUtil {
 		CallableStatement callableStatement = null;
 		ResultSet results = null;
 
-		try {
+//		try {
 			callableStatement = connection.prepareCall(sql);
 			setParameters(callableStatement, parameters);
 			results = callableStatement.executeQuery();
 			return results;
 
-		} finally {
-			closeStatement(callableStatement);
-		}
+//		} finally {
+//			closeStatement(callableStatement);
+//		}
 	}
 
 	private static void setParameters(PreparedStatement prStatement, Object[] parameters) throws SQLException {

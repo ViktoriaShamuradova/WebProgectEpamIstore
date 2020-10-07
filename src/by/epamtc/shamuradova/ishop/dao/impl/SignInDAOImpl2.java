@@ -18,6 +18,7 @@ import by.epamtc.shamuradova.ishop.dao.util.JDBCUtil;
 //работает!!!!!
 public class SignInDAOImpl2 implements SignInDAO {
 	
+	
 	private ResultSetHandler resultSetHandlerUser;
 	
 	public SignInDAOImpl2() {

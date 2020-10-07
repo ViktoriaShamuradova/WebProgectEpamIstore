@@ -1,5 +1,7 @@
 package by.epamtc.shamuradova.ishop.service.impl;
 
+import java.io.UnsupportedEncodingException;
+import java.security.NoSuchAlgorithmException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -12,6 +14,7 @@ import by.epamtc.shamuradova.ishop.dao.impl.SignUpImplDAO;
 import by.epamtc.shamuradova.ishop.service.SignUpService;
 import by.epamtc.shamuradova.ishop.service.exception.ServiceException;
 import by.epamtc.shamuradova.ishop.service.exception.ValidationException;
+import by.epamtc.shamuradova.ishop.service.tool.MD5Encryptor;
 
 public class SignUpServiceImpl implements SignUpService {
 
@@ -27,9 +30,12 @@ public class SignUpServiceImpl implements SignUpService {
 			password = null;
 
 			SignUpDAO signUpDAO = new SignUpImplDAO();
-			signUpDAO.signUp(regInfo); // здесь бы отправть шифрованную версию пароля
+			
+			String hashPassword = MD5Encryptor.getHashCode(new String(regInfo.getPassword()));
+			regInfo.setPassword(hashPassword.toCharArray());
+			signUpDAO.signUp(regInfo);
 
-		} catch (DAOException | ValidationException e) {
+		} catch (DAOException | ValidationException |UnsupportedEncodingException |NoSuchAlgorithmException e) {
 			throw new ServiceException(e);
 		}
 

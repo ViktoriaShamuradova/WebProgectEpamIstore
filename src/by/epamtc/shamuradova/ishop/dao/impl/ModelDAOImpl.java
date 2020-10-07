@@ -24,6 +24,7 @@ public class ModelDAOImpl implements ModelDAO {
 
 	private ResultSetHandler resultSetHandlerModel;
 	private ResultSetHandlerCategory resultSetHandlerCategory;
+	private static final ConnectionPool pool = ConnectionPool.getInstance();
 
 	public ModelDAOImpl() {
 		resultSetHandlerModel = new ResultSetHandlerModel();
@@ -32,7 +33,6 @@ public class ModelDAOImpl implements ModelDAO {
 
 	@Override
 	public List<Model> listAllModels(int page, int limit) throws DAOException {
-		ConnectionPool pool = ConnectionPool.getInstance();
 		Connection connection = null;
 
 		List<Model> models = new ArrayList<>();
@@ -66,12 +66,11 @@ public class ModelDAOImpl implements ModelDAO {
 	// какую модель???
 	@Override
 	public Model getModel() throws DAOException {
-		ConnectionPool connectionPool = ConnectionPool.getInstance();
 		Connection connection = null;
 		Model model;
 		try {
-			connectionPool.initPoolData();
-			connection = connectionPool.getConnection();
+			pool.initPoolData();
+			connection = pool.getConnection();
 			String sql = null;
 
 			model = (Model) JDBCUtil.selectSingle(connection, sql, resultSetHandlerModel, null);
@@ -82,7 +81,7 @@ public class ModelDAOImpl implements ModelDAO {
 		} finally {
 			if (connection != null) {
 				try {
-					connectionPool.free(connection);
+					pool.free(connection);
 				} catch (ConnectionPoolException e) {
 					throw new DAOException(ErrorMessage.UNABLE_TO_FREE_CONNECTION);
 				}

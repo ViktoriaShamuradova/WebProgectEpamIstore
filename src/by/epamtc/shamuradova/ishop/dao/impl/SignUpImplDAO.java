@@ -36,21 +36,21 @@ public class SignUpImplDAO implements SignUpDAO {
 
 	@Override
 	public void signUp(RegInfo regInfo) throws DAOException {
-		ConnectionPool connectionPool = ConnectionPool.getInstance();
+		ConnectionPool pool = ConnectionPool.getInstance();
 		Connection connection = null;
 
 		try {
-			connectionPool.initPoolData();
-			connection = connectionPool.getConnection();
+			pool.initPoolData();
+			connection = pool.getConnection();
 
 			if (!checkLoginInBase(regInfo.getLogin(), connection)) {
 				String sql = SQLQuery.SIGN_UP;
 				int statusId = UserStatus.statusesId.get(regInfo.getStatus().toUpperCase());
 				int roleId = UserRole.rolesId.get(regInfo.getRole().toUpperCase());
-
-				JDBCUtil.insert(connection, sql, regInfo.getName(), regInfo.getSurname(), regInfo.getLogin(),
-						regInfo.getPassword(), regInfo.getEmail(), statusId, roleId);
-
+				String password = new String(regInfo.getPassword());
+				JDBCUtil.insert(connection, sql, regInfo.getName(), regInfo.getSurname(), regInfo.getLogin(), password,
+						regInfo.getEmail(), statusId, roleId);
+				password = null;
 				regInfo.deletePassword();
 
 			} else {
@@ -63,7 +63,7 @@ public class SignUpImplDAO implements SignUpDAO {
 
 			if (connection != null) {
 				try {
-					connectionPool.free(connection);
+					pool.free(connection);
 				} catch (ConnectionPoolException e) {
 					throw new DAOException(e);
 				}
@@ -96,5 +96,12 @@ public class SignUpImplDAO implements SignUpDAO {
 				}
 			}
 		}
+	}
+
+	public static void main(String[] args) throws DAOException {
+		SignUpImplDAO signUpImplDAO = new SignUpImplDAO();
+		char[] pass = new char[] { 'g', 'd', 'd', 's', 's', '4' };
+		RegInfo reg = new RegInfo("Vladimir", "Vlad", "VladVl", "vl@gmail.com", pass, UserStatus.NEW, UserRole.SHOPPER);
+		signUpImplDAO.signUp(reg);
 	}
 }
