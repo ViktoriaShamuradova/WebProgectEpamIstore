@@ -8,13 +8,15 @@ import java.util.regex.Pattern;
 import by.epamtc.shamuradova.ishop.bean.RegInfo;
 import by.epamtc.shamuradova.ishop.constant.ErrorMessage;
 import by.epamtc.shamuradova.ishop.constant.PatternContainer;
+import by.epamtc.shamuradova.ishop.constant.UserRole;
+import by.epamtc.shamuradova.ishop.constant.UserStatus;
 import by.epamtc.shamuradova.ishop.dao.SignUpDAO;
 import by.epamtc.shamuradova.ishop.dao.exception.DAOException;
 import by.epamtc.shamuradova.ishop.dao.impl.SignUpImplDAO;
 import by.epamtc.shamuradova.ishop.service.SignUpService;
 import by.epamtc.shamuradova.ishop.service.exception.ServiceException;
 import by.epamtc.shamuradova.ishop.service.exception.ValidationException;
-import by.epamtc.shamuradova.ishop.service.tool.MD5Encryptor;
+import by.epamtc.shamuradova.ishop.service.util.MD5Encryptor;
 
 public class SignUpServiceImpl implements SignUpService {
 
@@ -79,12 +81,12 @@ public class SignUpServiceImpl implements SignUpService {
 		}
 	}
 
-//	public static void main(String[] args) throws ServiceException {
-//		char[] password = new char[] { 'v', 'd', 'e', 'a', '2', '5' };
-//		String pass = new String(password);
-//		RegInfo regInfo = new RegInfo("Roman", "Rom", "RomRom34", "rom@gmail.com", password, 1, 2);
-//		SignUpServiceImpl sign = new SignUpServiceImpl();
-//		sign.signUp(regInfo);
-//	}
+	public static void main(String[] args) throws ServiceException {
+		char[] password = new char[] { 'v', 'd', 'e', 'a', '2', '5' };
+		String pass = new String(password);
+		RegInfo regInfo = new RegInfo("Roman", "Rom", "RomRom344", "rom@gmail.com", password, UserStatus.NEW, UserRole.SHOPPER);
+		SignUpServiceImpl sign = new SignUpServiceImpl();
+		sign.signUp(regInfo);
+	}
 
 }

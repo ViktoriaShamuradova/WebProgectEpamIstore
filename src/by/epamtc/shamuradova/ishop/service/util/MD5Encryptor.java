@@ -1,4 +1,4 @@
-package by.epamtc.shamuradova.ishop.service.tool;
+package by.epamtc.shamuradova.ishop.service.util;
 
 import java.io.UnsupportedEncodingException;
 import java.math.BigInteger;

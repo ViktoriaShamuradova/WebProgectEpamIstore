@@ -31,6 +31,7 @@ public class SetLocaleCommand implements Command {
 				session.setAttribute(SESSION_PARAMETER_LOCALE, ENGLISH_LOCALE);
 				break;
 		}
+		
 		String redirectTo = req.getParameter(REDIRECT_TO);
 		req.getRequestDispatcher(redirectTo).forward(req, resp); //решить проблему, на какую страницу переходить
 

@@ -17,22 +17,19 @@ import by.epamtc.shamuradova.ishop.dao.exception.DAOException;
 import by.epamtc.shamuradova.ishop.dao.handler.ResultSetHandler;
 import by.epamtc.shamuradova.ishop.dao.handler.impl.ResultSetHandlerCategory;
 import by.epamtc.shamuradova.ishop.dao.handler.impl.ResultSetHandlerModel;
+import by.epamtc.shamuradova.ishop.dao.handler.impl.ResultSetHandlerProducer;
 import by.epamtc.shamuradova.ishop.dao.pool.ConnectionPool;
 import by.epamtc.shamuradova.ishop.dao.util.JDBCUtil;
 
 public class ModelDAOImpl implements ModelDAO {
 
-	private ResultSetHandler resultSetHandlerModel;
-	private ResultSetHandlerCategory resultSetHandlerCategory;
-	private static final ConnectionPool pool = ConnectionPool.getInstance();
-
 	public ModelDAOImpl() {
-		resultSetHandlerModel = new ResultSetHandlerModel();
-		resultSetHandlerCategory = new ResultSetHandlerCategory();
 	}
 
 	@Override
 	public List<Model> listAllModels(int page, int limit) throws DAOException {
+		ResultSetHandler resultSetHandlerModel = new ResultSetHandlerModel();
+		ConnectionPool pool = ConnectionPool.getInstance();
 		Connection connection = null;
 
 		List<Model> models = new ArrayList<>();
@@ -66,6 +63,8 @@ public class ModelDAOImpl implements ModelDAO {
 	// какую модель???
 	@Override
 	public Model getModel() throws DAOException {
+		ResultSetHandler resultSetHandlerModel = new ResultSetHandlerModel();
+		ConnectionPool pool = ConnectionPool.getInstance();
 		Connection connection = null;
 		Model model;
 		try {
@@ -93,6 +92,7 @@ public class ModelDAOImpl implements ModelDAO {
 
 	@Override
 	public List<Model> listModelsByCategory(String categoryUrl, int page, int limit) throws DAOException {
+		ResultSetHandler resultSetHandlerModel = new ResultSetHandlerModel();
 		ConnectionPool pool = ConnectionPool.getInstance();
 		Connection connection = null;
 		List<Model> models = new ArrayList<>();
@@ -126,6 +126,7 @@ public class ModelDAOImpl implements ModelDAO {
 
 	@Override
 	public List<Category> listAllCategories() throws DAOException {
+		ResultSetHandlerCategory resultSetHandlerCategory = new ResultSetHandlerCategory();
 		ConnectionPool pool = ConnectionPool.getInstance();
 		Connection connection = null;
 
@@ -158,9 +159,40 @@ public class ModelDAOImpl implements ModelDAO {
 
 	@Override
 	public List<Producer> listAllProducer() throws DAOException {
-		// TODO Auto-generated method stub
-		return null;
+		ResultSetHandler resultSetHandlerProducer = new ResultSetHandlerProducer();
+		ConnectionPool pool = ConnectionPool.getInstance();
+		Connection connection = null;
+
+		List<Producer> producers = new ArrayList<>();
+		List<AbstractEntity> entityList;
+
+		try {
+			pool.initPoolData();
+			connection = pool.getConnection();
+
+			entityList = JDBCUtil.selectList(connection, SQLQuery.LIST_PRODUCER, resultSetHandlerProducer);
+
+		} catch (ConnectionPoolException | SQLException e) {
+			throw new DAOException(e);
+		} finally {
+			if (connection != null) {
+				try {
+					pool.free(connection);
+				} catch (ConnectionPoolException e) {
+					throw new DAOException(ErrorMessage.UNABLE_TO_FREE_CONNECTION);
+				}
+			}
+		}
+		for (AbstractEntity entity : entityList) {
+			producers.add((Producer) entity);
+		}
+
+		return producers;
 	}
 
-
+	public static void main(String[] args) throws DAOException {
+		ModelDAOImpl model = new ModelDAOImpl();
+		System.out.println(model.listAllCategories());
+		System.out.println(model.listAllProducer());
+	}
 }

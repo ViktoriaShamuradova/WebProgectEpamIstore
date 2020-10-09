@@ -27,7 +27,7 @@ public class AllModelsMoreCommand implements Command {
 		try {
 			models = modelService.listAllModels(2, ModelConstant.MAX_COUNT_MODELS_ON_PAGE);
 			req.setAttribute(MODELS_PARAM, models);
-			RequestDispatcher dispatcher = req.getRequestDispatcher("/WEB-INF/jsp/model_list.jsp");
+			RequestDispatcher dispatcher = req.getRequestDispatcher("/main.jsp"); ///WEB-INF/jsp/model_list.jsp
 			dispatcher.forward(req, resp);
 		}
 

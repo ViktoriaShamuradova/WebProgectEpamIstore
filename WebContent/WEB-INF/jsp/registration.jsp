@@ -19,29 +19,44 @@
 <fmt:message bundle="${loc}" key="message.surname" var="surname" />
 <fmt:message bundle="${loc}" key="message.email" var="email" />
 <fmt:message bundle="${loc}" key="button.send" var="send_button" />
-
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
 
 <%@ include file = "ruEn.jsp" %>
-	
+
+<div class="container" >
+<dic class="layout">
 <form action = "controller" method="post">
-		<input type="hidden" name="command" value="save_new_shopper" />
-		<c:out value="${name}" /> <br />
-		<input type="text" name="name" value="" /><br />
-		<c:out value="${surname}" /> <br />
-		<input type="text" name="surname" value="" /><br />
-		<c:out value="${login}" /> <br />
-		<input type="text" name="login" value="" /><br />
-		<c:out value="${email}" /><br />
-		<input type="email" name="email" value="" /><br />
-		<c:out value="${password}" /><br />
-		<input type="password" name="password" value="" /><br />
-		
-		<input type="submit" value="${send_button}" /><br />
+	<input type="hidden" name="command" value="save_new_shopper" />
+		<div class="row">
+	    <div class="col">
+	      <input type="text" class="form-control" name="name" placeholder=<c:out value="${name}" />>
+	    </div>
+	    <div class="col">
+	      <input type="text" class="form-control" name="surname" placeholder=<c:out value="${surname}" />>
+	    </div>
+	  </div>
+  
+	  <div class="form-group">
+	    <label for="exampleInputEmail1"><c:out value="${email}" /></label>
+	    <input type="email" class="form-control" name="email" id="exampleInputEmail1" aria-describedby="emailHelp">
+	  </div>
+	  
+	  <div class="form-group">
+		    <label for="exampleInputPassword1"><c:out value="${login}" /></label>
+		    <input type="text" class="form-control" name="login" >
+	</div>
 	
-	</form>
-
-
+	  <div class="form-group">
+	    <label for="exampleInputPassword1"><c:out value="${password}" /></label>
+	    <input type="password" class="form-control" name="password" id="exampleInputPassword1">
+	  </div>
+	  
+	  
+  	<button type="submit" class="btn btn-primary"><c:out value="${send_button}" /></button>
+</form>
+</div>
+</div>
 </body>
 </html>

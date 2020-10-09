@@ -1,5 +1,8 @@
 package by.epamtc.shamuradova.ishop.service.impl;
 
+import java.io.UnsupportedEncodingException;
+import java.security.NoSuchAlgorithmException;
+
 import by.epamtc.shamuradova.ishop.bean.AuthData;
 import by.epamtc.shamuradova.ishop.bean.User;
 import by.epamtc.shamuradova.ishop.constant.ErrorMessage;
@@ -9,8 +12,8 @@ import by.epamtc.shamuradova.ishop.dao.impl.SignInDAOImpl2;
 import by.epamtc.shamuradova.ishop.service.SignInService;
 import by.epamtc.shamuradova.ishop.service.exception.ServiceException;
 import by.epamtc.shamuradova.ishop.service.exception.ValidationException;
+import by.epamtc.shamuradova.ishop.service.util.MD5Encryptor;
 
-//все это дело как-то хешировать
 
 public class SignInServiceImpl implements SignInService {
 
@@ -19,14 +22,17 @@ public class SignInServiceImpl implements SignInService {
 
 		try {
 			validate(data);
-			// фабрика
+		
 			SignInDAO signIn = new SignInDAOImpl2();
+
+			String hashPasswword = MD5Encryptor.getHashCode(new String(data.getPassword()));
+			data.setPassword(hashPasswword.toCharArray());
+			hashPasswword = null;
+
 			User user = signIn.signIn(data);
 			return user;
 
-		} catch (ValidationException e) {
-			throw new ServiceException(e);
-		} catch (DAOException e) {
+		} catch (ValidationException | DAOException | NoSuchAlgorithmException | UnsupportedEncodingException e) {
 			throw new ServiceException(e);
 		}
 

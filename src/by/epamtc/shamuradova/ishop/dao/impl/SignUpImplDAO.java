@@ -28,14 +28,12 @@ import by.epamtc.shamuradova.ishop.dao.util.JDBCUtil;
 
 public class SignUpImplDAO implements SignUpDAO {
 
-	private ResultSetHandler resultSetHandlerUser;
-
 	public SignUpImplDAO() {
-		resultSetHandlerUser = new ResultSetHandlerUser();
 	}
 
 	@Override
 	public void signUp(RegInfo regInfo) throws DAOException {
+		ResultSetHandler resultSetHandlerUser = new ResultSetHandlerUser();
 		ConnectionPool pool = ConnectionPool.getInstance();
 		Connection connection = null;
 
@@ -98,10 +96,4 @@ public class SignUpImplDAO implements SignUpDAO {
 		}
 	}
 
-	public static void main(String[] args) throws DAOException {
-		SignUpImplDAO signUpImplDAO = new SignUpImplDAO();
-		char[] pass = new char[] { 'g', 'd', 'd', 's', 's', '4' };
-		RegInfo reg = new RegInfo("Vladimir", "Vlad", "VladVl", "vl@gmail.com", pass, UserStatus.NEW, UserRole.SHOPPER);
-		signUpImplDAO.signUp(reg);
-	}
 }

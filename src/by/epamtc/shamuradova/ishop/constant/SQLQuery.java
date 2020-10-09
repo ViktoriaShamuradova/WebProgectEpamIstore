@@ -19,6 +19,8 @@ public class SQLQuery {
 	public static final String LIST_MODELS_BY_CATEGORY = "select m.*, c.name as category, pr.name as producer from models m, categories c, producers pr \r\n"
 			+ "where c.name=? and pr.id=m.id_producer and c.id=m.id_category \r\n"
 			+ "order by m.id limit ? offset ?";
-	public static final String LIST_CATEGORY = "select c.* from  categories c";
-
+	//public static final String LIST_CATEGORY = "select* from  categories  order by id";
+	public static final String LIST_CATEGORY = "select c.name, SUM(m.count) AS count, c.id from categories c, models m WHERE c.id=m.id_category group by m.id_category";
+	//public static final String LIST_PRODUCER = "select* from  producers c order by id";
+	public static final String LIST_PRODUCER = "select p.name, SUM(m.count) AS count, p.id from producers p, models m WHERE p.id=m.id_producer group by m.id_producer";
 }

@@ -10,6 +10,7 @@ public final class UserStatus {
 	public static final String REGULAR = "REGULAR";
 
 	public static final Map<String, Integer> statusesId = new HashMap<>();
+	
 	static {
 		statusesId.put(NEW, 1);
 		statusesId.put(NOT_ACTIVE, 2);

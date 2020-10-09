@@ -43,7 +43,34 @@
 	
 		
 	<div id="modelList">
-		<%@ include file = "../WEB-INF/jsp/model_list.jsp" %> 
+		<!--<%@ include file = "../WEB-INF/jsp/model_list.jsp" %>   -->
+		
+		<div class="container">
+		<div class="row">
+			<c:forEach var="model" items="${models}">
+				<div class="card" style="width: 18rem;">
+					<div class="card-body">
+						<h5 class="card-title">
+							<c:out value="${model.name}" />
+						</h5>
+						<h6 class="card-price">
+							<c:out value="${model.price}" />
+						</h6>
+						<p class="card-text">
+							<c:out value="${model.description}" />
+						</p>
+						<p class="card-category">
+							<c:out value="${model.category}" />
+						</p>
+						<p class="card-text">
+							<c:out value="${model.producer}" />
+						</p>
+						<a href="#" class="btn btn-primary">Добавить в корзину</a>
+					</div>
+				</div>
+			</c:forEach>
+		</div>
+	</div>
 		
 		<form action="controller" method="post">
 			<input type="hidden" name="command" value="load_more_models" />		

@@ -12,18 +12,18 @@ import by.epamtc.shamuradova.ishop.service.ModelService;
 import by.epamtc.shamuradova.ishop.service.exception.ServiceException;
 
 /**
- *page - какую страницу товаров нужно отобразить, limit - максимальное количество товаров, которое должно вернуться данным запросом
+ * page - какую страницу товаров нужно отобразить, limit - максимальное
+ * количество товаров, которое должно вернуться данным запросом
  * 
  *
  * @author Шамурадова Виктория 2020
  */
-public class ModelServiceImpl implements ModelService{
+public class ModelServiceImpl implements ModelService {
 
-	
 	@Override
 	public List<Model> listAllModels(int page, int count) throws ServiceException {
 		ModelDAO modelDao = new ModelDAOImpl();
-		
+
 		try {
 			return modelDao.listAllModels(page, count);
 		} catch (DAOException e) {
@@ -33,7 +33,13 @@ public class ModelServiceImpl implements ModelService{
 
 	@Override
 	public List<Model> listModelsByCategory(String categoryUrl, int page, int limit) throws ServiceException {
-		// TODO Auto-generated method stub
+		ModelDAO modelDao = new ModelDAOImpl();
+		
+		try {
+			modelDao.listModelsByCategory(categoryUrl, page, limit);
+		} catch (DAOException e) {
+			throw new ServiceException(e);
+		}
 		return null;
 	}
 
