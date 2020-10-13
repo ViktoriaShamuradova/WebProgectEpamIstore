@@ -1,0 +1,15 @@
+headers-region {
+  font-family: "Roboto Condensed, sans-serif";
+  color: #2D2D2D;
+}
+headers-region .title {
+  font-size: 32px;
+  font-weight: bold;
+  margin-bottom: 3px;
+}
+headers-region .description {
+  margin-top: 0;
+}
+headers-region .site-logo .image {
+  width: 95px;
+}

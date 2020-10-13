@@ -4,9 +4,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 import by.epamtc.shamuradova.ishop.controller.command.impl.AdminPageCommand;
-import by.epamtc.shamuradova.ishop.controller.command.impl.AllModelsCommand;
+import by.epamtc.shamuradova.ishop.controller.command.impl.AllModelsAllCategoriesCommand;
 import by.epamtc.shamuradova.ishop.controller.command.impl.AllModelsMoreCommand;
+import by.epamtc.shamuradova.ishop.controller.command.impl.EnterPageCommand;
 import by.epamtc.shamuradova.ishop.controller.command.impl.ErrorPageCommand;
+import by.epamtc.shamuradova.ishop.controller.command.impl.ModelsByCategoryCommand;
 import by.epamtc.shamuradova.ishop.controller.command.impl.RegistrationPageCommand;
 import by.epamtc.shamuradova.ishop.controller.command.impl.SetLocaleCommand;
 import by.epamtc.shamuradova.ishop.controller.command.impl.ShopperPageCommand;
@@ -25,8 +27,10 @@ public class CommandProvider {
 		commands.put(ParameterNameCommand.GET_SHOPPER_PAGE, new ShopperPageCommand());
 		commands.put(ParameterNameCommand.GET_ERROR_PAGE, new ErrorPageCommand());
 		commands.put(ParameterNameCommand.GET_ADMIN_PAGE, new AdminPageCommand());
-		commands.put(ParameterNameCommand.GET_MAIN_ALL_MODELS_PAGE, new AllModelsCommand());
+		commands.put(ParameterNameCommand.GET_MAIN_ALL_MODELS_PAGE, new AllModelsAllCategoriesCommand());
 		commands.put(ParameterNameCommand.LOAD_MORE_MODELS, new AllModelsMoreCommand());
+		commands.put(ParameterNameCommand.MODELS_BY_CATEGORY, new ModelsByCategoryCommand());
+		commands.put(ParameterNameCommand.ENTER_PAGE, new EnterPageCommand());
 	}	
 	
 	public Command getCommand(String commandName) {

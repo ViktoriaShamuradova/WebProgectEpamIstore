@@ -20,22 +20,60 @@ public class AllModelsMoreCommand implements Command {
 	private static final String MODELS_PARAM = "models";
 	private static final String ERROR_PAGE = "controller?command=GET_ERROR_PAGE";
 
+	private ModelService modelService;
+
+	public AllModelsMoreCommand() {
+		modelService = new ModelServiceImpl();
+	}
+
 	@Override
 	public void execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		ModelService modelService = new ModelServiceImpl();
-		List<Model> models;
 		try {
-			models = modelService.listAllModels(2, ModelConstant.MAX_COUNT_MODELS_ON_PAGE);
-			req.setAttribute(MODELS_PARAM, models);
-			RequestDispatcher dispatcher = req.getRequestDispatcher("/main.jsp"); ///WEB-INF/jsp/model_list.jsp
-			dispatcher.forward(req, resp);
-		}
+			List<Model> models = getModels(req.getParameter("category"));
+	
 
-		catch (ServiceException e) {
+			req.setAttribute(MODELS_PARAM, models);
+			RequestDispatcher dispatcher = req.getRequestDispatcher("/main.jsp");
+			dispatcher.forward(req, resp);
+		} catch (ServiceException e) {
 			e.printStackTrace();
 			resp.sendRedirect(ERROR_PAGE);
 		}
 
 	}
+
+	private List<Model> getModels(String category) throws ServiceException {
+		if (category == null || category.isEmpty()) {
+			return modelService.listAllModels(2, ModelConstant.MAX_COUNT_MODELS_ON_PAGE);
+		}
+
+		return modelService.listModelsByCategory(category, 2, ModelConstant.MAX_COUNT_MODELS_ON_PAGE);
+	}
+
+//	@Override
+//	public void execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+//		try {
+//			int page = Integer.parseInt(req.getParameter("page"));
+//			List<Model> models = getModels(req.getParameter("category"), page);
+//			Page<Model> modelsPage = new Page<>();
+//			modelsPage.setResult(models);
+//			
+//			req.setAttribute(MODELS_PARAM, models);
+//			RequestDispatcher dispatcher = req.getRequestDispatcher("/main.jsp");
+//			dispatcher.forward(req, resp);
+//		} catch (ServiceException e) {
+//			e.printStackTrace();
+//			resp.sendRedirect(ERROR_PAGE);
+//		}
+//
+//	}
+//	
+//	private List<Model> getModels(String category, int page) throws ServiceException {
+//		if (category == null || category.isEmpty()) {
+//			return modelService.listAllModels(page, ModelConstant.MAX_COUNT_MODELS_ON_PAGE * page);
+//		}
+//		
+//		return modelService.listModelsByCategory(category, page, ModelConstant.MAX_COUNT_MODELS_ON_PAGE * page);
+//	}
 
 }

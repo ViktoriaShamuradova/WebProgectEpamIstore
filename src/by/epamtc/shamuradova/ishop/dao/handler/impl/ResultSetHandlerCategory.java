@@ -38,6 +38,7 @@ public class ResultSetHandlerCategory implements ResultSetHandler{
 		category.setName(rs.getString(CategotyColumnName.NAME));
 		category.setId(rs.getInt(CategotyColumnName.ID));
 		category.setCount(rs.getInt(CategotyColumnName.COUNT));
+		category.setUrl(rs.getString(CategotyColumnName.URL));
 		
 		return category;
 	}

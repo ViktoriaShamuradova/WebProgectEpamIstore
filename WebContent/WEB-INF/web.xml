@@ -10,7 +10,15 @@
     <welcome-file>default.jsp</welcome-file>
   </welcome-file-list>
   
+  <context-param>
+  	<param-name>category_list</param-name>
+  	<param-value></param-value>
+  </context-param>
   
+  <context-param>
+  	<param-name>producer_list</param-name>
+  	<param-value></param-value>
+  </context-param>
   
   <servlet>
   <servlet-name>Controller</servlet-name>
@@ -20,6 +28,10 @@
     <servlet-name>Controller</servlet-name>
     <url-pattern>/controller</url-pattern>
   </servlet-mapping>
+  
+  <listener>
+  	<listener-class>by.epamtc.shamuradova.ishop.listener.IShopApplicationListener</listener-class>
+  </listener>
   
   
 </web-app>

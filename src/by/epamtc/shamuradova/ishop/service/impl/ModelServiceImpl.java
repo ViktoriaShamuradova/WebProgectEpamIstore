@@ -34,19 +34,24 @@ public class ModelServiceImpl implements ModelService {
 	@Override
 	public List<Model> listModelsByCategory(String categoryUrl, int page, int limit) throws ServiceException {
 		ModelDAO modelDao = new ModelDAOImpl();
-		
+		List<Model> models;
 		try {
-			modelDao.listModelsByCategory(categoryUrl, page, limit);
+			return modelDao.listModelsByCategory(categoryUrl, page, limit);
 		} catch (DAOException e) {
 			throw new ServiceException(e);
 		}
-		return null;
+
 	}
 
 	@Override
 	public List<Category> listAllCategories() throws ServiceException {
-		// TODO Auto-generated method stub
-		return null;
+		ModelDAO modelDao = new ModelDAOImpl();
+		List<Category> models;
+		try {
+			return modelDao.listAllCategories();
+		} catch (DAOException e) {
+			throw new ServiceException(e);
+		}
 	}
 
 	@Override

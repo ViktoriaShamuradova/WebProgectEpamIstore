@@ -5,6 +5,7 @@ public final class CategotyColumnName {
 	public static final String NAME = "name";
 	public static final String ID = "id";
 	public static final String COUNT = "count";
+	public static final String URL = "url";
 
 	private CategotyColumnName() {
 

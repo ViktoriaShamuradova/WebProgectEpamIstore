@@ -101,7 +101,7 @@ public class ModelDAOImpl implements ModelDAO {
 		try {
 			pool.initPoolData();
 			connection = pool.getConnection();
-			int offset = (page - 1) * limit;
+			int offset = 0;
 
 			entityList = JDBCUtil.selectList(connection, SQLQuery.LIST_MODELS_BY_CATEGORY, resultSetHandlerModel,
 					categoryUrl, limit, offset);
@@ -192,7 +192,7 @@ public class ModelDAOImpl implements ModelDAO {
 
 	public static void main(String[] args) throws DAOException {
 		ModelDAOImpl model = new ModelDAOImpl();
-		System.out.println(model.listAllCategories());
-		System.out.println(model.listAllProducer());
+		System.out.println(model.listModelsByCategory("mobile", 1, 5));
+		//System.out.println(model.listAllProducer());
 	}
 }

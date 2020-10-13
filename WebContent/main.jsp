@@ -19,65 +19,112 @@
 <fmt:message bundle="${loc}" key="message.sighUp" var="signUp" />
 <fmt:message bundle="${loc}" key="button.send" var="send_button" />
 
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<link href="front/font-awesome/css/all.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="front/css/style.css">
 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="javascript/main.js" type="text/javascript"></script>
 </head>
-<body> 
+<body>
 
-<%@ include file = "../WEB-INF/jsp/ruEn.jsp" %> 
+	<div class="headers-region">
 
-	<form action="controller" method="post">
-			<input type="hidden" name="command" value="sign_in" />
-			<c:out value="${login}" /> <br /> 
-			<input type="login" name="login" value="" /><br />
-	
-			<c:out value="${password}" /> <br /> 
-			<input type="password" name="password" value="" /><br />
-			<input type="submit"  value="${send_button}"><br />
-	</form>
+		
+		<div class="site-logo">
+				<img src="front/img/log.png" class="image">
+		</div>
+		
+		<i class="fas fa-user"></i>
+		
 
-		<h2>
-			<a href="controller?command=registration_page"><c:out value="${signUp}" /></a>
-		</h2>
-		
-	
-		
-	<div id="modelList">
-		<!--<%@ include file = "../WEB-INF/jsp/model_list.jsp" %>   -->
-		
-		<div class="container">
-		<div class="row">
-			<c:forEach var="model" items="${models}">
-				<div class="card" style="width: 18rem;">
-					<div class="card-body">
-						<h5 class="card-title">
-							<c:out value="${model.name}" />
-						</h5>
-						<h6 class="card-price">
-							<c:out value="${model.price}" />
-						</h6>
-						<p class="card-text">
-							<c:out value="${model.description}" />
-						</p>
-						<p class="card-category">
-							<c:out value="${model.category}" />
-						</p>
-						<p class="card-text">
-							<c:out value="${model.producer}" />
-						</p>
-						<a href="#" class="btn btn-primary">Добавить в корзину</a>
-					</div>
-				</div>
-			</c:forEach>
+
+		<div class="site-name">
+			<h1 class="title">Ishop</h1>
+			<p class="description">большой магазин электроники</p>
+		</div>
+
+
+		<div class="site-access">
+			<%@ include file="../WEB-INF/jsp/ruEn.jsp"%>
+
+			<h3>
+				<a href="controller?command=registration_page"><c:out
+						value="${signUp}" /></a>
+			</h3>
+
+			<a class="btn btn-primary"
+				href="controller?command=enter_page" role="button"><i class="fas fa-sign-in-alt"></i> Войти</a>
+
 		</div>
 	</div>
-		
-		<form action="controller" method="post">
-			<input type="hidden" name="command" value="load_more_models" />		
-			<input type="submit"  value="Load more models"><br />
-		</form>
+
+
+
+	<div class="container">
+		<ul class="list-group">
+			<li class="list-group-item active"><c:out value="Каталог" /></li>
+			<li class="list-group-item"><a
+				href="controller?command=models_by_category&category=mobile"><c:out
+						value="телефоны" /></a></li>
+			<li class="list-group-item"><a
+				href="controller?command=models_by_category&category=eBook"><c:out
+						value="электронные книги" /></a></li>
+			<li class="list-group-item"><a
+				href="controller?command=models_by_category&category=tablet"><c:out
+						value="планшеты" /></a></li>
+			<li class="list-group-item"><a
+				href="controller?command=models_by_category&category=laptop"><i class="fas fa-laptop"></i> <c:out
+						value="ноутбуки" /></a></li>
+			<li class="list-group-item"><a
+				href="controller?command=models_by_category&category=watch"><c:out
+						value="смарт-часы" /></a></li>
+			<li class="list-group-item"><a
+				href="controller?command=models_by_category&category=fitness_bracelet"><c:out
+						value="фитнес-браслет" /></a></li>
+		</ul>
 	</div>
 	
+	<div>
+		<button id="showFilters">Show filters</button>
+		<div id="filters" style="display: none;">
+			<input type="checkbox" /> 1
+			<input type="checkbox" /> 2
+			<input type="checkbox" /> 3
+			<input type="checkbox" /> 4
+			<input type="checkbox" /> 5
+		</div>
+	</div>
+
+
+	<div class="container">
+		<ul class="list-group">
+			<li class="list-group-item active"><c:out value="Model catalog" /></li>
+			<c:forEach var="category" items="${categories}">
+			<li class="list-group-item"><a
+				href="controller?command=models_by_category&category=${category.url}"><c:out value="${category.name} ${category.count}" /></a></li>
+			</c:forEach>
+		</ul>
+	</div>
+
+
+	<%@ include file="../WEB-INF/jsp/model_list.jsp"%>
+	 
+	<%-- <%@ include file="../WEB-INF/jsp/models.jsp"%> --%>
 	
+
+
+	<a class="btn btn-primary"
+		href="controller?command=load_more_models&category=${category}"
+		role="button">Load more models</a>
+	<%-- <form action="controller" method="post">
+			<input type="hidden" name="command" value="load_more_models" />
+			<input type="hidden" name="category" value="${requestScope.category}" />
+			<input type="submit"  value="Load more models"><br />
+		</form> --%>
+
+
 </body>
 </html>
