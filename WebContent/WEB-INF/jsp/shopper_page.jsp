@@ -11,6 +11,11 @@
 
 <c:out value="Hello ${sessionScope.user.login}!" />
 
+	<%@ include file="model_list.jsp"%>
+	 
+	<a class="btn btn-primary"
+		href="controller?command=load_more_models&category=${category}"
+		role="button">Load more models</a>
 
 </body>
 </html>

@@ -3,11 +3,13 @@ package by.epamtc.shamuradova.ishop.controller.command;
 import java.util.HashMap;
 import java.util.Map;
 
+import by.epamtc.shamuradova.ishop.controller.command.impl.AddToCartCommand;
 import by.epamtc.shamuradova.ishop.controller.command.impl.AdminPageCommand;
 import by.epamtc.shamuradova.ishop.controller.command.impl.AllModelsAllCategoriesCommand;
 import by.epamtc.shamuradova.ishop.controller.command.impl.AllModelsMoreCommand;
 import by.epamtc.shamuradova.ishop.controller.command.impl.EnterPageCommand;
 import by.epamtc.shamuradova.ishop.controller.command.impl.ErrorPageCommand;
+import by.epamtc.shamuradova.ishop.controller.command.impl.ModalPageModalCommand;
 import by.epamtc.shamuradova.ishop.controller.command.impl.ModelsByCategoryCommand;
 import by.epamtc.shamuradova.ishop.controller.command.impl.RegistrationPageCommand;
 import by.epamtc.shamuradova.ishop.controller.command.impl.SetLocaleCommand;
@@ -31,6 +33,8 @@ public class CommandProvider {
 		commands.put(ParameterNameCommand.LOAD_MORE_MODELS, new AllModelsMoreCommand());
 		commands.put(ParameterNameCommand.MODELS_BY_CATEGORY, new ModelsByCategoryCommand());
 		commands.put(ParameterNameCommand.ENTER_PAGE, new EnterPageCommand());
+		commands.put(ParameterNameCommand.MODEL_PAGE_MODAL, new ModalPageModalCommand());
+		commands.put(ParameterNameCommand.ADD_TO_CARD, new AddToCartCommand());
 	}	
 	
 	public Command getCommand(String commandName) {

@@ -6,6 +6,7 @@
 <html>
 <head>
 <meta charset="utf-8">
+
 <fmt:setLocale value="${sessionScope.locale}" />
 <fmt:setBundle basename="localization.locale" var="loc" />
 
@@ -62,30 +63,6 @@
 	</div>
 
 
-
-	<div class="container">
-		<ul class="list-group">
-			<li class="list-group-item active"><c:out value="Каталог" /></li>
-			<li class="list-group-item"><a
-				href="controller?command=models_by_category&category=mobile"><c:out
-						value="телефоны" /></a></li>
-			<li class="list-group-item"><a
-				href="controller?command=models_by_category&category=eBook"><c:out
-						value="электронные книги" /></a></li>
-			<li class="list-group-item"><a
-				href="controller?command=models_by_category&category=tablet"><c:out
-						value="планшеты" /></a></li>
-			<li class="list-group-item"><a
-				href="controller?command=models_by_category&category=laptop"><i class="fas fa-laptop"></i> <c:out
-						value="ноутбуки" /></a></li>
-			<li class="list-group-item"><a
-				href="controller?command=models_by_category&category=watch"><c:out
-						value="смарт-часы" /></a></li>
-			<li class="list-group-item"><a
-				href="controller?command=models_by_category&category=fitness_bracelet"><c:out
-						value="фитнес-браслет" /></a></li>
-		</ul>
-	</div>
 	
 	<div>
 		<button id="showFilters">Show filters</button>
@@ -103,8 +80,8 @@
 		<ul class="list-group">
 			<li class="list-group-item active"><c:out value="Model catalog" /></li>
 			<c:forEach var="category" items="${categories}">
-			<li class="list-group-item"><a
-				href="controller?command=models_by_category&category=${category.url}"><c:out value="${category.name} ${category.count}" /></a></li>
+			<li class="list-group-item">
+			<a href="controller?command=models_by_category&category=${category.url}"><c:out value="${category.name}                       ${category.count}" /></a></li>
 			</c:forEach>
 		</ul>
 	</div>

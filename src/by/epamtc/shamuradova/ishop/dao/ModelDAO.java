@@ -19,4 +19,6 @@ public interface ModelDAO {
 	public List<Category> listAllCategories() throws DAOException;
 
 	public List<Producer> listAllProducer() throws DAOException;
+	
+	
 }

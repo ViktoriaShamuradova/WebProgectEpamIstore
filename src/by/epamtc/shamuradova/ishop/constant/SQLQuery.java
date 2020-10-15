@@ -21,8 +21,11 @@ public class SQLQuery {
 			+ "order by m.id limit ? offset ?";
 	// public static final String LIST_CATEGORY = "select* from categories order by
 	// id";
-	public static final String LIST_CATEGORY = "select c.name, SUM(m.count) AS count, c.id from categories c, models m WHERE c.id=m.id_category group by m.id_category";
+	public static final String LIST_CATEGORY = "select c.name, c.url, SUM(m.count) AS count, c.id from categories c, models m WHERE c.id=m.id_category group by m.id_category";
 	// public static final String LIST_PRODUCER = "select* from producers c order by
 	// id";
 	public static final String LIST_PRODUCER = "select p.name, SUM(m.count) AS count, p.id from producers p, models m WHERE p.id=m.id_producer group by m.id_producer";
+	public static final String CART_BY_ID = "select * from carts where id_user= ?";
+	public static final String ADD_CART = "INSERT INTO carts(id_user, created) VALUES (?,?)";
+	public static final String ADD_CART_ITEM = "INSERT INTO cart_item(id_cart, id_model, count) VALUES (?,?,?)";
 }

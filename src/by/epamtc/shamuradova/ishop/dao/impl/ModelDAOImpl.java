@@ -190,9 +190,5 @@ public class ModelDAOImpl implements ModelDAO {
 		return producers;
 	}
 
-	public static void main(String[] args) throws DAOException {
-		ModelDAOImpl model = new ModelDAOImpl();
-		System.out.println(model.listModelsByCategory("mobile", 1, 5));
-		//System.out.println(model.listAllProducer());
-	}
+
 }

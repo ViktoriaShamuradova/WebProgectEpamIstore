@@ -1,7 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"
 	pageEncoding="utf-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
-<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 
 <div class="container">
@@ -24,7 +23,12 @@
 					<p class="card-text">
 						<c:out value="${model.producer}" />
 					</p>
-					<a href="#" class="btn btn-primary">Добавить в корзину</a>
+					
+	
+					<p>
+						<a href="controller?command=add_to_card&model=${model}" class="btn btn-primary">Добавить в корзину</a>
+					</p>
+				
 				</div>
 			</div>
 		</c:forEach>
