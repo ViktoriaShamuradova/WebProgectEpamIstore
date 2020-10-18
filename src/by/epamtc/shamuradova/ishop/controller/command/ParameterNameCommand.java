@@ -14,7 +14,8 @@ public enum ParameterNameCommand {
 	MODELS_BY_CATEGORY,
 	ENTER_PAGE,
 	MODEL_PAGE_MODAL,
-	ADD_TO_CARD
+	ADD_TO_CART,
+	CART_PAGE
 	
 	
 

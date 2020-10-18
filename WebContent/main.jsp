@@ -20,8 +20,7 @@
 <fmt:message bundle="${loc}" key="message.sighUp" var="signUp" />
 <fmt:message bundle="${loc}" key="button.send" var="send_button" />
 
-<link rel="stylesheet"
-	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 <link href="front/font-awesome/css/all.css" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="front/css/style.css">
@@ -81,7 +80,7 @@
 			<li class="list-group-item active"><c:out value="Model catalog" /></li>
 			<c:forEach var="category" items="${categories}">
 			<li class="list-group-item">
-			<a href="controller?command=models_by_category&category=${category.url}"><c:out value="${category.name}                       ${category.count}" /></a></li>
+			<a href="controller?command=models_by_category&category=${category.url}"><c:out value="${category.name} ${category.count}" /></a></li>
 			</c:forEach>
 		</ul>
 	</div>

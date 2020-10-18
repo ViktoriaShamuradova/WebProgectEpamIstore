@@ -60,9 +60,9 @@ public class ModelDAOImpl implements ModelDAO {
 		return models;
 	}
 
-	// какую модель???
+
 	@Override
-	public Model getModel() throws DAOException {
+	public Model getModelById(int idModel) throws DAOException {
 		ResultSetHandler resultSetHandlerModel = new ResultSetHandlerModel();
 		ConnectionPool pool = ConnectionPool.getInstance();
 		Connection connection = null;
@@ -70,10 +70,10 @@ public class ModelDAOImpl implements ModelDAO {
 		try {
 			pool.initPoolData();
 			connection = pool.getConnection();
-			String sql = null;
+			String sql = SQLQuery.MODEL_BY_ID;
 
-			model = (Model) JDBCUtil.selectSingle(connection, sql, resultSetHandlerModel, null);
-
+			model = (Model) JDBCUtil.selectSingle(connection, sql, resultSetHandlerModel, idModel);
+			return model;
 		} catch (ConnectionPoolException | SQLException e) {
 			throw new DAOException(ErrorMessage.DATABASE_ERROR, e);
 
@@ -87,7 +87,7 @@ public class ModelDAOImpl implements ModelDAO {
 			}
 		}
 
-		return model;
+		
 	}
 
 	@Override
@@ -189,6 +189,5 @@ public class ModelDAOImpl implements ModelDAO {
 
 		return producers;
 	}
-
 
 }

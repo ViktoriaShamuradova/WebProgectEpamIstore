@@ -60,4 +60,16 @@ public class ModelServiceImpl implements ModelService {
 		return null;
 	}
 
+	@Override
+	public Model getModel(int idModel) throws ServiceException {
+
+		ModelDAO modelDao = new ModelDAOImpl();
+
+		try {
+			return modelDao.getModelById(idModel);
+		} catch (DAOException e) {
+			throw new ServiceException(e);
+		}
+	}
+
 }

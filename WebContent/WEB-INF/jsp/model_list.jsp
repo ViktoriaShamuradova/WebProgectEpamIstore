@@ -26,7 +26,7 @@
 					
 	
 					<p>
-						<a href="controller?command=add_to_card&model=${model}" class="btn btn-primary">Добавить в корзину</a>
+						<a href="controller?command=add_to_cart&modelId=${model.id}" class="btn btn-primary">Добавить в корзину</a>
 					</p>
 				
 				</div>

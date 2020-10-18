@@ -7,6 +7,7 @@ import by.epamtc.shamuradova.ishop.controller.command.impl.AddToCartCommand;
 import by.epamtc.shamuradova.ishop.controller.command.impl.AdminPageCommand;
 import by.epamtc.shamuradova.ishop.controller.command.impl.AllModelsAllCategoriesCommand;
 import by.epamtc.shamuradova.ishop.controller.command.impl.AllModelsMoreCommand;
+import by.epamtc.shamuradova.ishop.controller.command.impl.CartPageCommand;
 import by.epamtc.shamuradova.ishop.controller.command.impl.EnterPageCommand;
 import by.epamtc.shamuradova.ishop.controller.command.impl.ErrorPageCommand;
 import by.epamtc.shamuradova.ishop.controller.command.impl.ModalPageModalCommand;
@@ -34,7 +35,8 @@ public class CommandProvider {
 		commands.put(ParameterNameCommand.MODELS_BY_CATEGORY, new ModelsByCategoryCommand());
 		commands.put(ParameterNameCommand.ENTER_PAGE, new EnterPageCommand());
 		commands.put(ParameterNameCommand.MODEL_PAGE_MODAL, new ModalPageModalCommand());
-		commands.put(ParameterNameCommand.ADD_TO_CARD, new AddToCartCommand());
+		commands.put(ParameterNameCommand.ADD_TO_CART, new AddToCartCommand());
+		commands.put(ParameterNameCommand.CART_PAGE, new CartPageCommand());
 	}	
 	
 	public Command getCommand(String commandName) {

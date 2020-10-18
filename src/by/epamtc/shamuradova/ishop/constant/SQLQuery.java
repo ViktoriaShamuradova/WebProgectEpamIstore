@@ -26,6 +26,12 @@ public class SQLQuery {
 	// id";
 	public static final String LIST_PRODUCER = "select p.name, SUM(m.count) AS count, p.id from producers p, models m WHERE p.id=m.id_producer group by m.id_producer";
 	public static final String CART_BY_ID = "select * from carts where id_user= ?";
+	public static final String MODEL_BY_ID = "select m.*, c.name as category, p.name as producer from models m, producers p, categories c where m.id= ? and c.id=m.id_category and p.id=m.id_producer";
 	public static final String ADD_CART = "INSERT INTO carts(id_user, created) VALUES (?,?)";
 	public static final String ADD_CART_ITEM = "INSERT INTO cart_item(id_cart, id_model, count) VALUES (?,?,?)";
+	public static final String TOTAL_COUNT_OF_MODELS_IN_CART = "CALL total_count_in_cart(?)";
+	public static final String TOTAL_SUM_OF_MODELS_IN_CART = "CALL count_tottal_sum_for_cart(?)";
+	public static final String LIST_SHOP_CART_ITEMS ="SELECT m.name, m.description, m.id, m.price, m.image_link, categories.name as category, p.name as producer, c.count \r\n" + 
+	"FROM models m, cart_item c, producers p, categories \r\n" + 
+	"where c.id_model=m.id and c.id_cart= ? and categories.id=m.id_category and p.id=m.id_producer";
 }
