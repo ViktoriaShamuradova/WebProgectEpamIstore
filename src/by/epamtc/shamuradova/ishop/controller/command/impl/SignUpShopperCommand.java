@@ -43,14 +43,14 @@ public class SignUpShopperCommand implements Command {
 
 		SignUpService signUpService = new SignUpServiceImpl();
 
-		User user = new User();
-		user.setLogin(regInfo.getLogin());
-		final HttpSession session = req.getSession(true);
-
-		session.setAttribute("user", user);
+		
 
 		try {
-			signUpService.signUp(regInfo);
+			User user = signUpService.signUp(regInfo);
+	
+			final HttpSession session = req.getSession(true);
+
+			session.setAttribute("user", user);
 			resp.sendRedirect(SHOPPER_PAGE);
 
 		} catch (ServiceException e) {// ЕСЛИ ОШИБКА БД, ТО СТРАНИЦА С ИЗВИНЕНИЯМИ, ЕСЛИ ЛОГИН - ВЫБЕРИТЕ ДРУГОЙ, ЕСЛИ

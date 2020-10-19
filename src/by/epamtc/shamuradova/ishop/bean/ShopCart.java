@@ -1,25 +1,40 @@
 package by.epamtc.shamuradova.ishop.bean;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
 public class ShopCart implements Serializable {
 
+
+	private static final long serialVersionUID = 4905506574371844621L;
+	
 	private Map<Integer, ShopCartItem> shopCartItems;
-	private int totalSum;
+	private BigDecimal totalSum;
 	private int totalCount;
 
 	public ShopCart() {
-		shopCartItems = new HashMap();
+		shopCartItems = new HashMap<>();
 	}
 
-	public ShopCart(Map<Integer, ShopCartItem> shopCartItems, int totalSum, int totalCount) {
+	public ShopCart(Map<Integer, ShopCartItem> shopCartItems, BigDecimal totalSum, int totalCount) {
 		super();
 		this.shopCartItems = shopCartItems;
 		this.totalSum = totalSum;
 		this.totalCount = totalCount;
+	}
+
+	public void removeModel(int idModel, int count) {
+		ShopCartItem item = shopCartItems.get(idModel);
+		if (item.getCount() > count) {
+			item.setCount(item.getCount() - count);
+		} else {
+			shopCartItems.remove(idModel);
+		}
+		refreshData();
+
 	}
 
 	public Collection<ShopCartItem> getShopCartItems() {
@@ -30,11 +45,11 @@ public class ShopCart implements Serializable {
 		this.shopCartItems = shopCartItems;
 	}
 
-	public int getTotalSum() {
+	public BigDecimal getTotalSum() {
 		return totalSum;
 	}
 
-	public void setTotalSum(int totalSum) {
+	public void setTotalSum(BigDecimal totalSum) {
 		this.totalSum = totalSum;
 	}
 
@@ -48,9 +63,19 @@ public class ShopCart implements Serializable {
 
 	public void addShopCartItem(Model model, int count) {
 	}
-	
+
 	public void addShopCartItem(ShopCartItem item) {
 		shopCartItems.put(item.getModel().getId(), item);
+	}
+
+	private void refreshData() {
+		totalCount = 0;
+		totalSum = BigDecimal.ZERO;
+		for (ShopCartItem item : getShopCartItems()) {
+			totalCount = totalCount + item.getCount();
+			totalSum = totalSum.add(item.getModel().getPrice().multiply(BigDecimal.valueOf(item.getCount())));
+
+		}
 	}
 
 	@Override
@@ -59,7 +84,7 @@ public class ShopCart implements Serializable {
 		int result = 1;
 		result = prime * result + ((shopCartItems == null) ? 0 : shopCartItems.hashCode());
 		result = prime * result + totalCount;
-		result = prime * result + totalSum;
+		result = prime * result + ((totalSum == null) ? 0 : totalSum.hashCode());
 		return result;
 	}
 
@@ -79,7 +104,10 @@ public class ShopCart implements Serializable {
 			return false;
 		if (totalCount != other.totalCount)
 			return false;
-		if (totalSum != other.totalSum)
+		if (totalSum == null) {
+			if (other.totalSum != null)
+				return false;
+		} else if (!totalSum.equals(other.totalSum))
 			return false;
 		return true;
 	}
@@ -89,5 +117,6 @@ public class ShopCart implements Serializable {
 		return "ShopCart [shopCartItems=" + shopCartItems + ", totalSum=" + totalSum + ", totalCount=" + totalCount
 				+ "]";
 	}
+
 
 }

@@ -1,5 +1,6 @@
 package by.epamtc.shamuradova.ishop.dao;
 
+import java.math.BigDecimal;
 import java.sql.Date;
 import java.util.List;
 
@@ -19,7 +20,7 @@ public interface CartDAO {
 
 	public void addCartItem(CartContent cartContents) throws DAOException;
 
-	public int getTotalSumCart(int idUser) throws DAOException;
+	public BigDecimal getTotalSumCart(int idUser) throws DAOException;
 
 	public List<ShopCartItem> getShopCartItems(int cartId) throws DAOException;
 

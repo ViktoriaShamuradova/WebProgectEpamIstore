@@ -161,7 +161,8 @@ public class User extends AbstractEntity<Integer> {
 
 	@Override
 	public String toString() {
-		return "User [name=" + name + ", surname=" + surname + ", login=" + login + ", password="
+		super.toString();
+		return "User [ id=" + getId() + ", name=" + name + ", surname=" + surname + ", login=" + login + ", password="
 				+ Arrays.toString(password) + ", email=" + email + ", status=" + status + ", role=" + role + "]";
 	}
 

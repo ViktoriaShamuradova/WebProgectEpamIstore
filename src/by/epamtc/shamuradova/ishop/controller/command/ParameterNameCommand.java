@@ -15,8 +15,9 @@ public enum ParameterNameCommand {
 	ENTER_PAGE,
 	MODEL_PAGE_MODAL,
 	ADD_TO_CART,
-	CART_PAGE
-	
+	CART_PAGE,
+	SIGN_OUT,
+	REDUCE_COUNT_OF_GOODS_PER_UNIT
 	
 
 }

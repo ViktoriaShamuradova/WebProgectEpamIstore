@@ -6,18 +6,19 @@ import java.util.ArrayList;
 import java.util.List;
 
 import by.epamtc.shamuradova.ishop.bean.AbstractEntity;
-import by.epamtc.shamuradova.ishop.bean.Model;
 import by.epamtc.shamuradova.ishop.bean.User;
-import by.epamtc.shamuradova.ishop.constant.database_column_name.ModelColumnName;
 import by.epamtc.shamuradova.ishop.constant.database_column_name.UserColumnName;
 import by.epamtc.shamuradova.ishop.dao.handler.ResultSetHandler;
 
-public class ResultSetHandlerUser implements ResultSetHandler {
+public class ResiltSetHandlerUser implements ResultSetHandler{
+
+	public ResiltSetHandlerUser() {
+		
+	}
 
 	@Override
 	public AbstractEntity handleSingle(ResultSet resultSet) throws SQLException {
 		User user = null;
-
 		if (resultSet.next()) {
 			user = initialized(resultSet);
 		}
@@ -32,21 +33,19 @@ public class ResultSetHandlerUser implements ResultSetHandler {
 		while (resultSet.next()) {
 			list.add(initialized(resultSet));
 		}
-
+		
 		return list;
 	}
-
+	
 	private User initialized(ResultSet rs) throws SQLException {
 		User user = new User();
-		
-		user.setRole(rs.getString(UserColumnName.ROLE));
-		user.setStatus(rs.getString(UserColumnName.STATUS));
-		user.setEmail(rs.getString(UserColumnName.EMAIL));
-		user.setId(rs.getInt(UserColumnName.ID));
-		user.setLogin(rs.getString(UserColumnName.LOGIN));
-		user.setName(rs.getString(ModelColumnName.NAME));
+		user.setName(rs.getString(UserColumnName.NAME));
 		user.setSurname(rs.getString(UserColumnName.SURNAME));
-		
+		user.setLogin(rs.getString(UserColumnName.LOGIN));
+		user.setEmail(rs.getString(UserColumnName.EMAIL));
+		user.setStatus(rs.getString(UserColumnName.STATUS));
+		user.setRole(rs.getString(UserColumnName.ROLE));
+		user.setId(rs.getInt(UserColumnName.ID));
 		return user;
 	}
 

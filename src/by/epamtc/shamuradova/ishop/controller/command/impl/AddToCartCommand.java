@@ -68,7 +68,7 @@ public class AddToCartCommand implements Command {
 				cartService.createCartItem(content);
 			}
 
-			ShopCart shopCart = cartService.formShopCart(user.getId());
+			ShopCart shopCart = cartService.formNewShopCart(user.getId());
 
 			session.setAttribute("shopcart", shopCart);
 			resp.sendRedirect(SHOPPER_PAGE);

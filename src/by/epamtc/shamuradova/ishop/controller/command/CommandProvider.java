@@ -12,10 +12,12 @@ import by.epamtc.shamuradova.ishop.controller.command.impl.EnterPageCommand;
 import by.epamtc.shamuradova.ishop.controller.command.impl.ErrorPageCommand;
 import by.epamtc.shamuradova.ishop.controller.command.impl.ModalPageModalCommand;
 import by.epamtc.shamuradova.ishop.controller.command.impl.ModelsByCategoryCommand;
+import by.epamtc.shamuradova.ishop.controller.command.impl.ReduceCountOfModelPerUnitCommand;
 import by.epamtc.shamuradova.ishop.controller.command.impl.RegistrationPageCommand;
 import by.epamtc.shamuradova.ishop.controller.command.impl.SetLocaleCommand;
 import by.epamtc.shamuradova.ishop.controller.command.impl.ShopperPageCommand;
 import by.epamtc.shamuradova.ishop.controller.command.impl.SignInCommand;
+import by.epamtc.shamuradova.ishop.controller.command.impl.SignOutCommand;
 import by.epamtc.shamuradova.ishop.controller.command.impl.SignUpShopperCommand;
 
 public class CommandProvider {
@@ -37,8 +39,10 @@ public class CommandProvider {
 		commands.put(ParameterNameCommand.MODEL_PAGE_MODAL, new ModalPageModalCommand());
 		commands.put(ParameterNameCommand.ADD_TO_CART, new AddToCartCommand());
 		commands.put(ParameterNameCommand.CART_PAGE, new CartPageCommand());
-	}	
-	
+		commands.put(ParameterNameCommand.SIGN_OUT, new SignOutCommand());
+		commands.put(ParameterNameCommand.REDUCE_COUNT_OF_GOODS_PER_UNIT, new ReduceCountOfModelPerUnitCommand());
+	}
+
 	public Command getCommand(String commandName) {
 		commandName = commandName.toUpperCase();
 

@@ -2,11 +2,13 @@ package by.epamtc.shamuradova.ishop.service.impl;
 
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
+import java.sql.SQLException;
 
 import by.epamtc.shamuradova.ishop.bean.AuthData;
 import by.epamtc.shamuradova.ishop.bean.User;
 import by.epamtc.shamuradova.ishop.constant.ErrorMessage;
 import by.epamtc.shamuradova.ishop.dao.SignInDAO;
+import by.epamtc.shamuradova.ishop.dao.exception.ConnectionPoolException;
 import by.epamtc.shamuradova.ishop.dao.exception.DAOException;
 import by.epamtc.shamuradova.ishop.dao.impl.SignInDAOImpl2;
 import by.epamtc.shamuradova.ishop.service.SignInService;
@@ -55,6 +57,14 @@ public class SignInServiceImpl implements SignInService {
 		if (error.length() != 0) {
 			throw new ValidationException(new String(error));
 		}
+	}
+	public static void main(String[] args) throws ConnectionPoolException, SQLException, DAOException, ServiceException {
+		String pass = new String("123456789");
+		char[] password = pass.toCharArray();
+		AuthData data = new AuthData("ShamurShamaaaaa44", password);
+		SignInServiceImpl serv = new SignInServiceImpl();
+		System.out.println(serv.signIn(data));
+
 	}
 
 }

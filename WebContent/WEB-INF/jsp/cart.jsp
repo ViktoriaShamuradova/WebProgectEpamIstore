@@ -18,35 +18,40 @@
 				<tr>
 					<th scope="col">Товар</th>
 					<th scope="col">Количество</th>
-					<th scope="col">Действие</th>
+					
 				</tr>
 			</thead>
 			<tbody>
 				<c:forEach var="shopCartItem" items="${sessionScope.shopcart.shopCartItems}">
 					<tr>
-					 	<th scope="row">1</th>
 						<td><c:out value="${shopCartItem.model.name}" /></td>
-					</tr>
-					
-					<tr>
-						<th scope="row">2</th>
-						<td><td><c:out value="${shopCartItem.count}" /></td></td>
-					</tr>
-					
-					<tr>	
-					 <th scope="row">3</th>			
-						<td><button type="button" class="btn btn-warning">Удалить</button></td>		
-					</tr>
-				</c:forEach>
+						<td><a class="btn btn-primary btn-sm" href="controller?command=reduce_count_of_goods_per_unit&idModel=${shopCartItems.model.id}" role="button">-</a>
+							<c:out value="${shopCartItem.count}" />
+							<a class="btn btn-primary btn-sm" href="#" role="button">+</a>
+							</td>					
+					</tr>	
+				</c:forEach>				
 			</tbody>
 		</table>
-
 	</div>
 	
-	<c:out value="${sessionScope.shopcart.totalSum}" />
 	
-	<c:out value="${sessionScope.shopcart.totalCount}" />
-
+	<div class = "container">
+	
+		<nav aria-label="breadcrumb">
+	  		<ol class="breadcrumb">
+	    		<li class="breadcrumb-item">Total sum <h5><c:out value=" ${sessionScope.shopcart.totalSum}" /></h5></li>
+	    		<li class="breadcrumb-item">Total count <h5><c:out value="${sessionScope.shopcart.totalCount}" /></h5></li>
+	    		<li class="breadcrumb-item"><a href="#" class="btn btn-primary">Оформить заказ</a></li>
+	    		
+	   			
+	  		</ol>
+	  </nav>
+	
+	
+	</div>
+	
+	
 
 
 

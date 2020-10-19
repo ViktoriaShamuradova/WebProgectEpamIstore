@@ -1,5 +1,6 @@
 package by.epamtc.shamuradova.ishop.dao.impl;
 
+import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -55,6 +56,16 @@ public class CartDAOImpl implements CartDAO {
 		}
 		return cart;
 	}
+	
+	void delete() {
+		try {
+			Connection conn = ConnectionPool.getInstance().getConnection();
+			conn.setAutoCommit(false);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 
 	@Override
 	public void addCart(int userId, Date date) throws DAOException {
@@ -107,7 +118,7 @@ public class CartDAOImpl implements CartDAO {
 	}
 
 	@Override
-	public int getTotalSumCart(int idUser) throws DAOException {
+	public BigDecimal getTotalSumCart(int idUser) throws DAOException {
 
 		ConnectionPool pool = ConnectionPool.getInstance();
 		Connection connection = null;
@@ -119,7 +130,7 @@ public class CartDAOImpl implements CartDAO {
 			ResultSet res = JDBCUtil.call(connection, SQLQuery.TOTAL_SUM_OF_MODELS_IN_CART, idUser);
 
 			if (res.next()) {
-				return res.getInt("total_sum");
+				return res.getBigDecimal("total_sum");
 			} else
 				throw new DAOException("total sum error");
 		} catch (ConnectionPoolException | SQLException e) {

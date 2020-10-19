@@ -2,12 +2,12 @@ package by.epamtc.shamuradova.ishop.dao.impl;
 
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.Arrays;
 
-import by.epamtc.shamuradova.ishop.bean.AuthData;
 import by.epamtc.shamuradova.ishop.bean.User;
 import by.epamtc.shamuradova.ishop.constant.ErrorMessage;
 import by.epamtc.shamuradova.ishop.constant.SQLQuery;
-import by.epamtc.shamuradova.ishop.dao.SignInDAO;
+import by.epamtc.shamuradova.ishop.dao.UserDAO;
 import by.epamtc.shamuradova.ishop.dao.exception.ConnectionPoolException;
 import by.epamtc.shamuradova.ishop.dao.exception.DAOException;
 import by.epamtc.shamuradova.ishop.dao.handler.ResultSetHandler;
@@ -15,31 +15,24 @@ import by.epamtc.shamuradova.ishop.dao.handler.impl.ResultSetHandlerUser;
 import by.epamtc.shamuradova.ishop.dao.pool.ConnectionPool;
 import by.epamtc.shamuradova.ishop.dao.util.JDBCUtil;
 
-//работает!!!!!
-public class SignInDAOImpl2 implements SignInDAO {
-	
-	
-	private ResultSetHandler resultSetHandlerUser;
-	
-	public SignInDAOImpl2() {
-		resultSetHandlerUser = new ResultSetHandlerUser();
-	}
+public class UserDAOImpl implements UserDAO {
 
 	@Override
-	public User signIn(AuthData data) throws DAOException {
+	public User getUserByLogin(String login) throws DAOException {
+		ResultSetHandler resultSetHandlerUser = new ResultSetHandlerUser();
 		ConnectionPool pool = ConnectionPool.getInstance();
 		Connection connection = null;
 		User user;
 		try {
 			pool.initPoolData();
 			connection = pool.getConnection();
-			String sql = SQLQuery.SIGN_IN;
-			
-			user = (User)JDBCUtil.selectSingle(connection, sql, resultSetHandlerUser, data.getLogin());
+			String sql = SQLQuery.USER_BY_LOGIN;
+
+			user = (User) JDBCUtil.selectSingle(connection, sql, resultSetHandlerUser, login);
+			return user;
 		} catch (ConnectionPoolException | SQLException e) {
 			throw new DAOException(ErrorMessage.DATABASE_ERROR, e);
-			
-			
+
 		} finally {
 			if (connection != null) {
 				try {
@@ -50,16 +43,13 @@ public class SignInDAOImpl2 implements SignInDAO {
 			}
 		}
 
-		return user;
-		
 	}
-	public static void main(String[] args) throws ConnectionPoolException, SQLException, DAOException {
-		String pass = new String("123456789");
-		char[] password = pass.toCharArray();
-		AuthData data = new AuthData("ShamurShamaaaaa44", password);
-		SignInDAOImpl2 dao = new SignInDAOImpl2();
-		System.out.println(dao.signIn(data));
-
+	public static void main(String[] args) throws DAOException {
+		String login = "TestTest55";
+		UserDAOImpl user = new UserDAOImpl();
+		User u = user.getUserByLogin(login);
+		System.out.println(Arrays.toString(u.getPassword()) + " "+ u.getId());
+		
 	}
 
 }

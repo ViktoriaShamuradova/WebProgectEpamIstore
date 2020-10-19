@@ -6,13 +6,16 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import by.epamtc.shamuradova.ishop.bean.RegInfo;
+import by.epamtc.shamuradova.ishop.bean.User;
 import by.epamtc.shamuradova.ishop.constant.ErrorMessage;
 import by.epamtc.shamuradova.ishop.constant.PatternContainer;
 import by.epamtc.shamuradova.ishop.constant.UserRole;
 import by.epamtc.shamuradova.ishop.constant.UserStatus;
 import by.epamtc.shamuradova.ishop.dao.SignUpDAO;
+import by.epamtc.shamuradova.ishop.dao.UserDAO;
 import by.epamtc.shamuradova.ishop.dao.exception.DAOException;
 import by.epamtc.shamuradova.ishop.dao.impl.SignUpImplDAO;
+import by.epamtc.shamuradova.ishop.dao.impl.UserDAOImpl;
 import by.epamtc.shamuradova.ishop.service.SignUpService;
 import by.epamtc.shamuradova.ishop.service.exception.ServiceException;
 import by.epamtc.shamuradova.ishop.service.exception.ValidationException;
@@ -21,7 +24,7 @@ import by.epamtc.shamuradova.ishop.service.util.MD5Encryptor;
 public class SignUpServiceImpl implements SignUpService {
 
 	@Override
-	public void signUp(RegInfo regInfo) throws ServiceException {
+	public User signUp(RegInfo regInfo) throws ServiceException {
 		try {
 			validate(regInfo);
 
@@ -36,6 +39,13 @@ public class SignUpServiceImpl implements SignUpService {
 			String hashPassword = MD5Encryptor.getHashCode(new String(regInfo.getPassword()));
 			regInfo.setPassword(hashPassword.toCharArray());
 			signUpDAO.signUp(regInfo);
+			
+			UserDAO userDAO = new UserDAOImpl();
+			User user = userDAO.getUserByLogin(regInfo.getLogin());
+			
+			return user;
+			
+			
 
 		} catch (DAOException | ValidationException |UnsupportedEncodingException |NoSuchAlgorithmException e) {
 			throw new ServiceException(e);
@@ -82,11 +92,11 @@ public class SignUpServiceImpl implements SignUpService {
 	}
 
 	public static void main(String[] args) throws ServiceException {
-		char[] password = new char[] { 'v', 'd', 'e', 'a', '2', '5' };
+		char[] password = new char[] { '1', '2', '3', '4', '5', '6','7', '8','9' };
 		String pass = new String(password);
-		RegInfo regInfo = new RegInfo("Roman", "Rom", "RomRom344", "rom@gmail.com", password, UserStatus.NEW, UserRole.SHOPPER);
+		RegInfo regInfo = new RegInfo("Shamuraaa", "Shamaaa", "ShamurShamaaaaa44", "sham@gmail.com", password, UserStatus.NEW, UserRole.SHOPPER);
 		SignUpServiceImpl sign = new SignUpServiceImpl();
-		sign.signUp(regInfo);
+		System.out.println(sign.signUp(regInfo));
 	}
 
 }
