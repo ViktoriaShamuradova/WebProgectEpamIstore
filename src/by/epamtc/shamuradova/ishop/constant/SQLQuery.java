@@ -17,8 +17,7 @@ public class SQLQuery {
 	public static final String CHECK_LOGIN = "CALL check_login(?)";
 	public static final String LIST_MODELS = "select m.*, c.name as category, p.name as producer from models m, producers p, categories c where c.id=m.id_category and p.id=m.id_producer limit ? offset ?";
 	public static final String LIST_MODELS_BY_CATEGORY = "select m.*, c.name as category, pr.name as producer from models m, categories c, producers pr \r\n"
-			+ "where c.url=? and pr.id=m.id_producer and c.id=m.id_category \r\n"
-			+ "order by m.id limit ? offset ?";
+			+ "where c.url=? and pr.id=m.id_producer and c.id=m.id_category \r\n" + "order by m.id limit ? offset ?";
 	// public static final String LIST_CATEGORY = "select* from categories order by
 	// id";
 	public static final String LIST_CATEGORY = "select c.name, c.url, SUM(m.count) AS count, c.id from categories c, models m WHERE c.id=m.id_category group by m.id_category";
@@ -32,7 +31,10 @@ public class SQLQuery {
 	public static final String ADD_CART_ITEM = "INSERT INTO cart_item(id_cart, id_model, count) VALUES (?,?,?)";
 	public static final String TOTAL_COUNT_OF_MODELS_IN_CART = "CALL total_count_in_cart(?)";
 	public static final String TOTAL_SUM_OF_MODELS_IN_CART = "CALL count_tottal_sum_for_cart(?)";
-	public static final String LIST_SHOP_CART_ITEMS ="SELECT m.name, m.description, m.id, m.price, m.image_link, categories.name as category, p.name as producer, c.count \r\n" + 
-	"FROM models m, cart_item c, producers p, categories \r\n" + 
-	"where c.id_model=m.id and c.id_cart= ? and categories.id=m.id_category and p.id=m.id_producer";
+	public static final String LIST_SHOP_CART_ITEMS = "SELECT m.name, m.description, m.id, m.price, m.image_link, categories.name as category, p.name as producer, c.count \r\n"
+			+ "FROM models m, cart_item c, producers p, categories \r\n"
+			+ "where c.id_model=m.id and c.id_cart= ? and categories.id=m.id_category and p.id=m.id_producer";
+	public static final String DELETE_CART_BY_ID = "delete from carts where id_user=?";
+	public static final String DELETE_CARTITEM_BY_ID_MODEL = "delete from cart_item where id_model=?";
+	public static final String UPDATE_CARTITEM_COUNT_BY_ID_MODEL = "update cart_item set count=? where id_model=?";
 }

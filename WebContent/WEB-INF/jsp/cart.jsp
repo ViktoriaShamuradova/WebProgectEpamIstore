@@ -25,7 +25,7 @@
 				<c:forEach var="shopCartItem" items="${sessionScope.shopcart.shopCartItems}">
 					<tr>
 						<td><c:out value="${shopCartItem.model.name}" /></td>
-						<td><a class="btn btn-primary btn-sm" href="controller?command=reduce_count_of_goods_per_unit&idModel=${shopCartItems.model.id}" role="button">-</a>
+						<td><a class="btn btn-primary btn-sm" href="controller?command=reduce_count_of_goods_per_unit&idModel=${shopCartItem.model.id}" role="button">-</a>
 							<c:out value="${shopCartItem.count}" />
 							<a class="btn btn-primary btn-sm" href="#" role="button">+</a>
 							</td>					

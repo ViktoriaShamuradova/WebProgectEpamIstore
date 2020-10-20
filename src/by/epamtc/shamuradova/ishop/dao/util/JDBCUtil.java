@@ -56,7 +56,7 @@ public final class JDBCUtil {
 		}
 	}
 
-	public static void insert(Connection connection, String sql, Object... parameters) throws SQLException {
+	public static void insertDeleteUpdate(Connection connection, String sql, Object... parameters) throws SQLException {
 
 		PreparedStatement prStatement = connection.prepareStatement(sql);
 		try {
@@ -67,6 +67,9 @@ public final class JDBCUtil {
 		}
 
 	}
+	
+
+	
 
 	public static ResultSet call(Connection connection, String sql, Object... parameters) throws SQLException {
 		CallableStatement callableStatement = null;

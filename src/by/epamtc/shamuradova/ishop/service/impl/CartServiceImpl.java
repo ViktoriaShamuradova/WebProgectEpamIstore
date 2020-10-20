@@ -8,6 +8,7 @@ import java.util.Map;
 
 import by.epamtc.shamuradova.ishop.bean.Cart;
 import by.epamtc.shamuradova.ishop.bean.CartContent;
+import by.epamtc.shamuradova.ishop.bean.Model;
 import by.epamtc.shamuradova.ishop.bean.ShopCart;
 import by.epamtc.shamuradova.ishop.bean.ShopCartItem;
 import by.epamtc.shamuradova.ishop.dao.CartDAO;
@@ -54,6 +55,7 @@ public class CartServiceImpl implements CartService {
 		}
 
 	}
+
 //исправить, правильнее исправлять сумму и колво в shopCart, а не дополнтельно запрашивать в бд
 	@Override
 	public ShopCart formNewShopCart(int userId) throws ServiceException {
@@ -82,43 +84,84 @@ public class CartServiceImpl implements CartService {
 		return shopCart;
 
 	}
-	//здессь посмотри транзакции бд
+
+	// work
 	@Override
-	public void updateCartReduce(ShopCart shopCart, int idModel, int count, int idUser) throws ServiceException {
-		shopCart.removeModel(idModel, count);
-		
+	public void updateCartReduce(ShopCart shopCart, int idModel, int countToReduce, int idUser)
+			throws ServiceException {
+		shopCart.removeModel(idModel, countToReduce);
+
+		int count;
+
 		CartDAO cartDAO = new CartDAOImpl();
-		
-		
-		if(shopCart.getShopCartItems().isEmpty()) {
-			cartDAO.deleteCartByidUser(idUser);
-			cartDAO.deleteCartItemByIdModel(idModel);
+
+		try {
+			if (shopCart.isEmpty()) {
+				cartDAO.deleteCartByidUser(idUser);// одновременно удалится и последняя запись в cart_item
+
+			} else {
+				// если содержит модель, то корректируем количество, иначе удаляем запись этой
+				// модели в cart_item
+				if (shopCart.containsIdModel(idModel)) {
+					ShopCartItem item = shopCart.getShopCartItem(idModel);
+					count = item.getCount();
+					cartDAO.updateCartItemCountByIdModel(idModel, count);
+
+				} else {
+					cartDAO.deleteCartItemByIdModel(idModel);
+				}
+			}
+
+		} catch (DAOException e) {
+			throw new ServiceException(e);
 		}
-		
-		
-		// DAO 1
-		// DAO 2
-		// DAO 3
-		
-		
-		
+
 	}
 
 	public static void main(String[] args) throws ServiceException {
-//		CartServiceImpl cart = new CartServiceImpl();
+		CartServiceImpl cartS = new CartServiceImpl();
 //		System.out.println(cart.formNewShopCart(16));
-		Map<Integer, String> ex= new HashMap();
-		ex.put(1, "v1");
-		ex.put(2, "v2");
-		ex.put(3, "v3");
-		ex.remove("v3");
-		ex.remove(3);
-		System.out.println(ex);
-		
-	}
-		
-}
+		ShopCart cart = new ShopCart();
+		ShopCart cart2 = new ShopCart();
 
+		//create model, item
+		Model m57 = new Model();
+		m57.setId(57);
+		m57.setPrice(new BigDecimal(5000));
+		ShopCartItem item1 = new ShopCartItem(m57, 4);
+		
+		Model m58 = new Model();
+		m58.setId(58);
+		m58.setPrice(new BigDecimal(5000));
+		ShopCartItem item2 = new ShopCartItem(m58, 1);
+		
+//create shopcart
+		Map<Integer, ShopCartItem> ex = new HashMap();
+		ex.put(57, item1);
+		cart.setShopCartItems(ex);
+
+		Map<Integer, ShopCartItem> ex2 = new HashMap();
+		ex2.put(58, item2);
+		cart2.setShopCartItems(ex2);
+		
+		//work, если товаров больше 1
+		cartS.updateCartReduce(cart, 57, 1, 19);
+		
+		cartS.updateCartReduce(cart2, 58, 1, 20);
 	
 
+		
+		
 
+//		System.out.println(cart.getShopCartItems().contains(53));
+//		System.out.println(cart.getShopCartItems().contains(52));
+//		System.out.println(cart.getShopCartItems().contains(50));
+//		System.out.println(ex.containsKey(50));
+//		System.out.println(cart.getShopCartItems());
+//		System.out.println(count);
+//
+//		ShopCart c = new ShopCart();
+//		System.out.println(c.getShopCartItems().isEmpty());
+	}
+
+}

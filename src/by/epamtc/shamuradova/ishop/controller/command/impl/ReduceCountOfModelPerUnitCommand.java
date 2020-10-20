@@ -24,11 +24,12 @@ public class ReduceCountOfModelPerUnitCommand implements Command {
 	public ReduceCountOfModelPerUnitCommand() {
 		cartService = ServiceFactory.getInstance().getCartService();
 	}
-
+//поробуй без установки сессии вывести на экран
 	@Override
 	public void execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		HttpSession session = req.getSession();
 		ShopCart shopCart = (ShopCart) session.getAttribute("shopcart");
+		String modelId = req.getParameter("idModel");
 		int idModel = Integer.parseInt(req.getParameter("idModel"));
 		User user = (User)session.getAttribute("user");
 

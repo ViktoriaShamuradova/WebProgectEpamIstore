@@ -8,15 +8,15 @@ import java.util.Map;
 
 public class ShopCart implements Serializable {
 
-
 	private static final long serialVersionUID = 4905506574371844621L;
-	
+
 	private Map<Integer, ShopCartItem> shopCartItems;
 	private BigDecimal totalSum;
 	private int totalCount;
 
 	public ShopCart() {
 		shopCartItems = new HashMap<>();
+		totalSum = new BigDecimal(0);
 	}
 
 	public ShopCart(Map<Integer, ShopCartItem> shopCartItems, BigDecimal totalSum, int totalCount) {
@@ -24,6 +24,17 @@ public class ShopCart implements Serializable {
 		this.shopCartItems = shopCartItems;
 		this.totalSum = totalSum;
 		this.totalCount = totalCount;
+	}
+
+	public boolean containsIdModel(int idModel) {
+		return shopCartItems.containsKey(idModel);
+	}
+
+	public ShopCartItem getShopCartItem(int idModel) {
+		return shopCartItems.get(idModel);
+	}
+	public boolean isEmpty() {
+		return shopCartItems.isEmpty();
 	}
 
 	public void removeModel(int idModel, int count) {
@@ -117,6 +128,5 @@ public class ShopCart implements Serializable {
 		return "ShopCart [shopCartItems=" + shopCartItems + ", totalSum=" + totalSum + ", totalCount=" + totalCount
 				+ "]";
 	}
-
 
 }

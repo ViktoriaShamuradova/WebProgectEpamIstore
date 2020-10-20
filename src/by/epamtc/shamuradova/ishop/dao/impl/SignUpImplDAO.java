@@ -46,7 +46,7 @@ public class SignUpImplDAO implements SignUpDAO {
 				int statusId = UserStatus.statusesId.get(regInfo.getStatus().toUpperCase());
 				int roleId = UserRole.rolesId.get(regInfo.getRole().toUpperCase());
 				String password = new String(regInfo.getPassword());
-				JDBCUtil.insert(connection, sql, regInfo.getName(), regInfo.getSurname(), regInfo.getLogin(), password,
+				JDBCUtil.insertDeleteUpdate(connection, sql, regInfo.getName(), regInfo.getSurname(), regInfo.getLogin(), password,
 						regInfo.getEmail(), statusId, roleId);
 				password = null;
 				regInfo.deletePassword();
