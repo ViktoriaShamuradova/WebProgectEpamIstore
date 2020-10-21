@@ -12,8 +12,10 @@ import by.epamtc.shamuradova.ishop.bean.Model;
 import by.epamtc.shamuradova.ishop.bean.ShopCart;
 import by.epamtc.shamuradova.ishop.bean.ShopCartItem;
 import by.epamtc.shamuradova.ishop.dao.CartDAO;
+import by.epamtc.shamuradova.ishop.dao.ModelDAO;
 import by.epamtc.shamuradova.ishop.dao.exception.DAOException;
 import by.epamtc.shamuradova.ishop.dao.impl.CartDAOImpl;
+import by.epamtc.shamuradova.ishop.dao.impl.ModelDAOImpl;
 import by.epamtc.shamuradova.ishop.service.CartService;
 import by.epamtc.shamuradova.ishop.service.exception.ServiceException;
 
@@ -56,7 +58,7 @@ public class CartServiceImpl implements CartService {
 
 	}
 
-//исправить, правильнее исправлять сумму и колво в shopCart, а не дополнтельно запрашивать в бд
+//исправить, правильнее исправлять сумму и колво в shopCart, а не дополнтельно запрашивать в бд, справить добавление в shopCart
 	@Override
 	public ShopCart formNewShopCart(int userId) throws ServiceException {
 		ShopCart shopCart = new ShopCart();
@@ -118,23 +120,42 @@ public class CartServiceImpl implements CartService {
 
 	}
 
+//если не работает, завтра проверить по частям
+	@Override
+	public void updateCartIncrease(ShopCart shopCart, int idModel, int count) throws ServiceException {
+		ModelDAO modelDAO = new ModelDAOImpl();
+
+		try {
+			Model model = modelDAO.getModelById(idModel);
+			shopCart.addShopCartItem(model, count);
+
+			CartDAO cartDAO = new CartDAOImpl();
+
+			cartDAO.updateCartItemCountByIdModel(idModel, count);
+
+		} catch (DAOException e) {
+			throw new ServiceException(e);
+		}
+
+	}
+
 	public static void main(String[] args) throws ServiceException {
 		CartServiceImpl cartS = new CartServiceImpl();
 //		System.out.println(cart.formNewShopCart(16));
 		ShopCart cart = new ShopCart();
 		ShopCart cart2 = new ShopCart();
 
-		//create model, item
+		// create model, item
 		Model m57 = new Model();
 		m57.setId(57);
 		m57.setPrice(new BigDecimal(5000));
 		ShopCartItem item1 = new ShopCartItem(m57, 4);
-		
+
 		Model m58 = new Model();
 		m58.setId(58);
 		m58.setPrice(new BigDecimal(5000));
 		ShopCartItem item2 = new ShopCartItem(m58, 1);
-		
+
 //create shopcart
 		Map<Integer, ShopCartItem> ex = new HashMap();
 		ex.put(57, item1);
@@ -143,15 +164,11 @@ public class CartServiceImpl implements CartService {
 		Map<Integer, ShopCartItem> ex2 = new HashMap();
 		ex2.put(58, item2);
 		cart2.setShopCartItems(ex2);
-		
-		//work, если товаров больше 1
-		cartS.updateCartReduce(cart, 57, 1, 19);
-		
-		cartS.updateCartReduce(cart2, 58, 1, 20);
-	
 
-		
-		
+		// work, если товаров больше 1
+		cartS.updateCartReduce(cart, 57, 1, 19);
+
+		cartS.updateCartReduce(cart2, 58, 1, 20);
 
 //		System.out.println(cart.getShopCartItems().contains(53));
 //		System.out.println(cart.getShopCartItems().contains(52));

@@ -27,7 +27,7 @@
 						<td><c:out value="${shopCartItem.model.name}" /></td>
 						<td><a class="btn btn-primary btn-sm" href="controller?command=reduce_count_of_goods_per_unit&idModel=${shopCartItem.model.id}" role="button">-</a>
 							<c:out value="${shopCartItem.count}" />
-							<a class="btn btn-primary btn-sm" href="#" role="button">+</a>
+							<a class="btn btn-primary btn-sm" href="controller?command=increase_count_of_goods_per_unit&idModel=${shopCartItem.model.id}" role="button">+</a>
 							</td>					
 					</tr>	
 				</c:forEach>				
@@ -42,7 +42,7 @@
 	  		<ol class="breadcrumb">
 	    		<li class="breadcrumb-item">Total sum <h5><c:out value=" ${sessionScope.shopcart.totalSum}" /></h5></li>
 	    		<li class="breadcrumb-item">Total count <h5><c:out value="${sessionScope.shopcart.totalCount}" /></h5></li>
-	    		<li class="breadcrumb-item"><a href="#" class="btn btn-primary">Оформить заказ</a></li>
+	    		<li class="breadcrumb-item"><a href="controller?command=form_order" class="btn btn-primary">Оформить заказ</a></li>
 	    		
 	   			
 	  		</ol>

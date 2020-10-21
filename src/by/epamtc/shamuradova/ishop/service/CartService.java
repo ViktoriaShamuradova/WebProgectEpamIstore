@@ -16,4 +16,6 @@ public interface CartService {
 	public ShopCart formNewShopCart(int idUser) throws ServiceException;
 	
 	public void updateCartReduce(ShopCart shopCart, int idModel, int count, int idUser)throws ServiceException;
+
+	public void updateCartIncrease(ShopCart shopCart, int idModel, int count)throws ServiceException;
 }

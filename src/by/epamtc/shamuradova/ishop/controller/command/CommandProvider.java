@@ -10,6 +10,7 @@ import by.epamtc.shamuradova.ishop.controller.command.impl.AllModelsMoreCommand;
 import by.epamtc.shamuradova.ishop.controller.command.impl.CartPageCommand;
 import by.epamtc.shamuradova.ishop.controller.command.impl.EnterPageCommand;
 import by.epamtc.shamuradova.ishop.controller.command.impl.ErrorPageCommand;
+import by.epamtc.shamuradova.ishop.controller.command.impl.IncreaseCountOfModelPerUnitCommand;
 import by.epamtc.shamuradova.ishop.controller.command.impl.ModalPageModalCommand;
 import by.epamtc.shamuradova.ishop.controller.command.impl.ModelsByCategoryCommand;
 import by.epamtc.shamuradova.ishop.controller.command.impl.ReduceCountOfModelPerUnitCommand;
@@ -41,6 +42,8 @@ public class CommandProvider {
 		commands.put(ParameterNameCommand.CART_PAGE, new CartPageCommand());
 		commands.put(ParameterNameCommand.SIGN_OUT, new SignOutCommand());
 		commands.put(ParameterNameCommand.REDUCE_COUNT_OF_GOODS_PER_UNIT, new ReduceCountOfModelPerUnitCommand());
+		commands.put(ParameterNameCommand.INCREASE_COUNT_OF_GOODS_PER_UNIT,  new IncreaseCountOfModelPerUnitCommand());
+		commands.put(ParameterNameCommand.FORM_ORDER, new FormOrderCommand());
 	}
 
 	public Command getCommand(String commandName) {

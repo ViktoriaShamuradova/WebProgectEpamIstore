@@ -65,6 +65,8 @@
 			
 		</div>
 	</div>
+	
+	<%@ include file="model_list.jsp"%>
 
 	
 		

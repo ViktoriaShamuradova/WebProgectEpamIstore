@@ -33,6 +33,7 @@ public class ShopCart implements Serializable {
 	public ShopCartItem getShopCartItem(int idModel) {
 		return shopCartItems.get(idModel);
 	}
+
 	public boolean isEmpty() {
 		return shopCartItems.isEmpty();
 	}
@@ -73,8 +74,19 @@ public class ShopCart implements Serializable {
 	}
 
 	public void addShopCartItem(Model model, int count) {
+		ShopCartItem item = shopCartItems.get(model.getId());
+
+		if (item == null) {
+			item = new ShopCartItem(model, count);
+			shopCartItems.put(model.getId(), item);
+		} else {
+			item.setCount(item.getCount() + count);
+		}
+		refreshData();
+
 	}
 
+	// убрать и починить другие методы из-за него
 	public void addShopCartItem(ShopCartItem item) {
 		shopCartItems.put(item.getModel().getId(), item);
 	}
