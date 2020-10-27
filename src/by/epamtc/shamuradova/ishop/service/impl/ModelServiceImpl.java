@@ -34,7 +34,7 @@ public class ModelServiceImpl implements ModelService {
 	@Override
 	public List<Model> listModelsByCategory(String categoryUrl, int page, int limit) throws ServiceException {
 		ModelDAO modelDao = new ModelDAOImpl();
-		List<Model> models;
+
 		try {
 			return modelDao.listModelsByCategory(categoryUrl, page, limit);
 		} catch (DAOException e) {

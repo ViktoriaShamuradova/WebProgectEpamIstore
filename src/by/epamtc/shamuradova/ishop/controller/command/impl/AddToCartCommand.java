@@ -38,6 +38,8 @@ public class AddToCartCommand implements Command {
 		int idModel = Integer.parseInt(req.getParameter("modelId"));
 
 		Cart cart = null;
+		
+		//ри фильтре это можно убрать и проверить
 		if (session == null || user == null) {
 			req.getRequestDispatcher(GET_ENTER_PAGE_COMMAND).forward(req, resp);
 

@@ -8,11 +8,15 @@ import by.epamtc.shamuradova.ishop.controller.command.impl.AdminPageCommand;
 import by.epamtc.shamuradova.ishop.controller.command.impl.AllModelsAllCategoriesCommand;
 import by.epamtc.shamuradova.ishop.controller.command.impl.AllModelsMoreCommand;
 import by.epamtc.shamuradova.ishop.controller.command.impl.CartPageCommand;
+import by.epamtc.shamuradova.ishop.controller.command.impl.OrderDetailesPageCommand;
 import by.epamtc.shamuradova.ishop.controller.command.impl.EnterPageCommand;
 import by.epamtc.shamuradova.ishop.controller.command.impl.ErrorPageCommand;
+import by.epamtc.shamuradova.ishop.controller.command.impl.FormOrderCommand;
 import by.epamtc.shamuradova.ishop.controller.command.impl.IncreaseCountOfModelPerUnitCommand;
 import by.epamtc.shamuradova.ishop.controller.command.impl.ModalPageModalCommand;
 import by.epamtc.shamuradova.ishop.controller.command.impl.ModelsByCategoryCommand;
+import by.epamtc.shamuradova.ishop.controller.command.impl.MoreOrdersCommand;
+import by.epamtc.shamuradova.ishop.controller.command.impl.MyOrdersCommand;
 import by.epamtc.shamuradova.ishop.controller.command.impl.ReduceCountOfModelPerUnitCommand;
 import by.epamtc.shamuradova.ishop.controller.command.impl.RegistrationPageCommand;
 import by.epamtc.shamuradova.ishop.controller.command.impl.SetLocaleCommand;
@@ -44,6 +48,10 @@ public class CommandProvider {
 		commands.put(ParameterNameCommand.REDUCE_COUNT_OF_GOODS_PER_UNIT, new ReduceCountOfModelPerUnitCommand());
 		commands.put(ParameterNameCommand.INCREASE_COUNT_OF_GOODS_PER_UNIT,  new IncreaseCountOfModelPerUnitCommand());
 		commands.put(ParameterNameCommand.FORM_ORDER, new FormOrderCommand());
+		commands.put(ParameterNameCommand.CREATE_ORDER, new OrderDetailesPageCommand());
+		commands.put(ParameterNameCommand.MY_ORDERS, new MyOrdersCommand());
+		commands.put(ParameterNameCommand.LOAD_MORE_ORDERS, new MoreOrdersCommand());
+		
 	}
 
 	public Command getCommand(String commandName) {

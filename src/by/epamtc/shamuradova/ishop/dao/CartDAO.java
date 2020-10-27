@@ -13,9 +13,6 @@ public interface CartDAO {
 
 	public Cart getCartByUserId(int userId) throws DAOException;
 
-	// public void addCartItem(int idCart, int idModel, int count) throws
-	// DAOException;
-
 	public void addCart(int idUser, Date date) throws DAOException;
 
 	public void addCartItem(CartContent cartContents) throws DAOException;
@@ -26,10 +23,12 @@ public interface CartDAO {
 
 	public int getTotalCountOfModelsInCart(int idUser) throws DAOException;
 
-	public void deleteCartByidUser(int idUser) throws DAOException;
+	public boolean deleteCartByidUser(int idUser) throws DAOException;
 
 	public void deleteCartItemByIdModel(int idModel) throws DAOException;
 
 	public void updateCartItemCountByIdModel(int idModel, int count) throws DAOException;
+
+	public void deleteCartItemByIdCart(int idCart) throws DAOException;
 
 }

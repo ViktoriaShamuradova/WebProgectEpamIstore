@@ -5,7 +5,7 @@ public class Producer extends AbstractEntity<Integer> {
 	private static final long serialVersionUID = 502280979690366206L;
 	
 	private String name;
-	private int count;
+	private int modelCount;
 
 	public Producer() {
 	}
@@ -18,19 +18,19 @@ public class Producer extends AbstractEntity<Integer> {
 		this.name = name;
 	}
 
-	public int getCount() {
-		return count;
+	public int getModeltCount() {
+		return modelCount;
 	}
 
-	public void setCount(int count) {
-		this.count = count;
+	public void setModelCount(int modelCount) {
+		this.modelCount = modelCount;
 	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = super.hashCode();
-		result = prime * result + count;
+		result = prime * result + modelCount;
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		return result;
 	}
@@ -44,7 +44,7 @@ public class Producer extends AbstractEntity<Integer> {
 		if (getClass() != obj.getClass())
 			return false;
 		Producer other = (Producer) obj;
-		if (count != other.count)
+		if (modelCount != other.modelCount)
 			return false;
 		if (name == null) {
 			if (other.name != null)
@@ -56,7 +56,7 @@ public class Producer extends AbstractEntity<Integer> {
 
 	@Override
 	public String toString() {
-		return "Producer [name=" + name + ", count=" + count + "]";
+		return "Producer [name=" + name + ", modelCount=" + modelCount + "]";
 	}
 
 	

@@ -2,10 +2,12 @@ package by.epamtc.shamuradova.ishop.service.factory;
 
 import by.epamtc.shamuradova.ishop.service.CartService;
 import by.epamtc.shamuradova.ishop.service.ModelService;
+import by.epamtc.shamuradova.ishop.service.OrderService;
 import by.epamtc.shamuradova.ishop.service.SignInService;
 import by.epamtc.shamuradova.ishop.service.SignUpService;
 import by.epamtc.shamuradova.ishop.service.impl.CartServiceImpl;
 import by.epamtc.shamuradova.ishop.service.impl.ModelServiceImpl;
+import by.epamtc.shamuradova.ishop.service.impl.OrderServiceImpl;
 import by.epamtc.shamuradova.ishop.service.impl.SignInServiceImpl;
 import by.epamtc.shamuradova.ishop.service.impl.SignUpServiceImpl;
 
@@ -17,12 +19,25 @@ public class ServiceFactory {
 	private SignInService signInService = null;
 	private SignUpService signUpService = null;
 	private CartService cartService = null;
+	private OrderService orderService = null;
 
 	private ServiceFactory() {
 	}
 
 	public static ServiceFactory getInstance() {
 		return INSTANCE;
+	}
+
+	public OrderService getOrderService() {
+
+		if (orderService == null) {
+			synchronized (INSTANCE) {
+				if (orderService == null) {
+					orderService = new OrderServiceImpl();
+				}
+			}
+		}
+		return orderService;
 	}
 
 	public ModelService getModelService() {
@@ -36,6 +51,7 @@ public class ServiceFactory {
 		}
 		return modelService;
 	}
+
 	public CartService getCartService() {
 
 		if (cartService == null) {
@@ -47,7 +63,6 @@ public class ServiceFactory {
 		}
 		return cartService;
 	}
-
 
 	public SignInService getSignInService() {
 

@@ -34,7 +34,7 @@ public class ResultSetHandlerModel implements ResultSetHandler {
 		return list;
 	}
 
-	private Model initialized(ResultSet rs) throws SQLException {
+	public Model initialized(ResultSet rs) throws SQLException {
 		Model model = new Model();
 		model.setCategory(rs.getString(ModelColumnName.CATEGORY));
 		model.setCount(rs.getInt(ModelColumnName.COUNT));

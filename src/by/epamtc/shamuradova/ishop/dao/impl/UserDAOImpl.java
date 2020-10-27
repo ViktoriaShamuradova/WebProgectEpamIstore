@@ -11,25 +11,37 @@ import by.epamtc.shamuradova.ishop.dao.UserDAO;
 import by.epamtc.shamuradova.ishop.dao.exception.ConnectionPoolException;
 import by.epamtc.shamuradova.ishop.dao.exception.DAOException;
 import by.epamtc.shamuradova.ishop.dao.handler.ResultSetHandler;
+import by.epamtc.shamuradova.ishop.dao.handler.ResultSetHandler2;
+import by.epamtc.shamuradova.ishop.dao.handler.impl.ResultSetHandlerFactory;
 import by.epamtc.shamuradova.ishop.dao.handler.impl.ResultSetHandlerUser;
+import by.epamtc.shamuradova.ishop.dao.handler.impl.ResultSetHandlerUser2;
 import by.epamtc.shamuradova.ishop.dao.pool.ConnectionPool;
 import by.epamtc.shamuradova.ishop.dao.util.JDBCUtil;
 
 public class UserDAOImpl implements UserDAO {
 
+	private ConnectionPool pool;
+	private ResultSetHandler2<User> resultSetHandlerUser;
+	
+	public UserDAOImpl() {
+		pool= ConnectionPool.getInstance();
+		resultSetHandlerUser = ResultSetHandlerFactory.getSingleResultSetHandler(new ResultSetHandlerUser2());
+		
+		
+	}
+	
 	@Override
 	public User getUserByLogin(String login) throws DAOException {
-		ResultSetHandler resultSetHandlerUser = new ResultSetHandlerUser();
-		ConnectionPool pool = ConnectionPool.getInstance();
+		
 		Connection connection = null;
-		User user;
+		
 		try {
-			pool.initPoolData();
+			
 			connection = pool.getConnection();
 			String sql = SQLQuery.USER_BY_LOGIN;
 
-			user = (User) JDBCUtil.selectSingle(connection, sql, resultSetHandlerUser, login);
-			return user;
+			return JDBCUtil.select(connection, sql, resultSetHandlerUser, login);
+			
 		} catch (ConnectionPoolException | SQLException e) {
 			throw new DAOException(ErrorMessage.DATABASE_ERROR, e);
 

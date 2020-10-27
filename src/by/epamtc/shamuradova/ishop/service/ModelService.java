@@ -6,6 +6,8 @@ import by.epamtc.shamuradova.ishop.bean.Category;
 import by.epamtc.shamuradova.ishop.bean.Model;
 import by.epamtc.shamuradova.ishop.bean.Producer;
 import by.epamtc.shamuradova.ishop.service.exception.ServiceException;
+//page - какую страницу мделей нужно отобразить
+//limit - максимальное колва моделей должно вернуться запросом
 
 public interface ModelService {
 

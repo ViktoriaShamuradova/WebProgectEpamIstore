@@ -18,59 +18,15 @@
 </head>
 <body>
 
-
-	<nav class="navbar navbar-dark sticky-top bg-dark flex-md-nowrap p-0">
-		<div class="site-logo">
-			<img src="front/img/log.png" class="image">
-		</div>
-		
-		<div class="name">
-		<a class="navbar-brand col-sm-3 col-md-2 mr-0" href="#"><h1>Ishop</h1></a> 
-		</div>
-		
-		<input class="form-control form-control-dark w-100" type="text" placeholder="Search" aria-label="Search">
-		<ul class="navbar-nav px-3">
-			<li class="nav-item text-nowrap"><a class="nav-link" href="controller?command=sign_out">Sign out</a></li>
-		</ul>
-	</nav>
+<%@ include file="header.jsp"%>
 
 	<div class="container-fluid">
 		<div class="row">
-			<nav class="col-md-2 d-none d-md-block bg-light sidebar">
-				<div class="sidebar-sticky">
-					<ul class="nav flex-column">
-						<li class="nav-item"><a class="nav-link active" href="#">
-								<span data-feather="home"></span> My profile <span
-								class="sr-only">(current)</span>
-						</a></li>
-						<li class="nav-item"><a class="nav-link" href="#"> <span
-								data-feather="file"></span> Orders
-						</a></li>
-						
-						
-						<li class="nav-item"><a class="nav-link" href="controller?command=cart_page"> <span
-								data-feather="shopping-cart"></span> Cart <c:out value="(${sessionScope.shopcart.totalCount})" />
-						</a></li>
-						<li class="nav-item"><a class="nav-link" href="#"> <span
-								data-feather="bar-chart-2"></span> Reviews
-						</a></li>
-						<li class="nav-item"><a class="nav-link" href="#"> <span
-								data-feather="layers"></span> Saved goods
-						</a></li>
-					</ul>
-	
-				
-			</nav>
-
-			
+			<%@ include file="shopper_navbar.jsp"%>
+			<%@ include file="model_list.jsp"%>
 		</div>
-	</div>
-	
-	<%@ include file="model_list.jsp"%>
-
-	
 		
-
+	</div>
 	
 <!-- Icons -->
 	<script src="https://unpkg.com/feather-icons/dist/feather.min.js"></script>

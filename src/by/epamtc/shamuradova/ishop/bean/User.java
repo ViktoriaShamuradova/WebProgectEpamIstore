@@ -1,8 +1,6 @@
 package by.epamtc.shamuradova.ishop.bean;
 
-import java.io.Serializable;
 import java.util.Arrays;
-
 
 public class User extends AbstractEntity<Integer> {
 

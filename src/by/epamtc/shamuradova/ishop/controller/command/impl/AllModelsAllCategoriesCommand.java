@@ -36,6 +36,10 @@ public class AllModelsAllCategoriesCommand implements Command {
 			
 			req.setAttribute(MODELS_PARAM, models);
 			req.setAttribute(CATEGORY_PARAM, categories);
+			
+			System.out.println(req.getQueryString());
+			System.out.println(req.getRequestURI());
+			
 			RequestDispatcher dispatcher = req.getRequestDispatcher("/main.jsp"); 
 			dispatcher.forward(req, resp);
 		} 

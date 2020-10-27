@@ -6,6 +6,8 @@
 <html>
 <head>
 <meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="description" content="Пример на bootstrap 4: Базовая панель администратора с фиксированной боковой панелью и навигационной панелью. Версия v4.0.0">
 
 <fmt:setLocale value="${sessionScope.locale}" />
 <fmt:setBundle basename="localization.locale" var="loc" />
@@ -22,6 +24,7 @@
 
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 <link href="front/font-awesome/css/all.css" rel="stylesheet">
+<link href="dashboard.css" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="front/css/style.css">
 
@@ -30,40 +33,9 @@
 </head>
 <body>
 
-	<div class="headers-region">
+	<%@ include file="../WEB-INF/jsp/header.jsp"%>
 
-		
-		<div class="site-logo">
-				<img src="front/img/log.png" class="image">
-		</div>
-		
-		<i class="fas fa-user"></i>
-		
-
-
-		<div class="site-name">
-			<h1 class="title">Ishop</h1>
-			<p class="description">большой магазин электроники</p>
-		</div>
-
-
-		<div class="site-access">
-			<%@ include file="../WEB-INF/jsp/ruEn.jsp"%>
-
-			<h3>
-				<a href="controller?command=registration_page"><c:out
-						value="${signUp}" /></a>
-			</h3>
-
-			<a class="btn btn-primary"
-				href="controller?command=enter_page" role="button"><i class="fas fa-sign-in-alt"></i> Войти</a>
-
-		</div>
-	</div>
-
-
-	
-	<div>
+	<!-- <div>
 		<button id="showFilters">Show filters</button>
 		<div id="filters" style="display: none;">
 			<input type="checkbox" /> 1
@@ -72,29 +44,30 @@
 			<input type="checkbox" /> 4
 			<input type="checkbox" /> 5
 		</div>
+	</div> -->
+
+
+	<div class="container-fluid">
+		<div class="row">
+			<%@ include file="../WEB-INF/jsp/category_navbar.jsp"%>
+			<%@ include file="../WEB-INF/jsp/model_list.jsp"%>
+			<a class="btn btn-primary"
+		href="controller?command=load_more_models&category=${category}"
+		role="button">Load more models</a>
+		</div>
+		
 	</div>
 
 
-	<div class="container">
-		<ul class="list-group">
-			<li class="list-group-item active"><c:out value="Model catalog" /></li>
-			<c:forEach var="category" items="${categories}">
-			<li class="list-group-item">
-			<a href="controller?command=models_by_category&category=${category.url}"><c:out value="${category.name} ${category.count}" /></a></li>
-			</c:forEach>
-		</ul>
-	</div>
 
 
-	<%@ include file="../WEB-INF/jsp/model_list.jsp"%>
+	
 	 
 	<%-- <%@ include file="../WEB-INF/jsp/models.jsp"%> --%>
 	
 
 
-	<a class="btn btn-primary"
-		href="controller?command=load_more_models&category=${category}"
-		role="button">Load more models</a>
+	
 	<%-- <form action="controller" method="post">
 			<input type="hidden" name="command" value="load_more_models" />
 			<input type="hidden" name="category" value="${requestScope.category}" />

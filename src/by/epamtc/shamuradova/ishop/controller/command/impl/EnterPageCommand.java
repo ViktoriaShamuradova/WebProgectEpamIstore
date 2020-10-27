@@ -17,7 +17,4 @@ public class EnterPageCommand implements Command {
 		dispatcher.forward(req, resp);
 		
 	}
-	
-	
-
 }

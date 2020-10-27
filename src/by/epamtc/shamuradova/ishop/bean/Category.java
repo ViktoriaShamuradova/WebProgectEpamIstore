@@ -5,7 +5,7 @@ public class Category extends AbstractEntity<Integer> {
 	private static final long serialVersionUID = -6588428119548273094L;
 	
 	private String name;
-	private int count;
+	private int modelCount;
 	private String url;
 
 	public Category() {}
@@ -27,21 +27,20 @@ public class Category extends AbstractEntity<Integer> {
 		this.name = name;
 	}
 
-	public int getCount() {
-		return count;
+	public int getModeltCount() {
+		return modelCount;
 	}
 
 
-	public void setCount(int count) {
-		this.count = count;
+	public void setModelCount(int modelCount) {
+		this.modelCount = modelCount;
 	}
-
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = super.hashCode();
-		result = prime * result + count;
+		result = prime * result + modelCount;
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		result = prime * result + ((url == null) ? 0 : url.hashCode());
 		return result;
@@ -57,7 +56,7 @@ public class Category extends AbstractEntity<Integer> {
 		if (getClass() != obj.getClass())
 			return false;
 		Category other = (Category) obj;
-		if (count != other.count)
+		if (modelCount != other.modelCount)
 			return false;
 		if (name == null) {
 			if (other.name != null)
@@ -72,11 +71,9 @@ public class Category extends AbstractEntity<Integer> {
 		return true;
 	}
 
-
 	@Override
 	public String toString() {
-		return "Category [name=" + name + ", count=" + count + ", url=" + url + "]";
+		return "Category [name=" + name + ", modelCount=" + modelCount + ", url=" + url + "]";
 	}
-
 
 }

@@ -38,16 +38,19 @@
 	
 	<div class = "container">
 	
+	<c:if test="${empty sessionScope.shopcart.shopCartItems }">
+		<a class="btn btn-primary" href="controller?command=GET_SHOPPER_PAGE" role="button">Назад</a>
+	</c:if>
+	<c:if test="${ not empty sessionScope.shopcart.shopCartItems }">
 		<nav aria-label="breadcrumb">
 	  		<ol class="breadcrumb">
 	    		<li class="breadcrumb-item">Total sum <h5><c:out value=" ${sessionScope.shopcart.totalSum}" /></h5></li>
 	    		<li class="breadcrumb-item">Total count <h5><c:out value="${sessionScope.shopcart.totalCount}" /></h5></li>
 	    		<li class="breadcrumb-item"><a href="controller?command=form_order" class="btn btn-primary">Оформить заказ</a></li>
-	    		
-	   			
+	    		  			
 	  		</ol>
-	  </nav>
-	
+	  	</nav>
+	</c:if>
 	
 	</div>
 	

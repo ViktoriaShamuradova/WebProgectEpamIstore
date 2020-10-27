@@ -32,47 +32,39 @@ public class ConnectionPool {
 	}
 
 	public void initPoolData() throws ConnectionPoolException {
-
-		ResourceProperty resProperty = new ResourceProperty(PROPERTY);
-		String driverName = resProperty.getValue(DBParameter.DB_DRIVER);
-		String url = resProperty.getValue(DBParameter.DB_URL);
-		String user = resProperty.getValue(DBParameter.DB_USER);
-		String password = resProperty.getValue(DBParameter.DB_PASSWORD);
-
 		try {
+			ResourceProperty resProperty = new ResourceProperty(PROPERTY);
+			String driverName = resProperty.getValue(DBParameter.DB_DRIVER);
+			String url = resProperty.getValue(DBParameter.DB_URL);
+			String user = resProperty.getValue(DBParameter.DB_USER);
+			String password = resProperty.getValue(DBParameter.DB_PASSWORD);
+
 			poolSize = Integer.parseInt(resProperty.getValue(DBParameter.DB_POLL_SIZE));
-		} catch (NumberFormatException e) {
-			poolSize = 5;
-		}
 
-		try {
 			Class.forName(driverName);
+
+			freeConnections = new ArrayBlockingQueue<Connection>(poolSize);
+			busyConnections = new ArrayBlockingQueue<Connection>(poolSize);
+
+			addConnectionsInFreeConnections(url, user, password);
 		} catch (ClassNotFoundException e) {
 			throw new ConnectionPoolException(ErrorMessage.DRIVER_LOAD_ERROR, e);
 		}
-
-		freeConnections = new ArrayBlockingQueue<Connection>(poolSize);
-		busyConnections = new ArrayBlockingQueue<Connection>(poolSize);
-
-		addConnectionsInFreeConnections(url, user, password);
-
 	}
 
 	public Connection getConnection() throws ConnectionPoolException {
-		Connection connection = null;
 		try {
-			connection = freeConnections.take();
+			Connection connection = freeConnections.take();
 			busyConnections.put(connection);
+			return connection;
 		} catch (InterruptedException e) {
 			throw new ConnectionPoolException(ErrorMessage.CONNECTION_ERROR, e);
 		}
-		return connection;
-
 	}
 
 	public void free(Connection connection) throws ConnectionPoolException {
-		busyConnections.remove(connection);
 		try {
+			busyConnections.remove(connection);
 			freeConnections.put(connection);
 		} catch (InterruptedException e) {
 			throw new ConnectionPoolException(ErrorMessage.CONNECTION_ERROR, e);

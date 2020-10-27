@@ -34,7 +34,7 @@ public class ResultSetHandlerProducer implements ResultSetHandler {
 		Producer producer = new Producer();
 		producer.setName(rs.getString(ProducerColumnName.NAME));
 		producer.setId(rs.getInt(ProducerColumnName.ID));
-		producer.setCount(rs.getInt(ProducerColumnName.COUNT));
+		producer.setModelCount(rs.getInt(ProducerColumnName.COUNT));
 
 		return producer;
 	}

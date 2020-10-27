@@ -13,6 +13,7 @@ public class ErrorPageCommand implements Command{
 
 	@Override
 	public void execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		req.setAttribute("statusCode", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
 		RequestDispatcher dispatcher = req.getRequestDispatcher("/WEB-INF/jsp/error_page.jsp");
 		dispatcher.forward(req, resp);
 		

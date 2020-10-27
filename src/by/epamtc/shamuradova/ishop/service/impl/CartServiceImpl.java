@@ -37,8 +37,8 @@ public class CartServiceImpl implements CartService {
 	@Override
 	public void createCart(int idUser) throws ServiceException {
 		CartDAO cartDAO = new CartDAOImpl();
-		long millis = System.currentTimeMillis();
-		Date date = new Date(millis);
+
+		Date date = new Date(System.currentTimeMillis());
 		try {
 			cartDAO.addCart(idUser, date);
 		} catch (DAOException e) {
