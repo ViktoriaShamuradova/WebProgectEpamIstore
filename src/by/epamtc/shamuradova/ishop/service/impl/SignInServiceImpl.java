@@ -2,39 +2,47 @@ package by.epamtc.shamuradova.ishop.service.impl;
 
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
-import java.sql.SQLException;
 
 import by.epamtc.shamuradova.ishop.bean.AuthData;
 import by.epamtc.shamuradova.ishop.bean.User;
 import by.epamtc.shamuradova.ishop.constant.ErrorMessage;
 import by.epamtc.shamuradova.ishop.dao.SignInDAO;
-import by.epamtc.shamuradova.ishop.dao.exception.ConnectionPoolException;
 import by.epamtc.shamuradova.ishop.dao.exception.DAOException;
 import by.epamtc.shamuradova.ishop.dao.impl.SignInDAOImpl2;
 import by.epamtc.shamuradova.ishop.service.SignInService;
 import by.epamtc.shamuradova.ishop.service.exception.ServiceException;
 import by.epamtc.shamuradova.ishop.service.exception.ValidationException;
+import by.epamtc.shamuradova.ishop.service.exception.WrongAuthDataException;
 import by.epamtc.shamuradova.ishop.service.util.MD5Encryptor;
-
 
 public class SignInServiceImpl implements SignInService {
 
+	private SignInDAO signIn;
+
+	public SignInServiceImpl() {
+		signIn = new SignInDAOImpl2();
+	}
+
 	@Override
 	public User signIn(AuthData data) throws ServiceException {
-
 		try {
-			validate(data);
-		
-			SignInDAO signIn = new SignInDAOImpl2();
 
-			String hashPasswword = MD5Encryptor.getHashCode(new String(data.getPassword()));
+			validate(data);
+
+			String hashPasswword;
+
+			hashPasswword = MD5Encryptor.getHashCode(new String(data.getPassword()));
+
 			data.setPassword(hashPasswword.toCharArray());
 			hashPasswword = null;
 
 			User user = signIn.signIn(data);
+			if (user == null) {
+				throw new WrongAuthDataException("incorrect login or password");
+			}
 			return user;
 
-		} catch (ValidationException | DAOException | NoSuchAlgorithmException | UnsupportedEncodingException e) {
+		} catch (NoSuchAlgorithmException | UnsupportedEncodingException | DAOException e) {
 			throw new ServiceException(e);
 		}
 
@@ -57,14 +65,6 @@ public class SignInServiceImpl implements SignInService {
 		if (error.length() != 0) {
 			throw new ValidationException(new String(error));
 		}
-	}
-	public static void main(String[] args) throws ConnectionPoolException, SQLException, DAOException, ServiceException {
-		String pass = new String("123456789");
-		char[] password = pass.toCharArray();
-		AuthData data = new AuthData("ShamurShamaaaaa44", password);
-		SignInServiceImpl serv = new SignInServiceImpl();
-		System.out.println(serv.signIn(data));
-
 	}
 
 }

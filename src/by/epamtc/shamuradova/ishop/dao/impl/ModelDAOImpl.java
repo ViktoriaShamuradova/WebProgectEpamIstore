@@ -13,6 +13,7 @@ import by.epamtc.shamuradova.ishop.dao.ModelDAO;
 import by.epamtc.shamuradova.ishop.dao.exception.ConnectionPoolException;
 import by.epamtc.shamuradova.ishop.dao.exception.DAOException;
 import by.epamtc.shamuradova.ishop.dao.handler.ResultSetHandler2;
+import by.epamtc.shamuradova.ishop.dao.handler.factory.ResultSetHandler2Factory;
 import by.epamtc.shamuradova.ishop.dao.handler.impl.ResultSetHandlerCategory2;
 import by.epamtc.shamuradova.ishop.dao.handler.impl.ResultSetHandlerFactory;
 import by.epamtc.shamuradova.ishop.dao.handler.impl.ResultSetHandlerModel2;
@@ -27,6 +28,7 @@ public class ModelDAOImpl implements ModelDAO {
 	private ResultSetHandler2<List<Category>> resultSetHandlerCategories;
 	
 	private ResultSetHandler2<Model> resultSetHandlerModel;
+	private ResultSetHandler2<Integer> getterCountResultSetHandler;
 
 	private ConnectionPool pool;
 
@@ -37,6 +39,7 @@ public class ModelDAOImpl implements ModelDAO {
 		resultSetHandlerCategories = ResultSetHandlerFactory.getListResultSetHandler(new ResultSetHandlerCategory2());
 		resultSetHandlerModels = ResultSetHandlerFactory.getListResultSetHandler(new  ResultSetHandlerModel2());
 		resultSetHandlerProducers = ResultSetHandlerFactory.getListResultSetHandler(new ResultSetHandlerProducer2());
+		getterCountResultSetHandler = ResultSetHandler2Factory.getInstatnce().getGetterCountResultSetHandler();
 	}
 
 	@Override
@@ -47,7 +50,7 @@ public class ModelDAOImpl implements ModelDAO {
 			connection = pool.getConnection();
 			int offset = (page - 1) * limit;// сколько отступаем
 
-			return (List<Model>) JDBCUtil.select(connection, SQLQuery.LIST_MODELS, resultSetHandlerModels, limit,
+			return JDBCUtil.select(connection, SQLQuery.LIST_MODELS, resultSetHandlerModels, limit,
 					offset);
 
 		} catch (ConnectionPoolException | SQLException e) {
@@ -79,7 +82,7 @@ public class ModelDAOImpl implements ModelDAO {
 
 		try {
 			connection = pool.getConnection();
-			int offset = 0;
+			int offset = (page - 1) * limit;
 
 			return JDBCUtil.select(connection, SQLQuery.LIST_MODELS_BY_CATEGORY, resultSetHandlerModels, categoryUrl,
 					limit, offset);
@@ -133,10 +136,36 @@ public class ModelDAOImpl implements ModelDAO {
 			}
 		}
 	}
-
-	public static void main(String[] args) throws DAOException {
-		ModelDAOImpl dao = new ModelDAOImpl();
-		System.out.println();
 	
+	@Override
+	public int countModels() throws DAOException {
+		Connection connection = null;
+		try {
+			connection = pool.getConnection();
+
+			return JDBCUtil.select(connection, SQLQuery.COUNT_MODELS, getterCountResultSetHandler);
+
+		} catch (ConnectionPoolException | SQLException e) {
+			throw new DAOException(e);
+		} finally {
+			freeConnection(connection);
+		}
 	}
+	
+	
+	@Override
+	public int countModelsByVategoryUrl(String categoryUrl) throws DAOException {
+		Connection connection = null;
+		try {
+			connection = pool.getConnection();
+
+			return JDBCUtil.select(connection, SQLQuery.COUNT_MODELS_BY_CATEGORY_URL, getterCountResultSetHandler, categoryUrl);
+
+		} catch (ConnectionPoolException | SQLException e) {
+			throw new DAOException(e);
+		} finally {
+			freeConnection(connection);
+		}
+	}
+
 }

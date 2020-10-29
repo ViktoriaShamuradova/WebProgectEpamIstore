@@ -23,6 +23,7 @@
 	<div class="container-fluid">
 		<div class="row">
 			<%@ include file="shopper_navbar.jsp"%>
+			
 			<%@ include file="model_list.jsp"%>
 		</div>
 		

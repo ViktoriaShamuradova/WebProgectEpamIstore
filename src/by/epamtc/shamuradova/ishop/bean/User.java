@@ -10,7 +10,6 @@ public class User extends AbstractEntity<Integer> {
 	private String name;
 	private String surname;
 	private String login;
-	private char[] password;
 	private String email;
 	private String status;
 	private String role;
@@ -19,12 +18,11 @@ public class User extends AbstractEntity<Integer> {
 	}
 	
 
-	public User(String name, String surname, String login, char[] password, String email, String status, String role) {
+	public User(String name, String surname, String login, String email, String status, String role) {
 		super();
 		this.name = name;
 		this.surname = surname;
 		this.login = login;
-		this.password = password;
 		this.email = email;
 		this.status = status;
 		this.role = role;
@@ -50,17 +48,6 @@ public class User extends AbstractEntity<Integer> {
 	public void setRole(String role) {
 		this.role = role;
 	}
-
-
-
-	public char[] getPassword() {
-		return password;
-	}
-
-	public void setPassword(char[] password) {
-		this.password = password;
-	}
-
 
 
 	public String getName() {
@@ -104,7 +91,6 @@ public class User extends AbstractEntity<Integer> {
 		result = prime * result + ((email == null) ? 0 : email.hashCode());
 		result = prime * result + ((login == null) ? 0 : login.hashCode());
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		result = prime * result + Arrays.hashCode(password);
 		result = prime * result + ((role == null) ? 0 : role.hashCode());
 		result = prime * result + ((status == null) ? 0 : status.hashCode());
 		result = prime * result + ((surname == null) ? 0 : surname.hashCode());
@@ -136,8 +122,6 @@ public class User extends AbstractEntity<Integer> {
 				return false;
 		} else if (!name.equals(other.name))
 			return false;
-		if (!Arrays.equals(password, other.password))
-			return false;
 		if (role == null) {
 			if (other.role != null)
 				return false;
@@ -160,8 +144,7 @@ public class User extends AbstractEntity<Integer> {
 	@Override
 	public String toString() {
 		super.toString();
-		return "User [ id=" + getId() + ", name=" + name + ", surname=" + surname + ", login=" + login + ", password="
-				+ Arrays.toString(password) + ", email=" + email + ", status=" + status + ", role=" + role + "]";
+		return "User [ id=" + getId() + ", name=" + name + ", surname=" + surname + ", login=" + login  + ", email=" + email + ", status=" + status + ", role=" + role + "]";
 	}
 
 	

@@ -2,6 +2,7 @@
 	pageEncoding="utf-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+<%@ taglib uri="/WEB-INF/tld/GeneralPagination.tld" prefix="pag"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -35,44 +36,21 @@
 
 	<%@ include file="../WEB-INF/jsp/header.jsp"%>
 
-	<!-- <div>
-		<button id="showFilters">Show filters</button>
-		<div id="filters" style="display: none;">
-			<input type="checkbox" /> 1
-			<input type="checkbox" /> 2
-			<input type="checkbox" /> 3
-			<input type="checkbox" /> 4
-			<input type="checkbox" /> 5
-		</div>
-	</div> -->
+	<c:if test="${ not empty sessionScope.current_message }">	
+		<h2><c:out value="${sessionScope.current_message }"></c:out></h2>				
+	</c:if>	
 
 
 	<div class="container-fluid">
 		<div class="row">
 			<%@ include file="../WEB-INF/jsp/category_navbar.jsp"%>
-			<%@ include file="../WEB-INF/jsp/model_list.jsp"%>
-			<a class="btn btn-primary"
-		href="controller?command=load_more_models&category=${category}"
-		role="button">Load more models</a>
+			
+			<pag:modelPagination totalModels="${modelsCount}" modelsPerPage="${modelsPerPage}" 
+				currentPage="${pageNumber}" models="${models}" category="${category}"/>			
+		
 		</div>
 		
 	</div>
-
-
-
-
-	
-	 
-	<%-- <%@ include file="../WEB-INF/jsp/models.jsp"%> --%>
-	
-
-
-	
-	<%-- <form action="controller" method="post">
-			<input type="hidden" name="command" value="load_more_models" />
-			<input type="hidden" name="category" value="${requestScope.category}" />
-			<input type="submit"  value="Load more models"><br />
-		</form> --%>
 
 
 </body>

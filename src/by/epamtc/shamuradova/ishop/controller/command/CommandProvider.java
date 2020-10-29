@@ -5,18 +5,18 @@ import java.util.Map;
 
 import by.epamtc.shamuradova.ishop.controller.command.impl.AddToCartCommand;
 import by.epamtc.shamuradova.ishop.controller.command.impl.AdminPageCommand;
-import by.epamtc.shamuradova.ishop.controller.command.impl.AllModelsAllCategoriesCommand;
-import by.epamtc.shamuradova.ishop.controller.command.impl.AllModelsMoreCommand;
+import by.epamtc.shamuradova.ishop.controller.command.impl.BlackListCommand;
 import by.epamtc.shamuradova.ishop.controller.command.impl.CartPageCommand;
-import by.epamtc.shamuradova.ishop.controller.command.impl.OrderDetailesPageCommand;
+import by.epamtc.shamuradova.ishop.controller.command.impl.DeleteUserFromBlackListCommand;
 import by.epamtc.shamuradova.ishop.controller.command.impl.EnterPageCommand;
 import by.epamtc.shamuradova.ishop.controller.command.impl.ErrorPageCommand;
 import by.epamtc.shamuradova.ishop.controller.command.impl.FormOrderCommand;
 import by.epamtc.shamuradova.ishop.controller.command.impl.IncreaseCountOfModelPerUnitCommand;
-import by.epamtc.shamuradova.ishop.controller.command.impl.ModalPageModalCommand;
 import by.epamtc.shamuradova.ishop.controller.command.impl.ModelsByCategoryCommand;
+import by.epamtc.shamuradova.ishop.controller.command.impl.ModelsMoreCommand;
 import by.epamtc.shamuradova.ishop.controller.command.impl.MoreOrdersCommand;
 import by.epamtc.shamuradova.ishop.controller.command.impl.MyOrdersCommand;
+import by.epamtc.shamuradova.ishop.controller.command.impl.OrderDetailesPageCommand;
 import by.epamtc.shamuradova.ishop.controller.command.impl.ReduceCountOfModelPerUnitCommand;
 import by.epamtc.shamuradova.ishop.controller.command.impl.RegistrationPageCommand;
 import by.epamtc.shamuradova.ishop.controller.command.impl.SetLocaleCommand;
@@ -36,12 +36,9 @@ public class CommandProvider {
 		commands.put(ParameterNameCommand.SAVE_NEW_SHOPPER, new SignUpShopperCommand());
 		commands.put(ParameterNameCommand.GET_SHOPPER_PAGE, new ShopperPageCommand());
 		commands.put(ParameterNameCommand.GET_ERROR_PAGE, new ErrorPageCommand());
-		commands.put(ParameterNameCommand.GET_ADMIN_PAGE, new AdminPageCommand());
-		commands.put(ParameterNameCommand.GET_MAIN_ALL_MODELS_PAGE, new AllModelsAllCategoriesCommand());
-		commands.put(ParameterNameCommand.LOAD_MORE_MODELS, new AllModelsMoreCommand());
-		commands.put(ParameterNameCommand.MODELS_BY_CATEGORY, new ModelsByCategoryCommand());
+		commands.put(ParameterNameCommand.GET_ADMIN_PAGE, new AdminPageCommand());	
+		commands.put(ParameterNameCommand.GET_MAIN_ALL_MODELS_OR_BY_CATEGORY_PAGE, new ModelsByCategoryCommand());
 		commands.put(ParameterNameCommand.ENTER_PAGE, new EnterPageCommand());
-		commands.put(ParameterNameCommand.MODEL_PAGE_MODAL, new ModalPageModalCommand());
 		commands.put(ParameterNameCommand.ADD_TO_CART, new AddToCartCommand());
 		commands.put(ParameterNameCommand.CART_PAGE, new CartPageCommand());
 		commands.put(ParameterNameCommand.SIGN_OUT, new SignOutCommand());
@@ -52,6 +49,11 @@ public class CommandProvider {
 		commands.put(ParameterNameCommand.MY_ORDERS, new MyOrdersCommand());
 		commands.put(ParameterNameCommand.LOAD_MORE_ORDERS, new MoreOrdersCommand());
 		
+		//admin
+		commands.put(ParameterNameCommand.BLACK_LIST, new BlackListCommand());
+		commands.put(ParameterNameCommand.DELETE_USER_FROM_BLACK_LIST, new DeleteUserFromBlackListCommand());
+		
+		commands.put(ParameterNameCommand.LOAD_MORE_MODELS, new ModelsMoreCommand());
 	}
 
 	public Command getCommand(String commandName) {

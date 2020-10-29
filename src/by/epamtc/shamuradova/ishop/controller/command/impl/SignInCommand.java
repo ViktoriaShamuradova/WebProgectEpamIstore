@@ -15,6 +15,8 @@ import by.epamtc.shamuradova.ishop.controller.command.Command;
 import by.epamtc.shamuradova.ishop.service.CartService;
 import by.epamtc.shamuradova.ishop.service.SignInService;
 import by.epamtc.shamuradova.ishop.service.exception.ServiceException;
+import by.epamtc.shamuradova.ishop.service.exception.ValidationException;
+import by.epamtc.shamuradova.ishop.service.exception.WrongAuthDataException;
 import by.epamtc.shamuradova.ishop.service.factory.ServiceFactory;
 
 /**
@@ -27,6 +29,9 @@ import by.epamtc.shamuradova.ishop.service.factory.ServiceFactory;
 public class SignInCommand implements Command {
 	private static final String GET_ADMIN_COMMAND = "controller?command=GET_ADMIN_PAGE";
 	private static final String GET_SHOPPER_COMMAND = "controller?command=GET_SHOPPER_PAGE";
+	private static final String ENTER_PAGE_COMMAND = "controller?command=ENTER_PAGE";
+	private static final String MAIN_PAGE = "controller?command=GET_MAIN_ALL_MODELS_OR_BY_CATEGORY_PAGE";
+	private static final String CURRENT_MESSAGE = "current_message";
 
 	private SignInService signInService;
 	private CartService cartService;
@@ -39,6 +44,8 @@ public class SignInCommand implements Command {
 	@Override
 	public void execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		final HttpSession session = req.getSession(true);
+		
+		session.removeAttribute(CURRENT_MESSAGE);
 
 		AuthData authData = new AuthData();
 		authData.setLogin(req.getParameter("login"));
@@ -68,11 +75,18 @@ public class SignInCommand implements Command {
 				ShopCart shopCart = cartService.formNewShopCart(user.getId());
 				session.setAttribute("shopcart", shopCart);
 			}
-
+			session.setAttribute(CURRENT_MESSAGE, "Welcome" + user.getName());
 			resp.sendRedirect(url);
 
-		} catch (ServiceException e) {
-			throw new ServletException(e);
+		} catch (ValidationException e) {
+			session.setAttribute(CURRENT_MESSAGE, "login or password not valid, please try again");
+			resp.sendRedirect(ENTER_PAGE_COMMAND);
+		}catch(WrongAuthDataException e) {
+			session.setAttribute(CURRENT_MESSAGE, "login or password is wrong");
+			resp.sendRedirect(ENTER_PAGE_COMMAND);
+		}catch(ServiceException e) {
+			session.setAttribute(CURRENT_MESSAGE, "Sorry, we have some problems, visit us later");
+			resp.sendRedirect(MAIN_PAGE);
 		}
 	}
 

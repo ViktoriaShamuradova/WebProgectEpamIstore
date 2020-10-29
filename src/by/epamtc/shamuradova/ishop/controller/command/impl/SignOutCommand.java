@@ -11,6 +11,9 @@ import javax.servlet.http.HttpSession;
 import by.epamtc.shamuradova.ishop.controller.command.Command;
 
 public class SignOutCommand implements Command {
+	
+	private static final String MAIN_PAGE = "controller?command=GET_MAIN_ALL_MODELS_OR_BY_CATEGORY_PAGE";
+	
 
 	@Override
 	public void execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -19,9 +22,8 @@ public class SignOutCommand implements Command {
 		if (session != null) {
 			session.invalidate();
 		}
-		RequestDispatcher dispatcher = req.getRequestDispatcher("/main.jsp"); 
-		dispatcher.forward(req, resp);
-		
+		resp.sendRedirect(MAIN_PAGE);
+			
 	}
 
 }

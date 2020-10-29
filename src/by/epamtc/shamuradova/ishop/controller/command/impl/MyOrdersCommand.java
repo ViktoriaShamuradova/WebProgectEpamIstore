@@ -10,7 +10,7 @@ import javax.servlet.http.HttpSession;
 
 import by.epamtc.shamuradova.ishop.bean.Order;
 import by.epamtc.shamuradova.ishop.bean.User;
-import by.epamtc.shamuradova.ishop.constant.OrderConstant;
+import by.epamtc.shamuradova.ishop.constant.PerPage;
 import by.epamtc.shamuradova.ishop.controller.command.Command;
 import by.epamtc.shamuradova.ishop.service.OrderService;
 import by.epamtc.shamuradova.ishop.service.exception.ServiceException;
@@ -32,11 +32,11 @@ public class MyOrdersCommand implements Command {
 			User user = (User) session.getAttribute("user");
 			int idUser = user.getId();
 
-			List<Order> orders = orderService.listMyOrders(idUser, 1, OrderConstant.ORDERS_PER_PAGE);
+			List<Order> orders = orderService.listMyOrders(idUser, 1, PerPage.ORDERS_PER_PAGE);
 			int orderCount = orderService.countOrders(idUser);
 
 			req.setAttribute("orders", orders);
-			req.setAttribute("pageCount", getPageCount(orderCount, OrderConstant.ORDERS_PER_PAGE));
+			req.setAttribute("pageCount", getPageCount(orderCount, PerPage.ORDERS_PER_PAGE));
 			req.setAttribute("pageNumber", 1);
 			
 			req.getRequestDispatcher("/WEB-INF/jsp/all_orders.jsp").forward(req, resp);

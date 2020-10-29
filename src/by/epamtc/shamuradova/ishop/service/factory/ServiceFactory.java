@@ -5,11 +5,13 @@ import by.epamtc.shamuradova.ishop.service.ModelService;
 import by.epamtc.shamuradova.ishop.service.OrderService;
 import by.epamtc.shamuradova.ishop.service.SignInService;
 import by.epamtc.shamuradova.ishop.service.SignUpService;
+import by.epamtc.shamuradova.ishop.service.UserService;
 import by.epamtc.shamuradova.ishop.service.impl.CartServiceImpl;
 import by.epamtc.shamuradova.ishop.service.impl.ModelServiceImpl;
 import by.epamtc.shamuradova.ishop.service.impl.OrderServiceImpl;
 import by.epamtc.shamuradova.ishop.service.impl.SignInServiceImpl;
 import by.epamtc.shamuradova.ishop.service.impl.SignUpServiceImpl;
+import by.epamtc.shamuradova.ishop.service.impl.UserServiceImpl;
 
 public class ServiceFactory {
 
@@ -20,6 +22,7 @@ public class ServiceFactory {
 	private SignUpService signUpService = null;
 	private CartService cartService = null;
 	private OrderService orderService = null;
+	private UserService userService = null;
 
 	private ServiceFactory() {
 	}
@@ -39,6 +42,18 @@ public class ServiceFactory {
 		}
 		return orderService;
 	}
+	
+	public  UserService getUserService() {
+
+		if (userService == null) {
+			synchronized (INSTANCE) {
+				if (userService == null) {
+					userService = new UserServiceImpl();
+				}
+			}
+		}
+		return userService;
+	} 
 
 	public ModelService getModelService() {
 

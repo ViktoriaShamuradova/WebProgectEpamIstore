@@ -31,6 +31,11 @@
 				</div>
 			</div>
 		</c:forEach>
+			
 	</div>
+	<c:if test="${pageCount > 1}">	
+		<a class="btn btn-primary" href="controller?command=LOAD_MORE_MODELS&category=${category}&pageNumber=${pageNumber+1}&pageCount=${pageCount-1}" role="button">Load more models</a>					
+	</c:if>	
+		
 </div>
 </main>

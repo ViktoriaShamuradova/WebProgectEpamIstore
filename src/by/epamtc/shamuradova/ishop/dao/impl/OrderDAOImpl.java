@@ -190,7 +190,6 @@ public class OrderDAOImpl implements OrderDAO {
 	@Override
 	public int countOrdersByIdUser(int idUser) throws DAOException {
 		Connection connection = null;
-
 		try {
 			connection = connectionPool.getConnection();
 

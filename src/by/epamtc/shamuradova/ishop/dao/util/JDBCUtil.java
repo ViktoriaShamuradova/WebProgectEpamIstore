@@ -38,44 +38,6 @@ public final class JDBCUtil {
 
 	}
 
-	public static AbstractEntity selectSingle(Connection connection, String sql, ResultSetHandler resultSetHandler,
-			Object... parameters) throws SQLException {
-
-		PreparedStatement prStatement = null;
-		ResultSet resultSet = null;
-		try {
-			prStatement = connection.prepareStatement(sql);
-			setParameters(prStatement, parameters);
-
-			resultSet = prStatement.executeQuery();
-
-			return resultSetHandler.handleSingle(resultSet);
-		} finally {
-			closeStatement(prStatement);
-
-			closeResultSet(resultSet);
-		}
-	}
-
-	public static List<AbstractEntity> selectList(Connection connection, String sql, ResultSetHandler resultSetHandler,
-			Object... parameters) throws SQLException {
-
-		PreparedStatement prStatement = null;
-		ResultSet resultSet = null;
-		try {
-			prStatement = connection.prepareStatement(sql);
-			setParameters(prStatement, parameters);
-
-			resultSet = prStatement.executeQuery();
-
-			return resultSetHandler.handleList(resultSet);
-		} finally {
-			closeStatement(prStatement);
-
-			closeResultSet(resultSet);
-		}
-	}
-
 	public static void insertDeleteUpdate(Connection connection, String sql, Object... parameters) throws SQLException {
 
 		PreparedStatement prStatement = connection.prepareStatement(sql);
@@ -150,7 +112,6 @@ public final class JDBCUtil {
 			closeStatement(prStatement);
 			closeResultSet(resultSet);
 		}
-
 	}
 
 }

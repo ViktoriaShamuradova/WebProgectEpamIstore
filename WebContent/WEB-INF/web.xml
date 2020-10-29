@@ -1,55 +1,63 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" id="WebApp_ID" version="2.5">
-  <display-name>iStoreJDBC</display-name>
-  <welcome-file-list>
-    <welcome-file>index.html</welcome-file>
-    <welcome-file>index.htm</welcome-file>
-    <welcome-file>index.jsp</welcome-file>
-    <welcome-file>default.html</welcome-file>
-    <welcome-file>default.htm</welcome-file>
-    <welcome-file>default.jsp</welcome-file>
-  </welcome-file-list>
-  
-  <context-param>
-  	<param-name>category_list</param-name>
-  	<param-value></param-value>
-  </context-param>
-  
-  <context-param>
-  	<param-name>producer_list</param-name>
-  	<param-value></param-value>
-  </context-param>
-  
-  <servlet>
-  <servlet-name>Controller</servlet-name>
-    <servlet-class>by.epamtc.shamuradova.ishop.controller.Controller</servlet-class>
-  </servlet>
-  <servlet-mapping>
-    <servlet-name>Controller</servlet-name>
-    <url-pattern>/controller</url-pattern>
-  </servlet-mapping>
+<web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://java.sun.com/xml/ns/javaee"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+	id="WebApp_ID" version="2.5">
+	<display-name>iStoreJDBC</display-name>
+	<welcome-file-list>
+		<welcome-file>index.html</welcome-file>
+		<welcome-file>index.htm</welcome-file>
+		<welcome-file>index.jsp</welcome-file>
+		<welcome-file>default.html</welcome-file>
+		<welcome-file>default.htm</welcome-file>
+		<welcome-file>default.jsp</welcome-file>
+	</welcome-file-list>
 
-  
-  
-<filter>
-	<display-name>CharsetFilter</display-name>
-	<filter-name>CharsetFilter</filter-name>
-	<filter-class>by.epamtc.shamuradova.ishop.filter.CharsetFilter</filter-class>
-	<init-param>
-		<param-name>characterEncoding</param-name>
-		<param-value>utf-8</param-value>
-	</init-param>
-</filter>
-<filter-mapping>
-	<filter-name>CharsetFilter</filter-name>
-	<url-pattern>/controller</url-pattern>
-</filter-mapping>
-  
-  
+	<context-param>
+		<param-name>category_list</param-name>
+		<param-value></param-value>
+	</context-param>
 
-  
-   <listener>
-  	<listener-class>by.epamtc.shamuradova.ishop.listener.SourceInitListener</listener-class>
-  </listener>
-  
+	<context-param>
+		<param-name>producer_list</param-name>
+		<param-value></param-value>
+	</context-param>
+
+	<servlet>
+		<servlet-name>Controller</servlet-name>
+		<servlet-class>by.epamtc.shamuradova.ishop.controller.Controller</servlet-class>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>Controller</servlet-name>
+		<url-pattern>/controller</url-pattern>
+	</servlet-mapping>
+
+	<jsp-config>
+		<taglib>
+			<taglib-uri>generalPagination</taglib-uri>
+			<taglib-location>/WEB-INF/tld/GeneralPagination.tld</taglib-location>
+		</taglib>
+	</jsp-config>
+
+	<filter>
+		<display-name>CharsetFilter</display-name>
+		<filter-name>CharsetFilter</filter-name>
+		<filter-class>by.epamtc.shamuradova.ishop.filter.CharsetFilter</filter-class>
+		<init-param>
+			<param-name>characterEncoding</param-name>
+			<param-value>utf-8</param-value>
+		</init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>CharsetFilter</filter-name>
+		<url-pattern>/controller</url-pattern>
+	</filter-mapping>
+
+
+
+
+	<listener>
+		<listener-class>by.epamtc.shamuradova.ishop.listener.SourceInitListener</listener-class>
+	</listener>
+
 </web-app>

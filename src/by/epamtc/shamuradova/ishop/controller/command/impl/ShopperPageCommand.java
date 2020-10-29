@@ -7,9 +7,10 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import by.epamtc.shamuradova.ishop.bean.Model;
-import by.epamtc.shamuradova.ishop.constant.ModelConstant;
+import by.epamtc.shamuradova.ishop.constant.PerPage;
 import by.epamtc.shamuradova.ishop.controller.command.Command;
 import by.epamtc.shamuradova.ishop.service.ModelService;
 import by.epamtc.shamuradova.ishop.service.exception.ServiceException;
@@ -22,6 +23,8 @@ public class ShopperPageCommand implements Command {
 	private static final String ERROR_PAGE = "controller?command=GET_ERROR_PAGE";
 	private static final String MODELS_PARAM = "models";
 	private static final String CATEGORY_PARAM = "categories";
+	private static final String CURRENT_MESSAGE = "current_message";
+	
 	private ModelService modelService = ServiceFactory.getInstance().getModelService();
 
 	@Override
@@ -29,7 +32,11 @@ public class ShopperPageCommand implements Command {
 		List<Model> models;
 		
 		try {
-			models = modelService.listAllModels(FIRST_PAGE, ModelConstant.MAX_COUNT_MODELS_ON_PAGE);
+			HttpSession session =  req.getSession();
+			
+			String message = (String) session.getAttribute(CURRENT_MESSAGE);
+			session.removeAttribute(CURRENT_MESSAGE);
+			models = modelService.listAllModels(FIRST_PAGE, PerPage.MODELS_ON_PAGE);
 			
 
 			req.setAttribute(MODELS_PARAM, models);

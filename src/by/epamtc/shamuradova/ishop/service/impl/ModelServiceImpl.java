@@ -20,9 +20,14 @@ import by.epamtc.shamuradova.ishop.service.exception.ServiceException;
  */
 public class ModelServiceImpl implements ModelService {
 
+	private ModelDAO modelDao;
+
+	public ModelServiceImpl() {
+		modelDao = new ModelDAOImpl();
+	}
+
 	@Override
 	public List<Model> listAllModels(int page, int count) throws ServiceException {
-		ModelDAO modelDao = new ModelDAOImpl();
 
 		try {
 			return modelDao.listAllModels(page, count);
@@ -33,7 +38,6 @@ public class ModelServiceImpl implements ModelService {
 
 	@Override
 	public List<Model> listModelsByCategory(String categoryUrl, int page, int limit) throws ServiceException {
-		ModelDAO modelDao = new ModelDAOImpl();
 
 		try {
 			return modelDao.listModelsByCategory(categoryUrl, page, limit);
@@ -45,8 +49,7 @@ public class ModelServiceImpl implements ModelService {
 
 	@Override
 	public List<Category> listAllCategories() throws ServiceException {
-		ModelDAO modelDao = new ModelDAOImpl();
-		List<Category> models;
+
 		try {
 			return modelDao.listAllCategories();
 		} catch (DAOException e) {
@@ -63,13 +66,38 @@ public class ModelServiceImpl implements ModelService {
 	@Override
 	public Model getModel(int idModel) throws ServiceException {
 
-		ModelDAO modelDao = new ModelDAOImpl();
-
 		try {
 			return modelDao.getModelById(idModel);
 		} catch (DAOException e) {
 			throw new ServiceException(e);
 		}
+	}
+
+	@Override
+	public int countModels() throws ServiceException {
+		try {
+
+			return modelDao.countModels();
+
+		} catch (DAOException e) {
+			throw new ServiceException(e);
+		}
+	}
+
+	@Override
+	public int countModelsByCategoryUrl(String categoryUrl) throws ServiceException {
+		if (categoryUrl != null) {
+			try {
+
+				return modelDao.countModelsByVategoryUrl(categoryUrl);
+
+			} catch (DAOException e) {
+				throw new ServiceException(e);
+			}
+		} else {
+			return 0;
+		}
+
 	}
 
 }

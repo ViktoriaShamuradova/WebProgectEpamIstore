@@ -23,6 +23,11 @@
 
 	<%@ include file="ruEn.jsp"%>
 	
+	<c:if test="${ not empty sessionScope.current_message }">	
+		<h2><c:out value="${sessionScope.current_message }"></c:out></h2>				
+	</c:if>	
+	
+	
 	<form action="controller" method="post">
 		<input type="hidden" name="command" value="sign_in" />
 		<c:out value="${login}" />

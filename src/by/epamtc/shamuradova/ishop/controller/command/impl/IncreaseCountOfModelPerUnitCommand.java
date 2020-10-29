@@ -29,7 +29,7 @@ public class IncreaseCountOfModelPerUnitCommand implements Command {
 		ShopCart shopCart = (ShopCart) session.getAttribute("shopcart");
 		int idModel = Integer.parseInt(req.getParameter("idModel"));
 		User user = (User)session.getAttribute("user");
-		
+		//роверить, тот ли юзер
 		try {
 			cartService.updateCartIncrease(shopCart, idModel, PER_UNIT);
 			resp.sendRedirect("controller?command=cart_page");

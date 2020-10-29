@@ -157,11 +157,12 @@ public class CartDAOImpl implements CartDAO {
 		ResultSet resultSet = null;
 		List<ShopCartItem> items = new ArrayList<>();
 		ResultSetHandler2<Model> resultSetHandlerModel= new ResultSetHandlerModel2();
+		
 		try {
 			connection = pool.getConnection();
 
 			prStatement = connection.prepareStatement(SQLQuery.LIST_SHOP_CART_ITEMS);
-			prStatement.setObject(1, cartId);
+			prStatement.setInt(1, cartId);
 			resultSet = prStatement.executeQuery();
 
 			while (resultSet.next()) {

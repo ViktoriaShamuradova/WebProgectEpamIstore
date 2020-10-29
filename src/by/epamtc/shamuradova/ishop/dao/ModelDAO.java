@@ -20,4 +20,8 @@ public interface ModelDAO {
 
 	public List<Producer> listAllProducer() throws DAOException;
 
+	public int countModels()throws DAOException;
+
+	public int countModelsByVategoryUrl(String categoryUrl)throws DAOException;
+
 }

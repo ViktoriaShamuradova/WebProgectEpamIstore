@@ -20,4 +20,8 @@ public interface ModelService {
 	public List<Category> listAllCategories() throws ServiceException;
 
 	public List<Producer> listAllProducer() throws ServiceException;
+
+	public int countModels() throws ServiceException;
+
+	public int countModelsByCategoryUrl(String categoryUrl) throws ServiceException;
 }

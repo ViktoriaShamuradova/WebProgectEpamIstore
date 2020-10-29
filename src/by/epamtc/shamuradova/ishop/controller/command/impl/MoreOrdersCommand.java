@@ -10,7 +10,7 @@ import javax.servlet.http.HttpSession;
 
 import by.epamtc.shamuradova.ishop.bean.Order;
 import by.epamtc.shamuradova.ishop.bean.User;
-import by.epamtc.shamuradova.ishop.constant.OrderConstant;
+import by.epamtc.shamuradova.ishop.constant.PerPage;
 import by.epamtc.shamuradova.ishop.controller.command.Command;
 import by.epamtc.shamuradova.ishop.service.OrderService;
 import by.epamtc.shamuradova.ishop.service.exception.ServiceException;
@@ -37,7 +37,7 @@ public class MoreOrdersCommand implements Command {
 			int idUser = user.getId();//редусмотреть nullpointer, если вылогинимся, может такое случиться, нужно фильтр под это создать
 
 			List<Order> orders = orderService.listMyOrders(idUser, pageNumber,
-					OrderConstant.ORDERS_PER_PAGE);
+					PerPage.ORDERS_PER_PAGE);
 			
 
 			req.setAttribute("orders", orders);
