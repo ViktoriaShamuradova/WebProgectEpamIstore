@@ -8,7 +8,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
 
-import by.epamtc.shamuradova.ishop.bean.AbstractEntity;
+import by.epamtc.shamuradova.ishop.bean.entity.AbstractEntity;
 import by.epamtc.shamuradova.ishop.constant.ErrorMessage;
 import by.epamtc.shamuradova.ishop.dao.handler.ResultSetHandler;
 import by.epamtc.shamuradova.ishop.dao.handler.ResultSetHandler2;

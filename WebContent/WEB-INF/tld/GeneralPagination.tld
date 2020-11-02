@@ -40,6 +40,7 @@
 		</attribute>
 	</tag>
 	
+	
 	<tag>
 		<name>pagination</name>
 		<tag-class>by.epamtc.shamuradova.ishop.tag.Pagination</tag-class>
@@ -60,6 +61,46 @@
 			<required>true</required>
 			<rtexprvalue>true</rtexprvalue>
 		</attribute>
+		<attribute>
+			<name>currentCommand</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+			<type>java.lang.String</type>
+		</attribute>
 	</tag>
+	
+	<tag>
+		<name>userPagination</name>
+		<tag-class>by.epamtc.shamuradova.ishop.tag.UserPagination</tag-class>
+		<body-content>empty</body-content>
+		
+		<attribute>
+			<name>currentPage</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>totalEntity</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>roleId</name>
+			<required>false</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>perPage</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+		</attribute>
+		<attribute>
+			<name>currentCommand</name>
+			<required>true</required>
+			<rtexprvalue>true</rtexprvalue>
+			<type>java.lang.String</type>
+		</attribute>
+	</tag>
+	
 	
 </taglib>

@@ -1,10 +1,12 @@
 package by.epamtc.shamuradova.ishop.dao.handler.impl;
 
+import java.io.InputStream;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import by.epamtc.shamuradova.ishop.constant.database_column_name.ModelColumnName;
 import by.epamtc.shamuradova.ishop.dao.handler.ResultSetHandler2;
 
 //перенести сюда все хэндлеры
@@ -38,6 +40,20 @@ public class ResultSetHandlerFactory {
 					return null;
 				}
 			}
+		};
+	}
+
+	public static ResultSetHandler2<InputStream> getImageResultSetHandler(){
+		return new ResultSetHandler2<InputStream>() {
+
+			@Override
+			public InputStream handle(ResultSet rs) throws SQLException {
+				if(rs.next()) {
+					return rs.getBinaryStream(ModelColumnName.IMAGE_LINK);
+				}else {
+					return null;
+				}
+			}		
 		};
 	}
 

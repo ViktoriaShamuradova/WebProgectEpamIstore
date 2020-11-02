@@ -13,15 +13,11 @@
 <fmt:setLocale value="${sessionScope.locale}" />
 <fmt:setBundle basename="localization.locale" var="loc" />
 
-
-<fmt:message bundle="${loc}" key="local.locbutton.name.ru"
-	var="ru_button" />
-<fmt:message bundle="${loc}" key="local.locbutton.name.en"
-	var="en_button" />
 <fmt:message bundle="${loc}" key="message.login" var="login" />
 <fmt:message bundle="${loc}" key="message.password" var="password" />
 <fmt:message bundle="${loc}" key="message.sighUp" var="signUp" />
 <fmt:message bundle="${loc}" key="button.send" var="send_button" />
+<fmt:message bundle="${loc}" key="message.signIn" var="signIn" />
 
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 <link href="front/font-awesome/css/all.css" rel="stylesheet">
@@ -49,6 +45,8 @@
 				currentPage="${pageNumber}" models="${models}" category="${category}"/>			
 		
 		</div>
+		
+		<!-- <input type="file" accept="image/png">ФАЙЛ ВЫБРАЛ</input> -->
 		
 	</div>
 

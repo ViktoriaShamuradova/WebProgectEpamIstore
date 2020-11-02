@@ -16,7 +16,5 @@ public final class UserRole {
 	static {
 		rolesId.put(ADMIN, 1);
 		rolesId.put(SHOPPER, 2);
-
 	}
-
 }

@@ -7,10 +7,13 @@ import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
-import by.epamtc.shamuradova.ishop.bean.Category;
-import by.epamtc.shamuradova.ishop.bean.Model;
+import by.epamtc.shamuradova.ishop.bean.entity.Category;
+import by.epamtc.shamuradova.ishop.bean.entity.Model;
+import by.epamtc.shamuradova.ishop.bean.entity.User;
 import by.epamtc.shamuradova.ishop.constant.PerPage;
+import by.epamtc.shamuradova.ishop.constant.UserRole;
 import by.epamtc.shamuradova.ishop.controller.command.Command;
 import by.epamtc.shamuradova.ishop.service.ModelService;
 import by.epamtc.shamuradova.ishop.service.exception.ServiceException;
@@ -23,6 +26,9 @@ public class ModelsByCategoryCommand implements Command {
 	private static final String MODELS_PARAM = "models";
 	private static final String CURRENT_CATEGORY_URL_PARAM = "category";
 
+	private static final String MAIN_PAGE = "/main.jsp";
+	private static final String SHOPPER_PAGE = "/WEB-INF/jsp/shopper_page.jsp";
+
 	private ModelService modelService;
 
 	public ModelsByCategoryCommand() {
@@ -33,26 +39,22 @@ public class ModelsByCategoryCommand implements Command {
 	public void execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
 		try {
-			String category = req.getParameter("category");
-			String pageNumberString = req.getParameter("pageNumber");
-			int pageNumber = pageNumberString == null ? FIRST_PAGE : Integer.parseInt(pageNumberString);
 
-			List<Model> models = getModels(category, pageNumber);
-			int modelsCount = getTotalModelCount(category);
+			HttpSession session = req.getSession();
+			User user = (User) session.getAttribute("user");
+			if (user == null) {
+				setCategoriesAndModels(req, resp);
 
-			List<Category> categories = modelService.listAllCategories();
+				RequestDispatcher dispatcher = req.getRequestDispatcher(MAIN_PAGE);
+				dispatcher.forward(req, resp);
 
-			req.setAttribute("categories", categories);
-			req.setAttribute(MODELS_PARAM, models);
-			req.setAttribute(CURRENT_CATEGORY_URL_PARAM, category);// сохранить текущую выбранную категорию, чтобы
-																	// загружать далее по категориям
-			req.setAttribute("pageCount", getPageCount(modelsCount, PerPage.MODELS_ON_PAGE));
-			req.setAttribute("modelsPerPage", PerPage.MODELS_ON_PAGE);
-			req.setAttribute("pageNumber", pageNumber);
-			req.setAttribute("modelsCount", modelsCount);
+			} else if (user.getRole().equals(UserRole.SHOPPER)) {
+				setCategoriesAndModels(req, resp);
 
-			RequestDispatcher dispatcher = req.getRequestDispatcher("/main.jsp");
-			dispatcher.forward(req, resp);
+				RequestDispatcher dispatcher = req.getRequestDispatcher(SHOPPER_PAGE);
+				dispatcher.forward(req, resp);
+			}
+
 		} catch (ServiceException e) {
 			e.printStackTrace();
 			resp.sendRedirect(ERROR_PAGE);
@@ -75,6 +77,27 @@ public class ModelsByCategoryCommand implements Command {
 
 	private int getPageCount(int totalCount, int itemsPerCount) {
 		return (int) Math.ceil((double) totalCount / itemsPerCount);
+	}
+
+	private void setCategoriesAndModels(HttpServletRequest req, HttpServletResponse resp) throws ServiceException {
+		String category = req.getParameter("category");
+		String pageNumberString = req.getParameter("pageNumber");
+		int pageNumber = pageNumberString == null ? FIRST_PAGE : Integer.parseInt(pageNumberString);
+
+		List<Model> models = getModels(category, pageNumber);
+		int modelsCount = getTotalModelCount(category);
+
+		List<Category> categories = modelService.listAllCategories();
+
+		req.setAttribute("categories", categories);
+		req.setAttribute(MODELS_PARAM, models);
+		req.setAttribute(CURRENT_CATEGORY_URL_PARAM, category);// сохранить текущую выбранную категорию, чтобы
+																// загружать далее по категориям
+		req.setAttribute("pageCount", getPageCount(modelsCount, PerPage.MODELS_ON_PAGE));
+		req.setAttribute("modelsPerPage", PerPage.MODELS_ON_PAGE);
+		req.setAttribute("pageNumber", pageNumber);
+		req.setAttribute("modelsCount", modelsCount);
+
 	}
 
 }

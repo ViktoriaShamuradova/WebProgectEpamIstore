@@ -6,12 +6,12 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import by.epamtc.shamuradova.ishop.bean.Cart;
-import by.epamtc.shamuradova.ishop.bean.Model;
-import by.epamtc.shamuradova.ishop.bean.Order;
-import by.epamtc.shamuradova.ishop.bean.OrderItem;
 import by.epamtc.shamuradova.ishop.bean.ShopCart;
 import by.epamtc.shamuradova.ishop.bean.ShopCartItem;
+import by.epamtc.shamuradova.ishop.bean.entity.Cart;
+import by.epamtc.shamuradova.ishop.bean.entity.Model;
+import by.epamtc.shamuradova.ishop.bean.entity.Order;
+import by.epamtc.shamuradova.ishop.bean.entity.OrderItem;
 import by.epamtc.shamuradova.ishop.dao.CartDAO;
 import by.epamtc.shamuradova.ishop.dao.OrderDAO;
 import by.epamtc.shamuradova.ishop.dao.exception.DAOException;

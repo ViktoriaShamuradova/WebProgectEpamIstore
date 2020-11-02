@@ -1,4 +1,4 @@
-package by.epamtc.shamuradova.ishop.bean;
+package by.epamtc.shamuradova.ishop.bean.entity;
 
 import java.math.BigDecimal;
 import java.sql.Date;

@@ -15,4 +15,3 @@
 											
 						</tr>	
 </c:forEach>	
-<!-- <a href="controller?command=delete_user_from_black_list&userId=${user.id}" class="btn btn-secondary btn-lg disabled" role="button" aria-disabled="true">Delete</a> -->

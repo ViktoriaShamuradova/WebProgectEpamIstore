@@ -2,8 +2,8 @@ package by.epamtc.shamuradova.ishop.service;
 
 import java.util.List;
 
-import by.epamtc.shamuradova.ishop.bean.Order;
 import by.epamtc.shamuradova.ishop.bean.ShopCart;
+import by.epamtc.shamuradova.ishop.bean.entity.Order;
 import by.epamtc.shamuradova.ishop.service.exception.ServiceException;
 
 

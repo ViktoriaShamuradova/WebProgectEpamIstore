@@ -1,4 +1,4 @@
-package by.epamtc.shamuradova.ishop.bean;
+package by.epamtc.shamuradova.ishop.bean.entity;
 
 public class OrderItem extends AbstractEntity<Integer>{
 

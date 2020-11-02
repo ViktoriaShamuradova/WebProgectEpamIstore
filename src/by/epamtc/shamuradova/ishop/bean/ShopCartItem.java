@@ -2,6 +2,8 @@ package by.epamtc.shamuradova.ishop.bean;
 
 import java.io.Serializable;
 
+import by.epamtc.shamuradova.ishop.bean.entity.Model;
+
 public class ShopCartItem implements Serializable{
 	
 	private Model model;

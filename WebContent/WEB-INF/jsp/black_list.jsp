@@ -44,7 +44,7 @@
 						
 					</tbody>
 				</table>
-					<pag:pagination totalEntity="${userCount}" perPage="${perPage}" currentPage="${pageNumber}" />
+					<pag:pagination currentCommand ="${command}" totalEntity="${userCount}" perPage="${perPage}" currentPage="${pageNumber}" />
 			</div>
 		</div>
 	</div>

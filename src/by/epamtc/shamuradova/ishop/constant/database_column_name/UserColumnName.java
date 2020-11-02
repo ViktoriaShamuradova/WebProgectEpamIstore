@@ -11,6 +11,7 @@ public final class UserColumnName {
 	public static final String ID_USER_STATUS = "id_user_status";
 	public static final String STATUS= "stat";
 	public static final String ROLE = "role";
+	public static final String BLACK_LIST = "black_list";
 	
 	private UserColumnName() {
 	}

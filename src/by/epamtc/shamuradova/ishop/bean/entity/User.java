@@ -1,4 +1,4 @@
-package by.epamtc.shamuradova.ishop.bean;
+package by.epamtc.shamuradova.ishop.bean.entity;
 
 import java.util.Arrays;
 
@@ -13,19 +13,9 @@ public class User extends AbstractEntity<Integer> {
 	private String email;
 	private String status;
 	private String role;
+	private boolean blackList;
 
 	public User() {
-	}
-	
-
-	public User(String name, String surname, String login, String email, String status, String role) {
-		super();
-		this.name = name;
-		this.surname = surname;
-		this.login = login;
-		this.email = email;
-		this.status = status;
-		this.role = role;
 	}
 
 
@@ -33,22 +23,18 @@ public class User extends AbstractEntity<Integer> {
 		return status;
 	}
 
-
 	public void setStatus(String status) {
 		this.status = status;
 	}
-
 
 	public String getRole() {
 		return role;
 	}
 
 
-
 	public void setRole(String role) {
 		this.role = role;
 	}
-
 
 	public String getName() {
 		return name;
@@ -83,11 +69,20 @@ public class User extends AbstractEntity<Integer> {
 		this.email = email;
 	}
 
+	public boolean isBlackList() {
+		return blackList;
+	}
+
+	public void setBlackList(boolean blackList) {
+		this.blackList = blackList;
+	}
+
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = super.hashCode();
+		result = prime * result + (blackList ? 1231 : 1237);
 		result = prime * result + ((email == null) ? 0 : email.hashCode());
 		result = prime * result + ((login == null) ? 0 : login.hashCode());
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
@@ -107,6 +102,8 @@ public class User extends AbstractEntity<Integer> {
 		if (getClass() != obj.getClass())
 			return false;
 		User other = (User) obj;
+		if (blackList != other.blackList)
+			return false;
 		if (email == null) {
 			if (other.email != null)
 				return false;
@@ -143,10 +140,8 @@ public class User extends AbstractEntity<Integer> {
 
 	@Override
 	public String toString() {
-		super.toString();
-		return "User [ id=" + getId() + ", name=" + name + ", surname=" + surname + ", login=" + login  + ", email=" + email + ", status=" + status + ", role=" + role + "]";
+		return "User [name=" + name + ", surname=" + surname + ", login=" + login + ", email=" + email + ", status="
+				+ status + ", role=" + role + ", blackList=" + blackList + "]";
 	}
-
-	
 
 }

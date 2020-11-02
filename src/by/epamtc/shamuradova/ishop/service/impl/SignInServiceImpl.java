@@ -4,12 +4,13 @@ import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 
 import by.epamtc.shamuradova.ishop.bean.AuthData;
-import by.epamtc.shamuradova.ishop.bean.User;
+import by.epamtc.shamuradova.ishop.bean.entity.User;
 import by.epamtc.shamuradova.ishop.constant.ErrorMessage;
 import by.epamtc.shamuradova.ishop.dao.SignInDAO;
 import by.epamtc.shamuradova.ishop.dao.exception.DAOException;
 import by.epamtc.shamuradova.ishop.dao.impl.SignInDAOImpl2;
 import by.epamtc.shamuradova.ishop.service.SignInService;
+import by.epamtc.shamuradova.ishop.service.exception.BlackListException;
 import by.epamtc.shamuradova.ishop.service.exception.ServiceException;
 import by.epamtc.shamuradova.ishop.service.exception.ValidationException;
 import by.epamtc.shamuradova.ishop.service.exception.WrongAuthDataException;
@@ -37,9 +38,15 @@ public class SignInServiceImpl implements SignInService {
 			hashPasswword = null;
 
 			User user = signIn.signIn(data);
+			
 			if (user == null) {
 				throw new WrongAuthDataException("incorrect login or password");
 			}
+			
+			if (user.isBlackList()) {
+				throw new BlackListException("your account has been deleted");
+			}
+		
 			return user;
 
 		} catch (NoSuchAlgorithmException | UnsupportedEncodingException | DAOException e) {

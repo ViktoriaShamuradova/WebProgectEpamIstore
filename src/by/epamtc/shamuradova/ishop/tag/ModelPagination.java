@@ -10,7 +10,7 @@ import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.tagext.TagSupport;
 
-import by.epamtc.shamuradova.ishop.bean.Model;
+import by.epamtc.shamuradova.ishop.bean.entity.Model;
 
 public class ModelPagination extends TagSupport {
 	private static final long serialVersionUID = 2579972393677888552L;
@@ -47,7 +47,7 @@ public class ModelPagination extends TagSupport {
 
 	@Override
 	public int doStartTag() throws JspException {
-		int pageCount = (int) Math.ceil((double) totalModels / modelsPerPage);//сть же этот параметр с комманды, можно передать
+		int pageCount = (int) Math.ceil((double) totalModels / modelsPerPage);
 		
 		
 	//	HttpSession session = pageContext.getSession();		
@@ -75,31 +75,36 @@ public class ModelPagination extends TagSupport {
 			out.write("<div class=\"container\">");
 			out.write("<div class=\"row\">");
 			for (Model model : this.models) {
+				out.write("<div class=\"card-group\">");
 				out.write("<div class=\"card\" style=\"width: 18rem;\">");
+				out.write("<img style=\"width: 287px; height: 250px;\" src=\"" + model.getImageLink() + "\">");
 				out.write("<div class=\"card-body\">");
 				out.write("<h5 class=\"card-title\">" + model.getName() + "</h5>");
 				out.write("<h6 class=\"card-price\">" + model.getPrice() + "</h6>");
 				out.write("<p class=\"card-text\">" + model.getDescription() + "</p>");
-				out.write("<p class=\"card-category\">" + model.getCategory() + "</p>");
-				out.write("<p class=\"card-text\">" + model.getProducer() + "</p>");
-				out.write("<p class=\"card-text\">" + model.getProducer() + "</p>");
+				
+				out.write("<p class=\"card-text\"><small class=\"text-muted\">" + model.getProducer() + "</small></p>");
+				
+				out.write("</div>");
 				out.write("<p>");
-				out.write("<a href=\"controller?command=add_to_cart&modelId=" + model.getId()+ "\" class=\"btn btn-primary\">Добавить в корзину</a>");
+				out.write("<a href=\"controller?command=add_to_cart&modelId=" + model.getId()+ "\" class=\"btn btn-secondary \" style=\"width: 200px;\">Добавить в корзину</a>");
 				out.write("</p>");
 				out.write("</div>");
 				out.write("</div>");
 			}
 			out.write("</div>");
 			out.write("<center>");
+			out.write("<div class=\"container mb-5 mt-5\">");
 			String categoryParam = category == null || category.isEmpty() ? "" : "&category=" + category;
 			if (pageCount != 1) {
 				for (int i = 1; i <= pageCount; i++) {
 					String active = i == currentPage ? " active" : "";
-					out.append("<a class=\"btn btn-primary btn-sm" + active + "\" href=\"controller?command=GET_MAIN_ALL_MODELS_OR_BY_CATEGORY_PAGE" + 
+					out.append("<a class=\"btn btn-secondary btn-sm " + active + "\" href=\"controller?command=ALL_MODELS_OR_BY_CATEGORY" + 
 							categoryParam + "&pageNumber=" + i
 							+ "\">" + i + " </a> ");
 				}
 			}
+			out.write("</div>");
 			out.write("</center>");
 			out.write("</div>");
 			out.write("</main>");

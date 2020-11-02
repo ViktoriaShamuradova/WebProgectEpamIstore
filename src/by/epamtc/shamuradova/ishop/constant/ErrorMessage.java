@@ -14,6 +14,9 @@ public final class ErrorMessage {
 	public static final String LOGIN_FORMAT = "Invalid login format";
 	public static final String PASSWORD_FORMAT = "Invalid password format";
 	public static final String INCORRECT_PASSWORD_OR_LOGIN = "Incorrect password or login";
+	public static final String CANT_BE_BELOW_MIN_PRICE = "price of model can't be below min price ";
+	public static final String LESS_THAN_ZERO = "less than zero";
+	public static final String NOT_VALID_DATA = "not valid data";
 
 	private ErrorMessage() {
 

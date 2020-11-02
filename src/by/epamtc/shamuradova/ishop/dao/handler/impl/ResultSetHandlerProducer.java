@@ -5,8 +5,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import by.epamtc.shamuradova.ishop.bean.AbstractEntity;
-import by.epamtc.shamuradova.ishop.bean.Producer;
+import by.epamtc.shamuradova.ishop.bean.entity.AbstractEntity;
+import by.epamtc.shamuradova.ishop.bean.entity.Producer;
 import by.epamtc.shamuradova.ishop.constant.database_column_name.ProducerColumnName;
 import by.epamtc.shamuradova.ishop.dao.handler.ResultSetHandler;
 

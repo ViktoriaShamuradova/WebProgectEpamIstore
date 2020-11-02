@@ -12,7 +12,7 @@ import by.epamtc.shamuradova.ishop.controller.command.Command;
 
 public class SignOutCommand implements Command {
 	
-	private static final String MAIN_PAGE = "controller?command=GET_MAIN_ALL_MODELS_OR_BY_CATEGORY_PAGE";
+	private static final String MAIN_PAGE = "controller?command=ALL_MODELS_OR_BY_CATEGORY";
 	
 
 	@Override

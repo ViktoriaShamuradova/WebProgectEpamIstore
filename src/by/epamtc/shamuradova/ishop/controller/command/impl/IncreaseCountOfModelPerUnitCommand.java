@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import by.epamtc.shamuradova.ishop.bean.ShopCart;
-import by.epamtc.shamuradova.ishop.bean.User;
+import by.epamtc.shamuradova.ishop.bean.entity.User;
 import by.epamtc.shamuradova.ishop.controller.command.Command;
 import by.epamtc.shamuradova.ishop.service.CartService;
 import by.epamtc.shamuradova.ishop.service.exception.ServiceException;

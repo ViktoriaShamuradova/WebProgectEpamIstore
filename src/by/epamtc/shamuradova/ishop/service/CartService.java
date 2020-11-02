@@ -1,8 +1,8 @@
 package by.epamtc.shamuradova.ishop.service;
 
-import by.epamtc.shamuradova.ishop.bean.Cart;
 import by.epamtc.shamuradova.ishop.bean.CartContent;
 import by.epamtc.shamuradova.ishop.bean.ShopCart;
+import by.epamtc.shamuradova.ishop.bean.entity.Cart;
 import by.epamtc.shamuradova.ishop.service.exception.ServiceException;
 
 public interface CartService {

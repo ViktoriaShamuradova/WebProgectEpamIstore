@@ -17,7 +17,7 @@
 <div class="container-fluid">
 		<div class="row">
 			<%@ include file="admin_navbar.jsp"%>
-			<%@ include file="model_list.jsp"%>
+			
 		</div>
 		
 	</div>

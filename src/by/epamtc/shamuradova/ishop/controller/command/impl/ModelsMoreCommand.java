@@ -8,8 +8,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import by.epamtc.shamuradova.ishop.bean.Category;
-import by.epamtc.shamuradova.ishop.bean.Model;
+import by.epamtc.shamuradova.ishop.bean.entity.Category;
+import by.epamtc.shamuradova.ishop.bean.entity.Model;
 import by.epamtc.shamuradova.ishop.constant.PerPage;
 import by.epamtc.shamuradova.ishop.controller.command.Command;
 import by.epamtc.shamuradova.ishop.service.ModelService;

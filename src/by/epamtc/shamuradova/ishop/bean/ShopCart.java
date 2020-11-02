@@ -6,6 +6,8 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
+import by.epamtc.shamuradova.ishop.bean.entity.Model;
+
 public class ShopCart implements Serializable {
 
 	private static final long serialVersionUID = 4905506574371844621L;

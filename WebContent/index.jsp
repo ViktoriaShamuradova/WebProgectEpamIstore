@@ -8,7 +8,7 @@
 </head>
 <body>
 
-<c:redirect url="controller?command=GET_MAIN_ALL_MODELS_OR_BY_CATEGORY_PAGE" />
+<c:redirect url="controller?command=ALL_MODELS_OR_BY_CATEGORY" />
 
 
 </body>

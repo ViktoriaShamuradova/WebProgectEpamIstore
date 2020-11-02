@@ -5,7 +5,7 @@ import java.sql.SQLException;
 import java.util.Arrays;
 import java.util.List;
 
-import by.epamtc.shamuradova.ishop.bean.User;
+import by.epamtc.shamuradova.ishop.bean.entity.User;
 import by.epamtc.shamuradova.ishop.constant.ErrorMessage;
 import by.epamtc.shamuradova.ishop.constant.SQLQuery;
 import by.epamtc.shamuradova.ishop.dao.UserDAO;
@@ -72,6 +72,87 @@ public class UserDAOImpl implements UserDAO {
 		}
 	}
 
+	@Override
+	public int countUsersInBlackList() throws DAOException {
+		return getCount(SQLQuery.COUNT_USERS_IN_BLACK_LIST);
+	}
+
+	@Override
+	public List<User> getUsers(int page, int limit) throws DAOException {
+		Connection connection = null;
+		try {
+			connection = pool.getConnection();
+			int offset = (page - 1) * limit;
+
+			return JDBCUtil.select(connection, SQLQuery.ALL_USERS, resultSetHandlerUsers, limit, offset);
+
+		} catch (ConnectionPoolException | SQLException e) {
+			throw new DAOException(ErrorMessage.DATABASE_ERROR, e);
+
+		} finally {
+			freeConnection(connection);
+		}
+	}
+
+	@Override
+	public int countUsers() throws DAOException {
+		return getCount(SQLQuery.COUNT_ALL_USERS);
+	}
+
+	@Override
+	public void toggleBlackListInUsers(int userId, boolean b) throws DAOException {
+		Connection connection = null;
+		try {
+			connection = pool.getConnection();
+
+			JDBCUtil.insertDeleteUpdate(connection, SQLQuery.UPDATE_USERS_BLACK_LIST, b, userId);
+
+		} catch (ConnectionPoolException | SQLException e) {
+			throw new DAOException(e);
+		} finally {
+			freeConnection(connection);
+		}
+
+	}
+
+	@Override
+	public List<User> getUsersByRole(int page, int limit, int roleId) throws DAOException {
+		Connection connection = null;
+		try {
+			connection = pool.getConnection();
+			int offset = (page - 1) * limit;
+
+			return JDBCUtil.select(connection, SQLQuery.USERS_BY_ROLE, resultSetHandlerUsers, roleId, limit, offset);
+
+		} catch (ConnectionPoolException | SQLException e) {
+			throw new DAOException(ErrorMessage.DATABASE_ERROR, e);
+
+		} finally {
+			freeConnection(connection);
+		}
+	}
+
+	@Override
+	public int countUsersByRole(int roleId) throws DAOException {
+		return getCount(SQLQuery.COUNT_USERS_BY_ROLE, roleId);
+
+	}
+
+	private int getCount(String sql, Object... parameters) throws DAOException {
+		Connection connection = null;
+		try {
+			pool.initPoolData();
+			connection = pool.getConnection();
+
+			return JDBCUtil.select(connection, sql, getterCountResultSetHandler, parameters);
+
+		} catch (ConnectionPoolException | SQLException e) {
+			throw new DAOException(e);
+		} finally {
+			freeConnection(connection);
+		}
+	}
+
 	private void freeConnection(Connection connection) throws DAOException {
 		if (connection != null) {
 			try {
@@ -82,42 +163,10 @@ public class UserDAOImpl implements UserDAO {
 		}
 	}
 
-	@Override
-	public int countUsersInBlackList() throws DAOException {
-		Connection connection = null;
-		try {
-			connection = pool.getConnection();
-
-			return JDBCUtil.select(connection, SQLQuery.COUNT_USERS_IN_BLACK_LIST, getterCountResultSetHandler);
-
-		} catch (ConnectionPoolException | SQLException e) {
-			throw new DAOException(e);
-		} finally {
-			freeConnection(connection);
-		}
-	}
-	
-	@Override
-	public void deleteUserFromBlackList(int userId) throws DAOException {
-		Connection connection = null;
-		try {
-			connection = pool.getConnection();
-
-			JDBCUtil.insertDeleteUpdate(connection, SQLQuery.DELETE_USER_FROM_BLACK_LIST_BY_USER_ID, userId);
-
-		} catch (ConnectionPoolException | SQLException e) {
-			throw new DAOException(e);
-		} finally {
-			freeConnection(connection);
-		}
-		
-	}
 	public static void main(String[] args) throws DAOException {
 		UserDAOImpl dao = new UserDAOImpl();
-		dao.deleteUserFromBlackList(1);
-		//System.out.println();
-	}
 
-	
+		System.out.println(dao.countUsersByRole(2));
+	}
 
 }

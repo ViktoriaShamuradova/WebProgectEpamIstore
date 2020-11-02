@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=utf-8"
 	pageEncoding="utf-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+<%@ taglib uri="/WEB-INF/tld/GeneralPagination.tld" prefix="pag"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -15,6 +17,9 @@
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 <link href="dashboard.css" rel="stylesheet">
 
+<fmt:setLocale value="${sessionScope.locale}" />
+<fmt:setBundle basename="localization.locale" var="loc" />
+
 </head>
 <body>
 
@@ -24,7 +29,8 @@
 		<div class="row">
 			<%@ include file="shopper_navbar.jsp"%>
 			
-			<%@ include file="model_list.jsp"%>
+			<pag:modelPagination totalModels="${modelsCount}" modelsPerPage="${modelsPerPage}" 
+				currentPage="${pageNumber}" models="${models}" category="${category}"/>	
 		</div>
 		
 	</div>

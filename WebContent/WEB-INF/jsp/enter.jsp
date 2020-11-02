@@ -15,28 +15,43 @@
 <fmt:message bundle="${loc}" key="message.login" var="login" />
 <fmt:message bundle="${loc}" key="message.password" var="password" />
 <fmt:message bundle="${loc}" key="button.send" var="send_button" />
+<fmt:message bundle="${loc}" key="button.back" var="back_button" />
 
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 
 <body>
 
-	<%@ include file="ruEn.jsp"%>
+	<%@ include file="header.jsp"%>
+	
+	<div class="container mt-5" >
+
+		<form action = "controller" method="post">
+			<input type="hidden" name="command" value="sign_in" />
+				<div class="row">
+			    <div class="col">
+			      <input type="text" required class="form-control" name="login" placeholder=<c:out value="${login}" />>
+			    </div>
+			    <div class="col">
+			      <input type="password" required class="form-control" name="password" placeholder=<c:out value="${password}" />>
+			    </div>
+			  </div>
+			  
+		<div class="container mt-3" >
+		  <button type="submit"  class="btn btn-secondary bt-5"><c:out value="${send_button}" /></button>
+		  <a href="controller?command=ALL_MODELS_OR_BY_CATEGORY"><button type="button" class="btn btn-light"><c:out value="${back_button}" /></button></a>
+		 </div>
+		</form>
+	</div>
+	
+
+		
+	
 	
 	<c:if test="${ not empty sessionScope.current_message }">	
 		<h2><c:out value="${sessionScope.current_message }"></c:out></h2>				
 	</c:if>	
 	
-	
-	<form action="controller" method="post">
-		<input type="hidden" name="command" value="sign_in" />
-		<c:out value="${login}" />
-		<br /> <input type="login" name="login" value="" /><br />
 
-		<c:out value="${password}" />
-		<br /> <input type="password" name="password" value="" /><br /> <input
-			type="submit" value="${send_button}"><br />
-	</form>
-	
 </body>
 </html>

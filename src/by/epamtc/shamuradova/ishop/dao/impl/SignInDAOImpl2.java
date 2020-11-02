@@ -5,7 +5,7 @@ import java.sql.SQLException;
 import java.util.Arrays;
 
 import by.epamtc.shamuradova.ishop.bean.AuthData;
-import by.epamtc.shamuradova.ishop.bean.User;
+import by.epamtc.shamuradova.ishop.bean.entity.User;
 import by.epamtc.shamuradova.ishop.constant.ErrorMessage;
 import by.epamtc.shamuradova.ishop.constant.SQLQuery;
 import by.epamtc.shamuradova.ishop.dao.SignInDAO;

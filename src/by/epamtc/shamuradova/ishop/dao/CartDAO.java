@@ -4,9 +4,9 @@ import java.math.BigDecimal;
 import java.sql.Date;
 import java.util.List;
 
-import by.epamtc.shamuradova.ishop.bean.Cart;
 import by.epamtc.shamuradova.ishop.bean.CartContent;
 import by.epamtc.shamuradova.ishop.bean.ShopCartItem;
+import by.epamtc.shamuradova.ishop.bean.entity.Cart;
 import by.epamtc.shamuradova.ishop.dao.exception.DAOException;
 
 public interface CartDAO {

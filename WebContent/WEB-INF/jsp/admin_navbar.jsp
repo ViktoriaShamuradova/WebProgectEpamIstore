@@ -19,12 +19,12 @@
 			
 			<li class="nav-item"><a class="nav-link"
 				href="controller?command=my_orders"> <span data-feather="file"></span>
-					Orders
+					My Orders
 			</a></li>
 
 			<li class="nav-item"><a class="nav-link"
 				href="controller?command=cart_page"> <span
-					data-feather="shopping-cart"></span> Cart 
+					data-feather="shopping-cart"></span> My Cart 
 					<c:out value="(${sessionScope.shopcart.totalCount})" />
 			</a></li>
 			

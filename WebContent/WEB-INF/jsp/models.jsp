@@ -4,7 +4,7 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
 
 <div>
-	<jsp:include page="model_list.jsp" />
+	<jsp:include page="model_list_card.jsp" />
 	<div>
 		<a>Load more models</a>
 	</div>

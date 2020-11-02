@@ -10,7 +10,9 @@ package by.epamtc.shamuradova.ishop.constant;
 public class SQLQuery {
 
 	public static final String ADD_NEW_USER = "INSERT INTO users(name, surname, login, password, email, id_user_status, id_user_role) VALUES (?,?,?,?,?,?,?)";
-	public static final String ADD_NEW_MODEL = "INSERT INTO models(name, description, price, id_category, id_producer, image_link, count) VALUES (?,?,?,?,?,?,?)";
+	public static final String ADD_NEW_MODEL = "INSERT INTO models(name, description, price, id_category, id_producer, count) VALUES (?,?,?, (select c.id from categories c where c.name=?),\r\n" + 
+			"(select p.id from producers p where p.name=?),?)";
+			//"INSERT INTO models(name, description, price, id_category, id_producer, image_link, count) VALUES (?,?,?,?,?,?,?)";
 	public static final String SIGN_IN = "select u.*, r.name as role, s.name as stat from users u, roles r, statuses s \r\n"
 			+ "where r.id=u.id_user_role and s.id=u.id_user_status and login= ? and password = ?";
 	public static final String SIGN_UP = "INSERT INTO users(name, surname, login, password, email, id_user_status, id_user_role) VALUES (?,?,?,?,?,?,?)";
@@ -52,9 +54,18 @@ public class SQLQuery {
 	public static final String COUNT_ORDERS_BY_ID_USER = "select count(*) from orders where id_user=?";
 	public static final String COUNT_MODELS = "select count(*) from models";
 	public static final String COUNT_MODELS_BY_CATEGORY_URL = "select count(*) from models INNER JOIN categories ON models.id_category=categories.id where categories.url=?";
-	public static final String BLACK_LIST = "select u.id, u.name, u.surname, u.login, u.email, s.name as stat, r.name as role from black_list b, users u, statuses s, roles r where b.id_user=u.id and u.id_user_role=r.id and\r\n" + 
-			"u.id_user_status=s.id limit ? offset ?";
-	public static final String COUNT_USERS_IN_BLACK_LIST = "select count(*) from black_list";
-	public static final String DELETE_USER_FROM_BLACK_LIST_BY_USER_ID = "delete from black_list where id_user=?";
+	public static final String BLACK_LIST = "select u.id, u.name, u.surname, u.login, u.email, u.black_list, s.name as stat, r.name as role from  users u, statuses s, roles r where u.black_list=true and u.id_user_role=r.id and\r\n" + 
+			"u.id_user_status=s.id order by surname limit ? offset ?";
+	public static final String COUNT_USERS_IN_BLACK_LIST = "select count(*) from users where users.black_list=true";
+	public static final String ALL_USERS = "select u.id, u.name, u.surname, u.login, u.email, u.black_list, s.name as stat, r.name as role from  users u, statuses s, roles r where  u.black_list=false and u.id_user_role=r.id and\r\n" + 
+			"u.id_user_status=s.id order by surname limit ? offset ?";
+	public static final String COUNT_ALL_USERS = "select count(*) from users where users.black_list='false'";
+	public static final String UPDATE_USERS_BLACK_LIST= "update users set black_list=? where id=?";
+	public static final String UPDATE_MODEL_BY_ID= "update models set name=?, description=?, id_category=(select c.id from categories c where c.name=?), id_producer=\r\n" + 
+			"(select p.id from producers p where p.name=?), count=?, price=? where id=?";
+	public static final String USERS_BY_ROLE = "select u.id, u.name, u.surname, u.login, u.email, u.black_list, s.name as stat, r.name as role from  users u, statuses s, roles r where  u.black_list=false and u.id_user_role=r.id and\r\n" + 
+			"u.id_user_status=s.id and u.id_user_role=? order by surname limit ? offset ?";
+	public static final String COUNT_USERS_BY_ROLE = "select count(*) from users where id_user_role=?";
+	public static final String MODEL_IMAGE_BY_ID = "select image_link from models where id=?";
 	
 }

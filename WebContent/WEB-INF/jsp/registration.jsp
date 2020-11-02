@@ -19,44 +19,46 @@
 <fmt:message bundle="${loc}" key="message.surname" var="surname" />
 <fmt:message bundle="${loc}" key="message.email" var="email" />
 <fmt:message bundle="${loc}" key="button.send" var="send_button" />
+<fmt:message bundle="${loc}" key="button.back" var="back_button" />
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
 
-<%@ include file = "ruEn.jsp" %>
+<%@ include file="header.jsp"%>
 
-<div class="container" >
-<dic class="layout">
-<form action = "controller" method="post">
-	<input type="hidden" name="command" value="save_new_shopper" />
-		<div class="row">
-	    <div class="col">
-	      <input type="text" class="form-control" name="name" placeholder=<c:out value="${name}" />>
-	    </div>
-	    <div class="col">
-	      <input type="text" class="form-control" name="surname" placeholder=<c:out value="${surname}" />>
-	    </div>
-	  </div>
-  
-	  <div class="form-group">
-	    <label for="exampleInputEmail1"><c:out value="${email}" /></label>
-	    <input type="email" class="form-control" name="email" id="exampleInputEmail1" aria-describedby="emailHelp">
-	  </div>
-	  
-	  <div class="form-group">
-		    <label for="exampleInputPassword1"><c:out value="${login}" /></label>
-		    <input type="text" class="form-control" name="login" >
-	</div>
-	
-	  <div class="form-group">
-	    <label for="exampleInputPassword1"><c:out value="${password}" /></label>
-	    <input type="password" class="form-control" name="password" id="exampleInputPassword1">
-	  </div>
-	  
-	  
-  	<button type="submit" class="btn btn-primary"><c:out value="${send_button}" /></button>
-</form>
+<div class="container mt-5" >
+
+		<form action = "controller" method="post">
+			<input type="hidden" name="command" value="save_new_shopper" />
+				<div class="row">
+			    <div class="col">
+			      <input type="text" required class="form-control" name="name" placeholder=<c:out value="${name}" />>
+			    </div>
+			    <div class="col">
+			      <input type="text" required class="form-control" name="surname" placeholder=<c:out value="${surname}" />>
+			    </div>
+			  </div>
+		  
+			  <div class="form-group mt-3">
+			    <input type="email" required class="form-control" name="email" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder=<c:out value="${email}"/>>
+			  </div>
+			  
+			  <div class="form-group">
+				    <input type="text" required  class="form-control" name="login" placeholder=<c:out value="${login}"/>>
+			</div>
+			
+			  <div class="form-group">
+			    <input type="password" required class="form-control" name="password" id="exampleInputPassword1" placeholder=<c:out value="${password}"/>>
+			  </div>
+			  
+			  
+		  	<button type="submit" required class="btn btn-secondary"><c:out value="${send_button}" /></button>
+		  	<div class="row mx-md-n5" style="margin-top: 20px;">
+		  							<div class="col px-md-5"><a href="controller?command=GET_MAIN_ALL_MODELS_OR_BY_CATEGORY_PAGE"><button type="button" class="btn btn-light"><c:out value="${back_button}" /></button></a></div>
+		  							
+			</div>
+		</form>
 </div>
-</div>
+
 </body>
 </html>

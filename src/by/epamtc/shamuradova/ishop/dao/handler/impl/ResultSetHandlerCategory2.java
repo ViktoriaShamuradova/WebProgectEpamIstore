@@ -3,7 +3,7 @@ package by.epamtc.shamuradova.ishop.dao.handler.impl;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import by.epamtc.shamuradova.ishop.bean.Category;
+import by.epamtc.shamuradova.ishop.bean.entity.Category;
 import by.epamtc.shamuradova.ishop.constant.database_column_name.CategotyColumnName;
 import by.epamtc.shamuradova.ishop.dao.handler.ResultSetHandler2;
 

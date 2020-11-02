@@ -6,7 +6,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import by.epamtc.shamuradova.ishop.bean.RegInfo;
-import by.epamtc.shamuradova.ishop.bean.User;
+import by.epamtc.shamuradova.ishop.bean.entity.User;
 import by.epamtc.shamuradova.ishop.constant.ErrorMessage;
 import by.epamtc.shamuradova.ishop.constant.PatternContainer;
 import by.epamtc.shamuradova.ishop.constant.UserRole;
@@ -23,6 +23,12 @@ import by.epamtc.shamuradova.ishop.service.util.MD5Encryptor;
 
 public class SignUpServiceImpl implements SignUpService {
 
+	private SignUpDAO signUpDAO ;
+	
+	public SignUpServiceImpl() {
+		signUpDAO = new SignUpImplDAO();
+	}
+	
 	@Override
 	public User signUp(RegInfo regInfo) throws ServiceException {
 		try {
@@ -34,8 +40,6 @@ public class SignUpServiceImpl implements SignUpService {
 			checkPasswordFormat(password, PatternContainer.PASSWORD_PATTERN);
 			password = null;
 
-			SignUpDAO signUpDAO = new SignUpImplDAO();
-			
 			String hashPassword = MD5Encryptor.getHashCode(new String(regInfo.getPassword()));
 			regInfo.setPassword(hashPassword.toCharArray());
 			signUpDAO.signUp(regInfo);

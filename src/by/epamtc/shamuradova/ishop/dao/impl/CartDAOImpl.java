@@ -9,10 +9,10 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import by.epamtc.shamuradova.ishop.bean.Cart;
 import by.epamtc.shamuradova.ishop.bean.CartContent;
-import by.epamtc.shamuradova.ishop.bean.Model;
 import by.epamtc.shamuradova.ishop.bean.ShopCartItem;
+import by.epamtc.shamuradova.ishop.bean.entity.Cart;
+import by.epamtc.shamuradova.ishop.bean.entity.Model;
 import by.epamtc.shamuradova.ishop.constant.ErrorMessage;
 import by.epamtc.shamuradova.ishop.constant.SQLQuery;
 import by.epamtc.shamuradova.ishop.constant.database_column_name.ModelColumnName;

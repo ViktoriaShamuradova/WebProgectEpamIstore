@@ -11,7 +11,7 @@
 	Hello World
 	<br />
 	<c:out value="Hello ${sessionScope.user.login}! SS" />
-	<jsp:useBean id="user" class="by.epamtc.shamuradova.ishop.bean.User"></jsp:useBean>
+	<jsp:useBean id="user" class="by.epamtc.shamuradova.ishop.bean.entity.User"></jsp:useBean>
 	<jsp:setProperty property="*" name="user"></jsp:setProperty>
 	<jsp:getProperty property="name" name="user"></jsp:getProperty>
 	<jsp:getProperty property="surname" name="user"></jsp:getProperty>

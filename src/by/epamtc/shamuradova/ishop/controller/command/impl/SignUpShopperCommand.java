@@ -8,13 +8,14 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import by.epamtc.shamuradova.ishop.bean.RegInfo;
-import by.epamtc.shamuradova.ishop.bean.User;
+import by.epamtc.shamuradova.ishop.bean.entity.User;
 import by.epamtc.shamuradova.ishop.constant.ParameterName;
 import by.epamtc.shamuradova.ishop.constant.UserRole;
 import by.epamtc.shamuradova.ishop.constant.UserStatus;
 import by.epamtc.shamuradova.ishop.controller.command.Command;
 import by.epamtc.shamuradova.ishop.service.SignUpService;
 import by.epamtc.shamuradova.ishop.service.exception.ServiceException;
+import by.epamtc.shamuradova.ishop.service.factory.ServiceFactory;
 import by.epamtc.shamuradova.ishop.service.impl.SignUpServiceImpl;
 
 /**
@@ -23,11 +24,17 @@ import by.epamtc.shamuradova.ishop.service.impl.SignUpServiceImpl;
  * 
  * @author Шамурадова Виктория 2020
  */
-//наверное нужно, чтобы дао возвращад юзера, чтобы его поместить в сессию
+
 public class SignUpShopperCommand implements Command {
 
 	private static final String SHOPPER_PAGE = "controller?command=GET_SHOPPER_PAGE";
 	private static final String ERROR_PAGE = "controller?command=GET_ERROR_PAGE";
+
+	private SignUpService signUpService;
+
+	public SignUpShopperCommand() {
+		signUpService = ServiceFactory.getInstance().getSignUpService();
+	}
 
 	@Override
 	public void execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -41,13 +48,9 @@ public class SignUpShopperCommand implements Command {
 		regInfo.setStatus(UserStatus.NEW);
 		regInfo.setRole(UserRole.SHOPPER);
 
-		SignUpService signUpService = new SignUpServiceImpl();
-
-		
-
 		try {
 			User user = signUpService.signUp(regInfo);
-	
+
 			final HttpSession session = req.getSession(true);
 
 			session.setAttribute("user", user);
