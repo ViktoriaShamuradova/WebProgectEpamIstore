@@ -1,18 +1,12 @@
 package by.epamtc.shamuradova.ishop.dao.impl;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
+
 import java.sql.SQLException;
 import java.util.List;
-
-import org.apache.catalina.tribes.util.Arrays;
 
 import by.epamtc.shamuradova.ishop.bean.ModelEdition;
 import by.epamtc.shamuradova.ishop.bean.entity.Category;

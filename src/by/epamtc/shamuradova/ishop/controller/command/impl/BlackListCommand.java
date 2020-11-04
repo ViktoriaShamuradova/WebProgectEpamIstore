@@ -26,7 +26,7 @@ public class BlackListCommand implements Command {
 	private static final String CURRENT_COMMAND = "command";
 	private static final String NAME_CURRENT_COMMAND= "controller?command=BLACK_LIST";
 	
-	private static final String MAIN_PAGE = "controller?command=GET_MAIN_ALL_MODELS_OR_BY_CATEGORY_PAGE";
+	private static final String MAIN_PAGE = "controller?command=ALL_MODELS_OR_BY_CATEGORY";
 
 	public BlackListCommand() {
 		userService = ServiceFactory.getInstance().getUserService();
@@ -56,14 +56,11 @@ public class BlackListCommand implements Command {
 			req.setAttribute("perPage", PerPage.USERS_ON_PAGE);
 			req.setAttribute(CURRENT_COMMAND, NAME_CURRENT_COMMAND);
 			
-
 			req.getRequestDispatcher("/WEB-INF/jsp/black_list.jsp").forward(req, resp);
 
 		} catch (ServiceException e) {
 			e.printStackTrace();
 			resp.sendRedirect(ERROR_PAGE);
 		}
-
 	}
-
 }

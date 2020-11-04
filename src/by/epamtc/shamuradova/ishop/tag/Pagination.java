@@ -48,7 +48,7 @@ public class Pagination extends TagSupport {
 			if (pageCount != 1) {
 				for (int i = 1; i <= pageCount; i++) {
 					String active = i == currentPage ? " active" : "";
-					out.append("<a class=\"btn btn-primary btn-sm" + active + "\" href=\"" + currentCommand 
+					out.append("<a class=\"btn btn-secondary btn-sm" + active + "\" href=\"" + currentCommand 
 							+ "&pageNumber=" + i + "\">" + i + " </a> ");
 				}
 			}

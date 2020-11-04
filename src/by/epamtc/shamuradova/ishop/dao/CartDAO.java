@@ -7,6 +7,7 @@ import java.util.List;
 import by.epamtc.shamuradova.ishop.bean.CartContent;
 import by.epamtc.shamuradova.ishop.bean.ShopCartItem;
 import by.epamtc.shamuradova.ishop.bean.entity.Cart;
+import by.epamtc.shamuradova.ishop.bean.entity.CartItem;
 import by.epamtc.shamuradova.ishop.dao.exception.DAOException;
 
 public interface CartDAO {
@@ -27,8 +28,12 @@ public interface CartDAO {
 
 	public void deleteCartItemByIdModel(int idModel) throws DAOException;
 
-	public void updateCartItemCountByIdModel(int idModel, int count) throws DAOException;
-
 	public void deleteCartItemByIdCart(int idCart) throws DAOException;
+
+	public List<CartItem> getCartItemsByCartId(int cartId) throws DAOException;
+
+	public CartItem getCartItemByCartIdModelId(int cartId, int modelId) throws DAOException;
+
+	public void updateCartItemCountByModelIdCartId(int modelId, int count, int cartId) throws DAOException;
 
 }

@@ -58,8 +58,6 @@ public class AllUsersCommand implements Command {
 		} catch (ServiceException e) {
 			e.printStackTrace();
 			resp.sendRedirect(ERROR_PAGE);
-		}
-		
+		}	
 	}
-
 }

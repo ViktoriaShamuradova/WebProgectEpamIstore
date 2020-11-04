@@ -12,7 +12,7 @@
 							<td><c:out value="${user.login}"></c:out></td>
 							<td><c:out value="${user.email}"></c:out></td>
 							<td><c:out value="${user.role}"></c:out></td>
-							<td><a class="btn btn-primary btn-sm" href="controller?command=add_to_black_list&userId=${user.id}">Add to black list</a></td>
+							<td><a class="btn btn-secondary btn-sm" href="controller?command=add_to_black_list&userId=${user.id}">Add to black list</a></td>
 											
 						</tr>	
 </c:forEach>

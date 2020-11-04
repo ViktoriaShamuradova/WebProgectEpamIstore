@@ -10,7 +10,7 @@ import by.epamtc.shamuradova.ishop.bean.entity.Category;
 import by.epamtc.shamuradova.ishop.constant.database_column_name.CategotyColumnName;
 import by.epamtc.shamuradova.ishop.dao.handler.ResultSetHandler;
 
-public class ResultSetHandlerCategory implements ResultSetHandler{
+public class ResultSetHandlerCategory implements ResultSetHandler {
 
 
 	@Override

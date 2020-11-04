@@ -10,6 +10,7 @@ public class CartContent implements Serializable{
 	
 	public CartContent() {	
 	}
+	
 
 	public CartContent(int cartId, int modelId, int count) {
 		super();
@@ -17,6 +18,7 @@ public class CartContent implements Serializable{
 		this.modelId = modelId;
 		this.count = count;
 	}
+
 
 	public int getCartId() {
 		return cartId;

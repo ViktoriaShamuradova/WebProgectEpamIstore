@@ -11,7 +11,7 @@
 							<td><c:out value="${user.surname}"></c:out></td>
 							<td><c:out value="${user.login}"></c:out></td>
 							<td><c:out value="${user.email}"></c:out></td>
-							<td><a class="btn btn-primary btn-sm" href="controller?command=delete_user_from_black_list&userId=${user.id}"> Delete</a></td>
+							<td><a class="btn btn-secondary btn-sm" href="controller?command=delete_user_from_black_list&userId=${user.id}"> <c:out value="${deleteLoc}" /></a></td>
 											
 						</tr>	
 </c:forEach>	

@@ -12,7 +12,7 @@
 							<td><c:out value="${model.producer}"></c:out></td>
 							<td><c:out value="${model.category}"></c:out></td>
 							<td><c:out value="${model.count}"></c:out></td>
-							<td><a class="btn btn-primary btn-sm" href="controller?command=form_editing_model&modelId=${model.id}"> Edit</a></td>
+							<td><a class="btn btn-secondary btn-sm" href="controller?command=form_editing_model&modelId=${model.id}"> Edit</a></td>
 											
 						</tr>	
 </c:forEach>	

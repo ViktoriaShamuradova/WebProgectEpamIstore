@@ -19,8 +19,7 @@ import by.epamtc.shamuradova.ishop.service.factory.ServiceFactory;
 
 public class SaveNewModelCommand implements Command {
 
-	private static final String ALL_MODELS_PAGE = "controller?command=all_models_for_admin";
-	private static final String MAIN_PAGE = "controller?command=GET_MAIN_ALL_MODELS_OR_BY_CATEGORY_PAGE";
+	private static final String MAIN_PAGE = "controller?command=ALL_MODELS_OR_BY_CATEGORY";
 	private static final String ERROR_PAGE = "controller?command=GET_ERROR_PAGE";
 
 	private ModelService modelService;
@@ -53,7 +52,7 @@ public class SaveNewModelCommand implements Command {
 
 			modelService.saveNewModel(modelEdition);
 
-			resp.sendRedirect(ALL_MODELS_PAGE);
+			resp.sendRedirect(MAIN_PAGE);
 			
 		} catch (ValidationException e) {
 			e.printStackTrace();

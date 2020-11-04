@@ -26,13 +26,11 @@ import by.epamtc.shamuradova.ishop.service.factory.ServiceFactory;
  * @author Виктория Шамурадова 2020
  */
 
-//yбрать маг значения
 public class SignInCommand implements Command {
-	
+
 	private static final String GET_ADMIN_COMMAND = "controller?command=GET_ADMIN_PAGE";
 	private static final String GET_SHOPPER_COMMAND = "controller?command=ALL_MODELS_OR_BY_CATEGORY";
-//"controller?command=GET_SHOPPER_PAGE";
-	
+
 	private static final String ENTER_PAGE_COMMAND = "controller?command=ENTER_PAGE";
 	private static final String MAIN_PAGE = "controller?command=GET_MAIN_ALL_MODELS_OR_BY_CATEGORY_PAGE";
 	private static final String CURRENT_MESSAGE = "current_message";
@@ -48,8 +46,6 @@ public class SignInCommand implements Command {
 	@Override
 	public void execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		final HttpSession session = req.getSession(true);
-		
-		session.removeAttribute(CURRENT_MESSAGE);
 
 		AuthData authData = new AuthData();
 		authData.setLogin(req.getParameter("login"));
@@ -57,7 +53,6 @@ public class SignInCommand implements Command {
 
 		User user = null;
 
-		// определяем к чему отнрсится юзер
 		try {
 			user = signInService.signIn(authData);
 			session.setAttribute("user", user);
@@ -73,28 +68,28 @@ public class SignInCommand implements Command {
 				break;
 			}
 
-			// проверяем, есть ли у юзера в бд запись о наличии корзины. Если есть, то формируем корзину и вставляем в сессию, чтобы ее отобразать
-
+			// проверяем, есть ли у юзера в бд запись о наличии корзины. Если есть, то
+			// формируем корзину и вставляем в сессию, чтобы ее отобразать
 			if (cartService.getCartByUserId(user.getId()) != null) {
 				ShopCart shopCart = cartService.formNewShopCart(user.getId());
 				session.setAttribute("shopcart", shopCart);
 			}
-			session.setAttribute(CURRENT_MESSAGE, "Welcome" + user.getName());
+			session.setAttribute(CURRENT_MESSAGE, "Welcome " + user.getName());
 			resp.sendRedirect(url);
 
 		} catch (ValidationException e) {
 			session.setAttribute(CURRENT_MESSAGE, "login or password not valid, please try again");
 			session.removeAttribute("user");
 			resp.sendRedirect(ENTER_PAGE_COMMAND);
-		}catch(WrongAuthDataException e) {
+		} catch (WrongAuthDataException e) {
 			session.setAttribute(CURRENT_MESSAGE, "login or password is wrong");
 			session.removeAttribute("user");
 			resp.sendRedirect(ENTER_PAGE_COMMAND);
-		}catch(BlackListException e) {
+		} catch (BlackListException e) {
 			session.setAttribute(CURRENT_MESSAGE, e.getMessage());
 			session.removeAttribute("user");
 			resp.sendRedirect(MAIN_PAGE);
-		} catch(ServiceException e) {
+		} catch (ServiceException e) {
 			session.setAttribute(CURRENT_MESSAGE, "Sorry, we have some problems, visit us later");
 			session.removeAttribute("user");
 			resp.sendRedirect(MAIN_PAGE);

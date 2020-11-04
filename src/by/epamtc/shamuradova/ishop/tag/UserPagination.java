@@ -8,6 +8,9 @@ import javax.servlet.jsp.tagext.TagSupport;
 
 public class UserPagination extends TagSupport {
 
+
+	private static final long serialVersionUID = 1881091514780686805L;
+	
 	private int currentPage;
 	private int totalEntity;
 	private int perPage;
@@ -53,7 +56,7 @@ public class UserPagination extends TagSupport {
 			if (pageCount != 1) {
 				for (int i = 1; i <= pageCount; i++) {
 					String active = i == currentPage ? " active" : "";
-					out.append("<a class=\"btn btn-primary btn-sm" + active + "\" href=\"" + currentCommand + "&roleId="
+					out.append("<a class=\"btn btn-secondary btn-sm" + active + "\" href=\"" + currentCommand + "&roleId="
 							+ roleId + "&pageNumber=" + i + "\">" + i + " </a> ");
 				}
 			}

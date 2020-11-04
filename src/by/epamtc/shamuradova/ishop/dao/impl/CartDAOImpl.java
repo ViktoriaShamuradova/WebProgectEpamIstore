@@ -12,15 +12,16 @@ import java.util.List;
 import by.epamtc.shamuradova.ishop.bean.CartContent;
 import by.epamtc.shamuradova.ishop.bean.ShopCartItem;
 import by.epamtc.shamuradova.ishop.bean.entity.Cart;
+import by.epamtc.shamuradova.ishop.bean.entity.CartItem;
 import by.epamtc.shamuradova.ishop.bean.entity.Model;
 import by.epamtc.shamuradova.ishop.constant.ErrorMessage;
 import by.epamtc.shamuradova.ishop.constant.SQLQuery;
-import by.epamtc.shamuradova.ishop.constant.database_column_name.ModelColumnName;
 import by.epamtc.shamuradova.ishop.dao.CartDAO;
 import by.epamtc.shamuradova.ishop.dao.exception.ConnectionPoolException;
 import by.epamtc.shamuradova.ishop.dao.exception.DAOException;
 import by.epamtc.shamuradova.ishop.dao.handler.ResultSetHandler2;
 import by.epamtc.shamuradova.ishop.dao.handler.impl.ResultSetHandlerCart2;
+import by.epamtc.shamuradova.ishop.dao.handler.impl.ResultSetHandlerCartItem2;
 import by.epamtc.shamuradova.ishop.dao.handler.impl.ResultSetHandlerFactory;
 import by.epamtc.shamuradova.ishop.dao.handler.impl.ResultSetHandlerModel2;
 import by.epamtc.shamuradova.ishop.dao.pool.ConnectionPool;
@@ -30,15 +31,19 @@ public class CartDAOImpl implements CartDAO {
 
 	private ConnectionPool pool;
 	private ResultSetHandler2<Cart> resultSetHandlerCart;
-	
+	private ResultSetHandler2<CartItem> resultSetHandlerCartItem;
+	private ResultSetHandler2<List<CartItem>> resultSetHandlerCartIems;
+
 	public CartDAOImpl() {
 		pool = ConnectionPool.getInstance();
 		resultSetHandlerCart = ResultSetHandlerFactory.getSingleResultSetHandler(new ResultSetHandlerCart2());
+		resultSetHandlerCartItem = ResultSetHandlerFactory.getSingleResultSetHandler(new ResultSetHandlerCartItem2());
+		resultSetHandlerCartIems = ResultSetHandlerFactory.getListResultSetHandler(new ResultSetHandlerCartItem2());
 	}
 
 	@Override
 	public void deleteCartItemByIdCart(int idCart) throws DAOException {
-		
+
 		Connection connection = null;
 
 		try {
@@ -73,12 +78,29 @@ public class CartDAOImpl implements CartDAO {
 	}
 
 	@Override
-	public void addCart(int userId, Date date) throws DAOException {
-		
+	public List<CartItem> getCartItemsByCartId(int cartId) throws DAOException {
 		Connection connection = null;
 
 		try {
-			
+			connection = pool.getConnection();
+
+			return JDBCUtil.select(connection, SQLQuery.CART_ITEMS_BY_CART_ID, resultSetHandlerCartIems, cartId);
+
+		} catch (ConnectionPoolException | SQLException e) {
+			throw new DAOException(ErrorMessage.DATABASE_ERROR, e);
+
+		} finally {
+			freeConnection(connection);
+		}
+	}
+
+	@Override
+	public void addCart(int userId, Date date) throws DAOException {
+
+		Connection connection = null;
+
+		try {
+
 			connection = pool.getConnection();
 
 			JDBCUtil.insertDeleteUpdate(connection, SQLQuery.ADD_CART, userId, date);
@@ -91,10 +113,10 @@ public class CartDAOImpl implements CartDAO {
 
 	@Override
 	public void addCartItem(CartContent cartContent) throws DAOException {
-	
+
 		Connection connection = null;
 		try {
-			
+
 			connection = pool.getConnection();
 
 			JDBCUtil.insertDeleteUpdate(connection, SQLQuery.ADD_CART_ITEM, cartContent.getCartId(),
@@ -106,12 +128,29 @@ public class CartDAOImpl implements CartDAO {
 			freeConnection(connection);
 		}
 	}
+	
+	@Override
+	public void updateCartItemCountByModelIdCartId(int modelId, int count, int cartId) throws DAOException {
+
+		Connection connection = null;
+		try {
+
+			connection = pool.getConnection();
+
+			JDBCUtil.insertDeleteUpdate(connection, SQLQuery.UPDATE_CART_ITEM_COUNT_BY_MODEL_ID_CART_ID,count, modelId, cartId);
+
+		} catch (ConnectionPoolException | SQLException e) {
+			throw new DAOException(e);
+		} finally {
+			freeConnection(connection);
+		}
+		
+	}
 
 	@Override
 	public BigDecimal getTotalSumCart(int idUser) throws DAOException {
 
 		Connection connection = null;
-
 		try {
 			connection = pool.getConnection();
 
@@ -132,7 +171,6 @@ public class CartDAOImpl implements CartDAO {
 	public int getTotalCountOfModelsInCart(int idUser) throws DAOException {
 
 		Connection connection = null;
-
 		try {
 			connection = pool.getConnection();
 
@@ -156,8 +194,8 @@ public class CartDAOImpl implements CartDAO {
 		PreparedStatement prStatement = null;
 		ResultSet resultSet = null;
 		List<ShopCartItem> items = new ArrayList<>();
-		ResultSetHandler2<Model> resultSetHandlerModel= new ResultSetHandlerModel2();
-		
+		ResultSetHandler2<Model> resultSetHandlerModel = new ResultSetHandlerModel2();
+
 		try {
 			connection = pool.getConnection();
 
@@ -211,14 +249,31 @@ public class CartDAOImpl implements CartDAO {
 		}
 	}
 
-	// work
+	@Override
+	public CartItem getCartItemByCartIdModelId(int cartId, int modelId) throws DAOException {
+		Connection connection = null;
+
+		try {
+			connection = pool.getConnection();
+
+			return JDBCUtil.select(connection, SQLQuery.CART_ITEM_BY_CART_ID_MODEL_ID, resultSetHandlerCartItem, cartId,
+					modelId);
+
+		} catch (ConnectionPoolException | SQLException e) {
+			throw new DAOException(ErrorMessage.DATABASE_ERROR, e);
+
+		} finally {
+			freeConnection(connection);
+		}
+	}
+
+	
 	@Override
 	public void deleteCartItemByIdModel(int idModel) throws DAOException {
 		Connection connection = null;
 
 		try {
 			connection = pool.getConnection();
-
 			JDBCUtil.insertDeleteUpdate(connection, SQLQuery.DELETE_CARTITEM_BY_ID_MODEL, idModel);
 
 		} catch (ConnectionPoolException | SQLException e) {
@@ -227,26 +282,8 @@ public class CartDAOImpl implements CartDAO {
 		} finally {
 			freeConnection(connection);
 		}
-
 	}
 
-	// work
-	@Override
-	public void updateCartItemCountByIdModel(int idModel, int count) throws DAOException {
-		Connection connection = null;
-
-		try {
-			connection = pool.getConnection();
-
-			JDBCUtil.insertDeleteUpdate(connection, SQLQuery.UPDATE_CARTITEM_COUNT_BY_ID_MODEL, count, idModel);
-
-		} catch (ConnectionPoolException | SQLException e) {
-			throw new DAOException(e);
-
-		} finally {
-			freeConnection(connection);
-		}
-	}
 	private void freeConnection(Connection connection) throws DAOException {
 		if (connection != null) {
 			try {
@@ -259,11 +296,14 @@ public class CartDAOImpl implements CartDAO {
 
 	public static void main(String[] args) throws DAOException {
 		CartDAOImpl cart = new CartDAOImpl();
-		cart.updateCartItemCountByIdModel(57, 5);
 		cart.deleteCartItemByIdModel(56);
 		System.out.println(cart.getTotalSumCart(15));
 		System.out.println(cart.getTotalCountOfModelsInCart(15));
 		System.out.println(cart.getShopCartItems(6));
 	}
+
+	
+
+	
 
 }

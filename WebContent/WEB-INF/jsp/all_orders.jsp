@@ -28,17 +28,16 @@
 	<%@ include file="header.jsp"%>
 
 
-	<div class="container-fluid center">
+	<div class="container-fluid center mt-5">
 		<div class="row">
 		
-			<h4><c:out value="${orderLoc}" /></h4>
-
+			
 			<div class="container">
 				<table class="table table-striped">
 					<thead>
 						<tr>
-							<th scope="col"><c:out value="${orderIdLoc}" /></th>
-							<th scope="col"><c:out value="${orderDateLoc}"/></th>
+							<th scope="col"><c:out value="${oderIdLoc}"/></th>
+							<th scope="col"><c:out value="${oderDateLoc}"/></th>
 						
 						</tr>
 					</thead>

@@ -22,11 +22,16 @@
 
 </head>
 <body>
-	<c:if test="${current_message !=null}">
-	<h1><c:out value=" ${current_message }" /></h1>
-	</c:if>
+	
 	
 	<%@ include file="header.jsp"%>
+	
+	<div class= container mt-5>
+		<c:if test="${current_message !=null}">
+			<h1><c:out value=" ${current_message }" /></h1>
+		</c:if>
+	</div>
+	
 	
 	<div class="container">
 		<table class="table">

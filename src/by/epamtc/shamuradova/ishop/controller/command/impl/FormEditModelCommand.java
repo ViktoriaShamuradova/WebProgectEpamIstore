@@ -19,7 +19,7 @@ public class FormEditModelCommand implements Command {
 
 	private ModelService modelService;
 
-	private static final String MAIN_PAGE = "controller?command=GET_MAIN_ALL_MODELS_OR_BY_CATEGORY_PAGE";
+	private static final String MAIN_PAGE = "controller?command=ALL_MODELS_OR_BY_CATEGORY";
 	private static final String ERROR_PAGE = "controller?command=GET_ERROR_PAGE";
 
 	public FormEditModelCommand() {
@@ -40,23 +40,21 @@ public class FormEditModelCommand implements Command {
 		try {
 
 			String modelIdString = req.getParameter("modelId");
-			if ("".equals(modelIdString.trim())) {
-				
+			if (modelIdString == null) {
 				req.getRequestDispatcher("/WEB-INF/jsp/model_edit.jsp").forward(req, resp);
 				
+			}else if("".equals(modelIdString.trim())) {
+				req.getRequestDispatcher("/WEB-INF/jsp/model_edit.jsp").forward(req, resp);
 				
 			} else {
-				//иначе подгружаем данные этой модели и переходим на страницу
-				
+			
+				// иначе подгружаем данные этой модели и переходим на страницу
 				int modelId = Integer.parseInt(req.getParameter("modelId"));
 				Model model = modelService.getModel(modelId);
 				req.setAttribute("model", model);
 				req.getRequestDispatcher("/WEB-INF/jsp/model_edit.jsp").forward(req, resp);
-				
 			}
-
-			
-		} catch (ServiceException e) {
+		} catch( ServiceException e) {
 			e.printStackTrace();
 			resp.sendRedirect(ERROR_PAGE);
 		}

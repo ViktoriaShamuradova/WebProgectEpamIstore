@@ -26,12 +26,14 @@ public class IncreaseCountOfModelPerUnitCommand implements Command {
 	@Override
 	public void execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		HttpSession session = req.getSession();
+		
 		ShopCart shopCart = (ShopCart) session.getAttribute("shopcart");
 		int idModel = Integer.parseInt(req.getParameter("idModel"));
+		
 		User user = (User)session.getAttribute("user");
-		//роверить, тот ли юзер
+	
 		try {
-			cartService.updateCartIncrease(shopCart, idModel, PER_UNIT);
+			cartService.updateCartIncrease(shopCart, idModel, PER_UNIT, user.getId());
 			resp.sendRedirect("controller?command=cart_page");
 
 		} catch (ServiceException e) {

@@ -3,6 +3,8 @@
 
 <fmt:message bundle="${loc}" key="menu.orders" var="orders" />
 <fmt:message bundle="${loc}" key="menu.cart" var="cart" />
+<fmt:message bundle="${loc}" key="category.allModel" var="allModelLoc" />
+<fmt:message bundle="${loc}" key="category.catalog" var="catalogLoc" />
 
 <nav class="col-md-2 d-none d-md-block bg-light sidebar">
 	<div class="sidebar-sticky">
@@ -19,9 +21,9 @@
 					<c:out value="(${sessionScope.shopcart.totalCount})" />
 			</a></li>
 			
-			<li class="list-group-item list-group-item-dark"><p class="font-weight-bold large"><c:out value="Model catalog" /></p></li>
+			<li class="list-group-item list-group-item-dark"><p class="font-weight-bold large"><c:out value="${catalogLoc }" /></p></li>
 			<c:if test="${not empty category }">
-					<li class="list-group-item"><a class="text-dark font-weight-bold large" href="controller?command=ALL_MODELS_OR_BY_CATEGORY"><c:out value="All models"/></a></li>
+					<li class="list-group-item"><a class="text-dark font-weight-bold large" href="controller?command=ALL_MODELS_OR_BY_CATEGORY"><c:out value="${allModelLoc}"/></a></li>
 			</c:if>
 			
 			<c:forEach var="category" items="${categories}">

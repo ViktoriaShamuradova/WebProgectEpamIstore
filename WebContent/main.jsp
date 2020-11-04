@@ -32,10 +32,6 @@
 
 	<%@ include file="../WEB-INF/jsp/header.jsp"%>
 
-	<c:if test="${ not empty sessionScope.current_message }">	
-		<h2><c:out value="${sessionScope.current_message }"></c:out></h2>				
-	</c:if>	
-
 
 	<div class="container-fluid">
 		<div class="row">
@@ -49,7 +45,5 @@
 		<!-- <input type="file" accept="image/png">ФАЙЛ ВЫБРАЛ</input> -->
 		
 	</div>
-
-
 </body>
 </html>

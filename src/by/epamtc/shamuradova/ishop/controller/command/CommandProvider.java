@@ -6,7 +6,6 @@ import java.util.Map;
 import by.epamtc.shamuradova.ishop.controller.command.impl.AddToCartCommand;
 import by.epamtc.shamuradova.ishop.controller.command.impl.AddUserInBlackListCommand;
 import by.epamtc.shamuradova.ishop.controller.command.impl.AdminPageCommand;
-import by.epamtc.shamuradova.ishop.controller.command.impl.AllModelsForAdminCommand;
 import by.epamtc.shamuradova.ishop.controller.command.impl.AllUsersCommand;
 import by.epamtc.shamuradova.ishop.controller.command.impl.BlackListCommand;
 import by.epamtc.shamuradova.ishop.controller.command.impl.CartPageCommand;
@@ -63,13 +62,11 @@ public class CommandProvider {
 		commands.put(ParameterNameCommand.DELETE_USER_FROM_BLACK_LIST, new DeleteUserFromBlackListCommand());
 		commands.put(ParameterNameCommand.ALL_USERS, new AllUsersCommand());
 		commands.put(ParameterNameCommand.ADD_TO_BLACK_LIST, new AddUserInBlackListCommand());
-		commands.put(ParameterNameCommand.ALL_MODELS_FOR_ADMIN, new AllModelsForAdminCommand());
 		commands.put(ParameterNameCommand.FORM_EDITING_MODEL, new FormEditModelCommand());
 		commands.put(ParameterNameCommand.SAVE_EDIT_MODEL, new SaveEditModelCommand());
 		commands.put(ParameterNameCommand.SAVE_NEW_MODEL, new SaveNewModelCommand());
 		
 		commands.put(ParameterNameCommand.USERS_BY_ROLE, new UsersByRoleCommand());
-		
 		
 		
 		commands.put(ParameterNameCommand.LOAD_MORE_MODELS, new ModelsMoreCommand());

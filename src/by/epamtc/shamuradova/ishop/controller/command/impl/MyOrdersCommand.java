@@ -19,6 +19,8 @@ import by.epamtc.shamuradova.ishop.service.factory.ServiceFactory;
 public class MyOrdersCommand implements Command {
 
 	private OrderService orderService;
+	
+	private static final String CURRENT_MESSAGE = "current_message";
 
 	public MyOrdersCommand() {
 		orderService = ServiceFactory.getInstance().getOrderService();
@@ -29,6 +31,11 @@ public class MyOrdersCommand implements Command {
 
 		try {
 			HttpSession session = req.getSession();
+			
+			String message = (String) session.getAttribute(CURRENT_MESSAGE);
+			session.removeAttribute(CURRENT_MESSAGE);
+			req.setAttribute(CURRENT_MESSAGE, message);
+			
 			User user = (User) session.getAttribute("user");
 			int idUser = user.getId();
 
@@ -44,7 +51,6 @@ public class MyOrdersCommand implements Command {
 		} catch (ServiceException e) {
 			e.printStackTrace();
 		}
-
 	}
 
 	private int getPageCount(int totalCount, int itemsPerCount) {

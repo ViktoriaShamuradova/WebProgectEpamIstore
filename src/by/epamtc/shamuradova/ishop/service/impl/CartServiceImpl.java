@@ -10,6 +10,7 @@ import by.epamtc.shamuradova.ishop.bean.CartContent;
 import by.epamtc.shamuradova.ishop.bean.ShopCart;
 import by.epamtc.shamuradova.ishop.bean.ShopCartItem;
 import by.epamtc.shamuradova.ishop.bean.entity.Cart;
+import by.epamtc.shamuradova.ishop.bean.entity.CartItem;
 import by.epamtc.shamuradova.ishop.bean.entity.Model;
 import by.epamtc.shamuradova.ishop.dao.CartDAO;
 import by.epamtc.shamuradova.ishop.dao.ModelDAO;
@@ -21,12 +22,16 @@ import by.epamtc.shamuradova.ishop.service.exception.ServiceException;
 
 public class CartServiceImpl implements CartService {
 
+	private CartDAO cartDAO;
+	private ModelDAO modelDAO;
+
 	public CartServiceImpl() {
+		cartDAO = new CartDAOImpl();
+		modelDAO = new ModelDAOImpl();
 	}
 
 	@Override
 	public Cart getCartByUserId(int userId) throws ServiceException {
-		CartDAO cartDAO = new CartDAOImpl();
 		try {
 			return cartDAO.getCartByUserId(userId);
 		} catch (DAOException e) {
@@ -36,8 +41,6 @@ public class CartServiceImpl implements CartService {
 
 	@Override
 	public void createCart(int idUser) throws ServiceException {
-		CartDAO cartDAO = new CartDAOImpl();
-
 		Date date = new Date(System.currentTimeMillis());
 		try {
 			cartDAO.addCart(idUser, date);
@@ -49,7 +52,6 @@ public class CartServiceImpl implements CartService {
 
 	@Override
 	public void createCartItem(CartContent content) throws ServiceException {
-		CartDAO cartDAO = new CartDAOImpl();
 		try {
 			cartDAO.addCartItem(content);
 		} catch (DAOException e) {
@@ -62,7 +64,7 @@ public class CartServiceImpl implements CartService {
 	@Override
 	public ShopCart formNewShopCart(int userId) throws ServiceException {
 		ShopCart shopCart = new ShopCart();
-		CartDAO cartDAO = new CartDAOImpl();
+
 		List<ShopCartItem> items = null;
 		int totalCount;
 		BigDecimal totalSum;
@@ -89,17 +91,15 @@ public class CartServiceImpl implements CartService {
 
 	// work
 	@Override
-	public void updateCartReduce(ShopCart shopCart, int idModel, int countToReduce, int idUser)
+	public void updateCartReduce(ShopCart shopCart, int idModel, int countToReduce, int userId)
 			throws ServiceException {
-		shopCart.removeModel(idModel, countToReduce);
-
-		int count;
-
-		CartDAO cartDAO = new CartDAOImpl();
 
 		try {
+			shopCart.removeModel(idModel, countToReduce);
+			int count;
+			Cart cart = cartDAO.getCartByUserId(userId);
 			if (shopCart.isEmpty()) {
-				cartDAO.deleteCartByidUser(idUser);// одновременно удалится и последняя запись в cart_item
+				cartDAO.deleteCartByidUser(userId);// одновременно удалится и последняя запись в cart_item
 
 			} else {
 				// если содержит модель, то корректируем количество, иначе удаляем запись этой
@@ -107,7 +107,7 @@ public class CartServiceImpl implements CartService {
 				if (shopCart.containsIdModel(idModel)) {
 					ShopCartItem item = shopCart.getShopCartItem(idModel);
 					count = item.getCount();
-					cartDAO.updateCartItemCountByIdModel(idModel, count);
+					cartDAO.updateCartItemCountByModelIdCartId(idModel, count, cart.getId());
 
 				} else {
 					cartDAO.deleteCartItemByIdModel(idModel);
@@ -117,26 +117,42 @@ public class CartServiceImpl implements CartService {
 		} catch (DAOException e) {
 			throw new ServiceException(e);
 		}
-
 	}
 
-//если не работает, завтра проверить по частям
 	@Override
-	public void updateCartIncrease(ShopCart shopCart, int idModel, int count) throws ServiceException {
-		ModelDAO modelDAO = new ModelDAOImpl();
+	public void updateCartIncrease(ShopCart shopCart, int modelId, int count, int userId) throws ServiceException {
 
 		try {
-			Model model = modelDAO.getModelById(idModel);
+			Model model = modelDAO.getModelById(modelId);
 			shopCart.addShopCartItem(model, count);
 
-			CartDAO cartDAO = new CartDAOImpl();
+			Cart cart = cartDAO.getCartByUserId(userId);
 
-			cartDAO.updateCartItemCountByIdModel(idModel, count);
+			cartDAO.updateCartItemCountByModelIdCartId(modelId, count, cart.getId());
 
 		} catch (DAOException e) {
 			throw new ServiceException(e);
 		}
+	}
 
+	@Override
+	public void updateCart(int userId, int modelId) throws ServiceException {
+
+		try {
+			Cart cart = getCartByUserId(userId);
+
+			CartItem c = cartDAO.getCartItemByCartIdModelId(cart.getId(), modelId);
+
+			if (c == null) {
+				cartDAO.addCartItem(new CartContent(cart.getId(), modelId, 1));
+			} else {
+				c.setCount(c.getCount() + 1);
+				cartDAO.updateCartItemCountByModelIdCartId(modelId, c.getCount(), cart.getId());
+			}
+
+		} catch (DAOException e) {
+			throw new ServiceException(e);
+		}
 	}
 
 	public static void main(String[] args) throws ServiceException {

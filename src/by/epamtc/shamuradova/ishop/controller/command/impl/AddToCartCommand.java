@@ -23,8 +23,11 @@ public class AddToCartCommand implements Command {
 
 	private CartService cartService;
 	private ModelService modelService;
+
 	private static final String GET_ENTER_PAGE_COMMAND = "controller?command=enter_page";
-	private static final String SHOPPER_PAGE = "controller?command=GET_SHOPPER_PAGE";
+	private static final String SHOPPER_PAGE = "controller?command=ALL_MODELS_OR_BY_CATEGORY";
+
+	private static final int FIRST_PRODUCT = 1;
 
 	public AddToCartCommand() {
 		cartService = ServiceFactory.getInstance().getCartService();
@@ -38,36 +41,23 @@ public class AddToCartCommand implements Command {
 		int idModel = Integer.parseInt(req.getParameter("modelId"));
 
 		Cart cart = null;
-		
-		//ри фильтре это можно убрать и проверить
-		if (session == null || user == null) {
-			req.getRequestDispatcher(GET_ENTER_PAGE_COMMAND).forward(req, resp);
 
+		if (user == null) {
+			req.getRequestDispatcher(GET_ENTER_PAGE_COMMAND).forward(req, resp);
 		}
 
 		try {
-
 			Model model = modelService.getModel(idModel);
-			if (cartService.getCartByUserId(user.getId()) == null) {
 
+			if (cartService.getCartByUserId(user.getId()) == null) {
 				cartService.createCart(user.getId());
 				cart = cartService.getCartByUserId(user.getId());
 
-				CartContent content = new CartContent();
-				content.setCartId(cart.getId());
-				content.setCount(1);
-				content.setModelId(model.getId());
-
-				cartService.createCartItem(content);
+				cartService.createCartItem(formCartContent(cart.getId(), FIRST_PRODUCT, model.getId()));
 
 			} else {
 				cart = cartService.getCartByUserId(user.getId());
-				CartContent content = new CartContent();
-				content.setCartId(cart.getId());
-				content.setCount(1);
-				content.setModelId(model.getId());
-
-				cartService.createCartItem(content);
+				cartService.updateCart(user.getId(), model.getId());
 			}
 
 			ShopCart shopCart = cartService.formNewShopCart(user.getId());
@@ -80,6 +70,15 @@ public class AddToCartCommand implements Command {
 			e1.printStackTrace();
 		}
 
+	}
+
+	private CartContent formCartContent(int cartId, int count, int modelId) {
+		CartContent content = new CartContent();
+		content.setCartId(cartId);
+		content.setCount(count);
+		content.setModelId(modelId);
+
+		return content;
 	}
 
 }
