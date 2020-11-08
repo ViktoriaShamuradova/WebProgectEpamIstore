@@ -23,4 +23,6 @@ public interface UserDAO {
 
 	public int countUsersByRole(int roleId) throws DAOException;
 
+	public User getUserById(int userId)throws DAOException;
+
 }

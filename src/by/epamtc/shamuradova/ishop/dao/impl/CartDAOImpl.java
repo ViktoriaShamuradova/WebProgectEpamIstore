@@ -301,9 +301,4 @@ public class CartDAOImpl implements CartDAO {
 		System.out.println(cart.getTotalCountOfModelsInCart(15));
 		System.out.println(cart.getShopCartItems(6));
 	}
-
-	
-
-	
-
 }

@@ -10,7 +10,6 @@ import javax.servlet.http.HttpSession;
 
 import by.epamtc.shamuradova.ishop.bean.entity.User;
 import by.epamtc.shamuradova.ishop.constant.PerPage;
-import by.epamtc.shamuradova.ishop.constant.UserRole;
 import by.epamtc.shamuradova.ishop.controller.command.Command;
 import by.epamtc.shamuradova.ishop.service.UserService;
 import by.epamtc.shamuradova.ishop.service.exception.ServiceException;
@@ -21,10 +20,17 @@ public class UsersByRoleCommand implements Command {
 	private UserService userService;
 
 	private static final int FIRST_PAGE = 1;
-	private static final String MAIN_PAGE = "controller?command=GET_MAIN_ALL_MODELS_OR_BY_CATEGORY_PAGE";
+	
 	private static final String CURRENT_COMMAND = "command";
 	private static final String NAME_CURRENT_COMMAND = "controller?command=users_by_role";
+	private static final String CURRENT_PAGE = "/WEB-INF/jsp/users_list.jsp";
 	private static final String ERROR_PAGE = "controller?command=GET_ERROR_PAGE";
+
+	private static final String PAGE_NUMBER = "pageNumber";
+	private static final String NAME_BEANS = "users";
+	private static final String COUNT_BEAN = "userCount";
+	private static final String PER_PAGE = "perPage";
+	private static final String ROLE_ID = "roleId";
 
 	public UsersByRoleCommand() {
 		userService = ServiceFactory.getInstance().getUserService();
@@ -37,32 +43,25 @@ public class UsersByRoleCommand implements Command {
 			HttpSession session = req.getSession();
 			User user = (User) session.getAttribute("user");
 
-			if (user.getRole().equalsIgnoreCase(UserRole.SHOPPER)) {
-				session.invalidate();
-				resp.sendRedirect(MAIN_PAGE);
-			}
-
-			String pageNumberString = req.getParameter("pageNumber");
+			String pageNumberString = req.getParameter(PAGE_NUMBER);
 			int pageNumber = pageNumberString == null ? FIRST_PAGE : Integer.parseInt(pageNumberString);
 
-			int roleId = Integer.parseInt(req.getParameter("roleId"));
-			List<User> users = userService.getUsersByRole(pageNumber, PerPage.USERS_ON_PAGE, roleId);
+			int roleId = Integer.parseInt(req.getParameter(ROLE_ID));
+			List<User> users = userService.getUsersByRole(user, pageNumber, PerPage.USERS_ON_PAGE, roleId);
 			int userCount = userService.countByRole(roleId);
 
-			req.setAttribute("users", users);
-			req.setAttribute("pageNumber", pageNumber);
-			req.setAttribute("userCount", userCount);
-			req.setAttribute("perPage", PerPage.USERS_ON_PAGE);
+			req.setAttribute(NAME_BEANS, users);
+			req.setAttribute(PAGE_NUMBER, pageNumber);
+			req.setAttribute(COUNT_BEAN, userCount);
+			req.setAttribute(PER_PAGE, PerPage.USERS_ON_PAGE);
 			req.setAttribute(CURRENT_COMMAND, NAME_CURRENT_COMMAND);
-			req.setAttribute("roleId", roleId);
+			req.setAttribute(ROLE_ID, roleId);
 
-			req.getRequestDispatcher("/WEB-INF/jsp/users_list.jsp").forward(req, resp);
+			req.getRequestDispatcher(CURRENT_PAGE).forward(req, resp);
 
 		} catch (ServiceException e) {
 			e.printStackTrace();
 			resp.sendRedirect(ERROR_PAGE);
 		}
-
 	}
-
 }

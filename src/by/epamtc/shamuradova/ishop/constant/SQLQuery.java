@@ -32,6 +32,7 @@ public class SQLQuery {
 	public static final String CART_BY_ID = "select * from carts where id_user= ?";
 	public static final String CART_ITEMS_BY_CART_ID = "select * from cart_items where id_cart= ?";
 	public static final String USER_BY_LOGIN = "select u.*, r.name as role, s.name as stat from users u, roles r, statuses s where u.login=? and r.id=u.id_user_role and s.id=u.id_user_status";
+	public static final String USER_BY_ID = "select u.*, r.name as role, s.name as stat from users u, roles r, statuses s where u.id=? and r.id=u.id_user_role and s.id=u.id_user_status";
 	public static final String MODEL_BY_ID = "select m.*, c.name as category, p.name as producer from models m, producers p, categories c where m.id= ? and c.id=m.id_category and p.id=m.id_producer";
 	public static final String ADD_CART = "INSERT INTO carts(id_user, created) VALUES (?,?)";
 	public static final String ADD_CART_ITEM = "INSERT INTO cart_items(id_cart, id_model, count) VALUES (?,?,?)";
@@ -42,16 +43,16 @@ public class SQLQuery {
 			+ "where c.id_model=m.id and c.id_cart= ? and categories.id=m.id_category and p.id=m.id_producer";
 	public static final String DELETE_CART_BY_ID = "delete from carts where id_user=?";
 	public static final String DELETE_CARTITEM_BY_ID_MODEL = "delete from cart_items where id_model=?";
-	public static final String ADD_ORDER = "INSERT INTO orders(id_user, created) VALUES (?,?)";
+	public static final String ADD_ORDER = "INSERT INTO orders(id_user, created, id_status_order ) VALUES (?,?, (select s.id from status_order s where s.name=?))";
 	public static final String ADD_ORDER_ITEM = "INSERT INTO order_items(id_order, id_model, count) VALUES (?,?,?)";
 	public static final String ORDER_BY_ID_USER = "select * from orders where id_user= ?";
 	public static final String ORDER_BY_ID_USER_AND_DATE = "select * from orders where id_user= ? and created=?";
 	public static final String DELETE_CART_ITEM_BY_ID_CART = "delete from cart_items where id_cart=?";
 	public static final String DELETE_ORDER_BY_ID = "delete from orders where id=?";
-	public static final String ORDER_BY_ID = "select * from orders where id=?";
+	public static final String ORDER_BY_ID = "select o.id, o.id_user, o.created, s.name as status from orders o, status_order s where o.id_status_order=s.id and o.id=?";
 	public static final String DELETE_ORDER_ITEM_BY_ID_ORDER = "delete from order_items where id_order=?";
 	public static final String LAST_INSERT_ID = "SELECT LAST_INSERT_ID();";
-	public static final String LIST_ORDER_BY_ID_USER = "SELECT * from orders  where id_user=? ORDER BY id DESC limit ? offset ?";
+	public static final String LIST_ORDER_BY_ID_USER = "SELECT o.id, o.created,o.id_user, s.name as status from orders o, status_order s where o.id_user=? and o.id_status_order=s.id ORDER BY id DESC limit ? offset ?";
 	public static final String COUNT_ORDERS_BY_ID_USER = "select count(*) from orders where id_user=?";
 	public static final String COUNT_MODELS = "select count(*) from models";
 	public static final String COUNT_MODELS_BY_CATEGORY_URL = "select count(*) from models INNER JOIN categories ON models.id_category=categories.id where categories.url=?";
@@ -70,5 +71,9 @@ public class SQLQuery {
 	public static final String MODEL_IMAGE_BY_ID = "select image_link from models where id=?";
 	public static final String CART_ITEM_BY_CART_ID_MODEL_ID = "select * from cart_items where id_cart=? and id_model=?";
 	public static final String UPDATE_CART_ITEM_COUNT_BY_MODEL_ID_CART_ID ="update cart_items set count=? where id_model=? and id_cart=?";
+	public static final String LIST_ORDER = "select o.id, o.id_user, o.created, s.name as status from orders o, status_order s where o.id_status_order=s.id order by o.created desc limit ? offset ?";
+	public static final String COUNT_ORDERS = "select count(*) from orders";
+	public static final String UPDATE_ORDER_STATUS_BY_ID = "update orders set id_status_order=(select s.id from status_order s where s.name=?) where id=?";
+	
 
 }

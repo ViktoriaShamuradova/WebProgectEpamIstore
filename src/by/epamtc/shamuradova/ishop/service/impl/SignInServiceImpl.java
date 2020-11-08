@@ -10,10 +10,10 @@ import by.epamtc.shamuradova.ishop.dao.SignInDAO;
 import by.epamtc.shamuradova.ishop.dao.exception.DAOException;
 import by.epamtc.shamuradova.ishop.dao.impl.SignInDAOImpl2;
 import by.epamtc.shamuradova.ishop.service.SignInService;
-import by.epamtc.shamuradova.ishop.service.exception.BlackListException;
+import by.epamtc.shamuradova.ishop.service.exception.AccessDeniedServiceException;
+import by.epamtc.shamuradova.ishop.service.exception.InternalServiceException;
 import by.epamtc.shamuradova.ishop.service.exception.ServiceException;
 import by.epamtc.shamuradova.ishop.service.exception.ValidationException;
-import by.epamtc.shamuradova.ishop.service.exception.WrongAuthDataException;
 import by.epamtc.shamuradova.ishop.service.util.MD5Encryptor;
 
 public class SignInServiceImpl implements SignInService {
@@ -40,17 +40,17 @@ public class SignInServiceImpl implements SignInService {
 			User user = signIn.signIn(data);
 			
 			if (user == null) {
-				throw new WrongAuthDataException("incorrect login or password");
+				throw new ValidationException("incorrect login or password");
 			}
 			
 			if (user.isBlackList()) {
-				throw new BlackListException("your account has been deleted");
+				throw new AccessDeniedServiceException("your account has been deleted");
 			}
 		
 			return user;
 
 		} catch (NoSuchAlgorithmException | UnsupportedEncodingException | DAOException e) {
-			throw new ServiceException(e);
+			throw new InternalServiceException(e);
 		}
 
 	}

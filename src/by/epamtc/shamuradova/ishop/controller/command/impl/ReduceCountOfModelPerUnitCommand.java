@@ -19,28 +19,31 @@ import by.epamtc.shamuradova.ishop.service.factory.ServiceFactory;
 public class ReduceCountOfModelPerUnitCommand implements Command {
 
 	private static final int PER_UNIT = 1;
+	
+	private static final String ERROR_PAGE = "controller?command=GET_ERROR_PAGE";
+	private static final String NAME_NEXT_COMMAND = "controller?command=cart_page";
+	
 	private CartService cartService;
 
 	public ReduceCountOfModelPerUnitCommand() {
 		cartService = ServiceFactory.getInstance().getCartService();
 	}
-//поробуй без установки сессии вывести на экран
+	
 	@Override
 	public void execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		HttpSession session = req.getSession();
+		
 		ShopCart shopCart = (ShopCart) session.getAttribute("shopcart");
 		int idModel = Integer.parseInt(req.getParameter("idModel"));
 		User user = (User)session.getAttribute("user");
 
 		try {
-			cartService.updateCartReduce(shopCart, idModel, PER_UNIT, user.getId());
-			resp.sendRedirect("controller?command=cart_page");
+			cartService.updateCartReduce(shopCart, idModel, PER_UNIT, user);
+			resp.sendRedirect(NAME_NEXT_COMMAND);
 
 		} catch (ServiceException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			resp.sendRedirect(ERROR_PAGE);		
 		}
-
 	}
-
 }

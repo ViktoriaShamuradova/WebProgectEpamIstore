@@ -10,7 +10,6 @@ import javax.servlet.http.HttpSession;
 
 import by.epamtc.shamuradova.ishop.bean.entity.User;
 import by.epamtc.shamuradova.ishop.constant.PerPage;
-import by.epamtc.shamuradova.ishop.constant.UserRole;
 import by.epamtc.shamuradova.ishop.controller.command.Command;
 import by.epamtc.shamuradova.ishop.service.UserService;
 import by.epamtc.shamuradova.ishop.service.exception.ServiceException;
@@ -19,13 +18,19 @@ import by.epamtc.shamuradova.ishop.service.factory.ServiceFactory;
 public class AllUsersCommand implements Command {
 
 	private UserService userService;
-	
+
 	private static final int FIRST_PAGE = 1;
-	private static final String ERROR_PAGE = "controller?command=GET_ERROR_PAGE";
+
 	private static final String CURRENT_COMMAND = "command";
-	private static final String NAME_CURRENT_COMMAND= "controller?command=all_users";
-	private static final String MAIN_PAGE = "controller?command=GET_MAIN_ALL_MODELS_OR_BY_CATEGORY_PAGE";
-	
+	private static final String PAGE_NUMBER = "pageNumber";
+	private static final String NAME_BEANS = "users";
+	private static final String COUNT_BEAN = "userCount";
+	private static final String PER_PAGE = "perPage";
+		
+	private static final String NAME_CURRENT_COMMAND = "controller?command=all_users";
+	private static final String NAME_CURRENT_PAGE = "/WEB-INF/jsp/users_list.jsp";
+	private static final String ERROR_PAGE = "controller?command=GET_ERROR_PAGE";
+
 	public AllUsersCommand() {
 		userService = ServiceFactory.getInstance().getUserService();
 	}
@@ -34,30 +39,25 @@ public class AllUsersCommand implements Command {
 	public void execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		try {
 			HttpSession session = req.getSession();
-			User user = (User)session.getAttribute("user");
-			
-			if(user.getRole().equalsIgnoreCase(UserRole.SHOPPER)) {
-				session.invalidate();
-				resp.sendRedirect(MAIN_PAGE);
-			}
-			
-			String pageNumberString = req.getParameter("pageNumber");
+			User user = (User) session.getAttribute("user");
+
+			String pageNumberString = req.getParameter(PAGE_NUMBER);
 			int pageNumber = pageNumberString == null ? FIRST_PAGE : Integer.parseInt(pageNumberString);
-			
-			List<User> users = userService.allUsers(pageNumber, PerPage.USERS_ON_PAGE);
+
+			List<User> users = userService.allUsers(user, pageNumber, PerPage.USERS_ON_PAGE);
 			int userCount = userService.countUsers();
 
-			req.setAttribute("users", users);
-			req.setAttribute("pageNumber", pageNumber);
-			req.setAttribute("userCount", userCount);
-			req.setAttribute("perPage", PerPage.USERS_ON_PAGE);
+			req.setAttribute(NAME_BEANS, users);
+			req.setAttribute(PAGE_NUMBER, pageNumber);
+			req.setAttribute(COUNT_BEAN, userCount);
+			req.setAttribute(PER_PAGE, PerPage.USERS_ON_PAGE);
 			req.setAttribute(CURRENT_COMMAND, NAME_CURRENT_COMMAND);
-			
-			req.getRequestDispatcher("/WEB-INF/jsp/users_list.jsp").forward(req, resp);
+
+			req.getRequestDispatcher(NAME_CURRENT_PAGE).forward(req, resp);
 
 		} catch (ServiceException e) {
 			e.printStackTrace();
 			resp.sendRedirect(ERROR_PAGE);
-		}	
+		}
 	}
 }

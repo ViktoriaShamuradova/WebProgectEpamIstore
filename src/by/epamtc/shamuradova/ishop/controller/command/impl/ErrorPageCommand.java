@@ -9,16 +9,21 @@ import javax.servlet.http.HttpServletResponse;
 
 import by.epamtc.shamuradova.ishop.controller.command.Command;
 
+/**
+ * Комманда, предназначенная для отображения данных заказа 
+ * 
+ * @author Шамурадова Виктория
+ * 
+ */
+
 public class ErrorPageCommand implements Command{
 
 	@Override
 	public void execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		req.setAttribute("statusCode", HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-		RequestDispatcher dispatcher = req.getRequestDispatcher("/WEB-INF/jsp/error_page.jsp");
+		
+		RequestDispatcher dispatcher = req.getRequestDispatcher("/WEB-INF/jsp/page/error.jsp");
 		dispatcher.forward(req, resp);
 		
 	}
-
-	
-
 }

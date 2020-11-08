@@ -24,7 +24,16 @@
 </head>
 <body>
 
+
+
 <%@ include file="header.jsp"%>
+
+
+	<div class= container mt-5>
+		<c:if test="${ not empty current_message }">	
+			<h2><c:out value="${current_message }"></c:out></h2>				
+		</c:if>	
+	</div>
 
 <div class="container mt-5" >
 

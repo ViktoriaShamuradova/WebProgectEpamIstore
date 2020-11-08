@@ -3,7 +3,6 @@ package by.epamtc.shamuradova.ishop.controller.command.impl;
 import java.io.IOException;
 import java.util.List;
 
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -22,15 +21,25 @@ import by.epamtc.shamuradova.ishop.service.factory.ServiceFactory;
 public class ModelsByCategoryCommand implements Command {
 
 	private static final int FIRST_PAGE = 1;
+	
 	private static final String ERROR_PAGE = "controller?command=GET_ERROR_PAGE";
+	private static final String CURRENT_COMMAND = "controller?command=ALL_MODELS_OR_BY_CATEGORY";
+	
 	private static final String MODELS_PARAM = "models";
+	private static final String CATEGORIES = "categories";
+	private static final String MODELS_COUNT = "modelsCount";
 	private static final String CURRENT_CATEGORY_URL_PARAM = "category";
 	private static final String CURRENT_MESSAGE = "current_message";
-
+	private static final String COMMAND = "command";
+	private static final String CATEGORY = "category";
+	private static final String PAGE_NUMBER = "pageNumber";
+	private static final String PAGE_COUNT = "pageCount";
+	private static final String PER_PAGE = "modelsPerPage";
+	
 	private static final String MAIN_PAGE = "/main.jsp";
 	private static final String SHOPPER_PAGE = "/WEB-INF/jsp/shopper_page.jsp";
 	private static final String ADMIN_PAGE = "/WEB-INF/jsp/model_list_admin.jsp";
-	private static final String CURRENT_COMMAND = "controller?command=ALL_MODELS_OR_BY_CATEGORY";
+
 	
 	private ModelService modelService;
 
@@ -52,22 +61,19 @@ public class ModelsByCategoryCommand implements Command {
 				setCategories(req, resp);
 				setModels(req, resp);
 
-				RequestDispatcher dispatcher = req.getRequestDispatcher(MAIN_PAGE);
-				dispatcher.forward(req, resp);
+				req.getRequestDispatcher(MAIN_PAGE).forward(req, resp);
 
 			} else if (user.getRole().equals(UserRole.SHOPPER)) {
 				setCategories(req, resp);
 				setModels(req, resp);
 
-				RequestDispatcher dispatcher = req.getRequestDispatcher(SHOPPER_PAGE);
-				dispatcher.forward(req, resp);
+				req.getRequestDispatcher(SHOPPER_PAGE).forward(req, resp);
 				
 			} else if(user.getRole().equals(UserRole.ADMIN)) {
 				setModels(req, resp);
-				req.setAttribute("command",CURRENT_COMMAND);
+				req.setAttribute(COMMAND,CURRENT_COMMAND);
 				
-				RequestDispatcher dispatcher = req.getRequestDispatcher(ADMIN_PAGE);
-				dispatcher.forward(req, resp);
+				req.getRequestDispatcher(ADMIN_PAGE).forward(req, resp);
 			}
 
 		} catch (ServiceException e) {
@@ -95,8 +101,8 @@ public class ModelsByCategoryCommand implements Command {
 	}
 
 	private void setModels(HttpServletRequest req, HttpServletResponse resp) throws ServiceException {
-		String category = req.getParameter("category");
-		String pageNumberString = req.getParameter("pageNumber");
+		String category = req.getParameter(CATEGORY);
+		String pageNumberString = req.getParameter(PAGE_NUMBER);
 		int pageNumber = pageNumberString == null ? FIRST_PAGE : Integer.parseInt(pageNumberString);
 
 		List<Model> models = getModels(category, pageNumber);
@@ -104,15 +110,15 @@ public class ModelsByCategoryCommand implements Command {
 
 		req.setAttribute(MODELS_PARAM, models);
 
-		req.setAttribute("pageCount", getPageCount(modelsCount, PerPage.MODELS_ON_PAGE));
-		req.setAttribute("modelsPerPage", PerPage.MODELS_ON_PAGE);
-		req.setAttribute("pageNumber", pageNumber);
-		req.setAttribute("modelsCount", modelsCount);
+		req.setAttribute(PAGE_COUNT, getPageCount(modelsCount, PerPage.MODELS_ON_PAGE));
+		req.setAttribute(PER_PAGE, PerPage.MODELS_ON_PAGE);
+		req.setAttribute(PAGE_NUMBER, pageNumber);
+		req.setAttribute(MODELS_COUNT, modelsCount);
 	}
 	private void setCategories(HttpServletRequest req, HttpServletResponse resp)throws ServiceException {
-		String category = req.getParameter("category");
+		String category = req.getParameter(CATEGORY);
 		List<Category> categories = modelService.listAllCategories();
-		req.setAttribute("categories", categories);
+		req.setAttribute(CATEGORIES, categories);
 		req.setAttribute(CURRENT_CATEGORY_URL_PARAM, category);	// сохранить текущую выбранную категорию, чтобы
 		// загружать далее по категориям
 	}

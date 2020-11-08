@@ -17,6 +17,10 @@ import by.epamtc.shamuradova.ishop.service.factory.ServiceFactory;
 public class IncreaseCountOfModelPerUnitCommand implements Command {
 
 	private static final int PER_UNIT = 1;
+
+	private static final String ERROR_PAGE = "controller?command=GET_ERROR_PAGE";
+	private static final String CURRENT_PAGE = "controller?command=cart_page";
+
 	private CartService cartService;
 
 	public IncreaseCountOfModelPerUnitCommand() {
@@ -26,21 +30,19 @@ public class IncreaseCountOfModelPerUnitCommand implements Command {
 	@Override
 	public void execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		HttpSession session = req.getSession();
-		
+
 		ShopCart shopCart = (ShopCart) session.getAttribute("shopcart");
 		int idModel = Integer.parseInt(req.getParameter("idModel"));
-		
-		User user = (User)session.getAttribute("user");
-	
+
+		User user = (User) session.getAttribute("user");
+
 		try {
-			cartService.updateCartIncrease(shopCart, idModel, PER_UNIT, user.getId());
-			resp.sendRedirect("controller?command=cart_page");
+			cartService.updateCartIncrease(shopCart, idModel, PER_UNIT, user);
+			resp.sendRedirect(CURRENT_PAGE);
 
 		} catch (ServiceException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			resp.sendRedirect(ERROR_PAGE);
 		}
-
 	}
-
 }

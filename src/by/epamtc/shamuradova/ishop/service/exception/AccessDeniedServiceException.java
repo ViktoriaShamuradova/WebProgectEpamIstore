@@ -1,19 +1,22 @@
 package by.epamtc.shamuradova.ishop.service.exception;
 
-//наследуется от IllegalArgumentException, потому что предены неправильные параметры для поиска объекта
-//если не имеет доступ к данному объекту, то выбрасываем данное исключение и устанавливаем 403 
-public class AccessDeniedServiceException extends IllegalArgumentException {
+import javax.servlet.http.HttpServletResponse;
 
-	public AccessDeniedServiceException(String message, Throwable e) {
-		super(message, e);
-	}
+/**
+ * Класс наследуется от AbstractApplicationException
+ * 
+ * 403 - запрещен доступ к ресурсу
+ * @author Шамурадова Виктория
+ * 
+ */
+
+public class AccessDeniedServiceException extends AbstractApplicationException {
+
+	
+	private static final long serialVersionUID = 6366557251443220625L;
 
 	public AccessDeniedServiceException(String message) {
-		super(message);
+		super(message, HttpServletResponse.SC_FORBIDDEN);
 	}
-
-	public AccessDeniedServiceException(Throwable e) {
-		super(e);
-	}
-
+	
 }

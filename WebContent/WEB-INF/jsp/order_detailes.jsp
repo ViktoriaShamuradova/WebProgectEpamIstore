@@ -17,8 +17,7 @@
 <fmt:message bundle="${loc}" key="attribute.totalcount" var="totalCountLoc" />
 <fmt:message bundle="${loc}" key="button.back" var="back" />
 
-<link rel="stylesheet"
-	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 
 </head>
 <body>
@@ -64,10 +63,16 @@
 	    	  			
 	  		</ol>
 	  	</nav>
-	  	<a class="btn btn-secondary" href="controller?command=my_orders" role="button"><c:out value="${back}" /></a>
-	
+	  	
+	  	<c:choose>
+	  		<c:when test="${sessionScope.user.role == 'ADMIN'}">
+	  			<a class="btn btn-secondary" href="controller?command=all_orders" role="button"><c:out value="${back}" /></a>
+	  		</c:when>
+	  		<c:otherwise>
+	  			<a class="btn btn-secondary" href="controller?command=my_orders" role="button"><c:out value="${back}" /></a>
+	  		</c:otherwise>
+	  	</c:choose>
+	  	
 	</div>
 	
-	
-
 </body>

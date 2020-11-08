@@ -9,8 +9,6 @@ import by.epamtc.shamuradova.ishop.bean.RegInfo;
 import by.epamtc.shamuradova.ishop.bean.entity.User;
 import by.epamtc.shamuradova.ishop.constant.ErrorMessage;
 import by.epamtc.shamuradova.ishop.constant.PatternContainer;
-import by.epamtc.shamuradova.ishop.constant.UserRole;
-import by.epamtc.shamuradova.ishop.constant.UserStatus;
 import by.epamtc.shamuradova.ishop.dao.SignUpDAO;
 import by.epamtc.shamuradova.ishop.dao.UserDAO;
 import by.epamtc.shamuradova.ishop.dao.exception.DAOException;
@@ -23,12 +21,12 @@ import by.epamtc.shamuradova.ishop.service.util.MD5Encryptor;
 
 public class SignUpServiceImpl implements SignUpService {
 
-	private SignUpDAO signUpDAO ;
-	
+	private SignUpDAO signUpDAO;
+
 	public SignUpServiceImpl() {
 		signUpDAO = new SignUpImplDAO();
 	}
-	
+
 	@Override
 	public User signUp(RegInfo regInfo) throws ServiceException {
 		try {
@@ -43,15 +41,13 @@ public class SignUpServiceImpl implements SignUpService {
 			String hashPassword = MD5Encryptor.getHashCode(new String(regInfo.getPassword()));
 			regInfo.setPassword(hashPassword.toCharArray());
 			signUpDAO.signUp(regInfo);
-			
+
 			UserDAO userDAO = new UserDAOImpl();
 			User user = userDAO.getUserByLogin(regInfo.getLogin());
-			
-			return user;
-			
-			
 
-		} catch (DAOException | ValidationException |UnsupportedEncodingException |NoSuchAlgorithmException e) {
+			return user;
+
+		} catch (DAOException | UnsupportedEncodingException | NoSuchAlgorithmException e) {
 			throw new ServiceException(e);
 		}
 
@@ -60,7 +56,7 @@ public class SignUpServiceImpl implements SignUpService {
 	private void checkLoginFormat(String login, Pattern loginPattern) throws ServiceException {
 		Matcher matcher = PatternContainer.LOGIN_PATTERN.matcher(login);
 		if (!matcher.find()) {
-			throw new ServiceException(ErrorMessage.LOGIN_FORMAT);
+			throw new ValidationException(ErrorMessage.LOGIN_FORMAT);
 		}
 	}
 
@@ -68,7 +64,7 @@ public class SignUpServiceImpl implements SignUpService {
 		Matcher matcher = PatternContainer.PASSWORD_PATTERN.matcher(password);
 		password = null;
 		if (!matcher.find()) {
-			throw new ServiceException(ErrorMessage.PASSWORD_FORMAT);
+			throw new ValidationException(ErrorMessage.PASSWORD_FORMAT);
 		}
 	}
 
@@ -95,12 +91,5 @@ public class SignUpServiceImpl implements SignUpService {
 		}
 	}
 
-	public static void main(String[] args) throws ServiceException {
-		char[] password = new char[] { '1', '2', '3', '4', '5', '6','7', '8','9' };
-		String pass = new String(password);
-		RegInfo regInfo = new RegInfo("Shamuraaa", "Shamaaa", "ShamurShamaaaaa44", "sham@gmail.com", password, UserStatus.NEW, UserRole.SHOPPER);
-		SignUpServiceImpl sign = new SignUpServiceImpl();
-		System.out.println(sign.signUp(regInfo));
-	}
 
 }

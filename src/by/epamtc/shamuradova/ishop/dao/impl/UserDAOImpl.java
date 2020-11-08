@@ -52,6 +52,22 @@ public class UserDAOImpl implements UserDAO {
 			freeConnection(connection);
 		}
 	}
+	@Override
+	public User getUserById(int userId) throws DAOException {
+		Connection connection = null;
+		try {
+			connection = pool.getConnection();
+			String sql = SQLQuery.USER_BY_ID;
+
+			return JDBCUtil.select(connection, sql, resultSetHandlerUser, userId);
+
+		} catch (ConnectionPoolException | SQLException e) {
+			throw new DAOException(ErrorMessage.DATABASE_ERROR, e);
+
+		} finally {
+			freeConnection(connection);
+		}
+	}
 
 	@Override
 	public List<User> getBlackList(int page, int limit) throws DAOException {
@@ -163,10 +179,6 @@ public class UserDAOImpl implements UserDAO {
 		}
 	}
 
-	public static void main(String[] args) throws DAOException {
-		UserDAOImpl dao = new UserDAOImpl();
-
-		System.out.println(dao.countUsersByRole(2));
-	}
+	
 
 }

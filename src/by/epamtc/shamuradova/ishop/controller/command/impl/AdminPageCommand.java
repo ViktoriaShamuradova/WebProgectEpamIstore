@@ -14,6 +14,8 @@ public class AdminPageCommand implements Command{
 
 	private static final String CURRENT_MESSAGE = "current_message";
 	
+	private static final String ADMIN_PAGE = "/WEB-INF/jsp/admin_page.jsp";
+	
 	@Override
 	public void execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		HttpSession session = req.getSession();
@@ -22,7 +24,7 @@ public class AdminPageCommand implements Command{
 		
 		req.setAttribute(CURRENT_MESSAGE, message);
 		
-		RequestDispatcher dispatcher = req.getRequestDispatcher("/WEB-INF/jsp/admin_page.jsp");
+		RequestDispatcher dispatcher = req.getRequestDispatcher(ADMIN_PAGE);
 		dispatcher.forward(req, resp);
 		
 	}

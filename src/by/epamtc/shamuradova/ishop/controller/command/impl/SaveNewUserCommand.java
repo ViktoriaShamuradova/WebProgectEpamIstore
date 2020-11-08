@@ -12,13 +12,8 @@ public class SaveNewUserCommand implements Command{
 
 	@Override
 	public void execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		
-		//resp.sendRedirect("jsp/welcome.jsp");
-		
-		System.out.println("save in databse");
+
 		resp.sendRedirect("/controller?command=welcome_user");
 		
 	}
-	
-
 }

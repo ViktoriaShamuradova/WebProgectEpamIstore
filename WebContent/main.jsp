@@ -32,7 +32,12 @@
 
 	<%@ include file="../WEB-INF/jsp/header.jsp"%>
 
-
+	<div class= container mt-5>
+		<c:if test="${ not empty current_message }">	
+			<h2><c:out value="${current_message }"></c:out></h2>				
+		</c:if>	
+	</div>
+	
 	<div class="container-fluid">
 		<div class="row">
 			<%@ include file="../WEB-INF/jsp/category_navbar.jsp"%>

@@ -21,6 +21,13 @@ public class MyOrdersCommand implements Command {
 	private OrderService orderService;
 	
 	private static final String CURRENT_MESSAGE = "current_message";
+	
+	private static final String PAGE_NUMBER = "pageNumber";
+	private static final String NAME_BEANS = "orders";
+	private static final String PAGE_COUNT = "pageCount";
+	
+	private static final String NAME_CURRENT_PAGE = "/WEB-INF/jsp/all_my_orders.jsp";
+	private static final String ERROR_PAGE = "controller?command=GET_ERROR_PAGE";
 
 	public MyOrdersCommand() {
 		orderService = ServiceFactory.getInstance().getOrderService();
@@ -37,29 +44,27 @@ public class MyOrdersCommand implements Command {
 			req.setAttribute(CURRENT_MESSAGE, message);
 			
 			User user = (User) session.getAttribute("user");
-			int idUser = user.getId();
+	
+			List<Order> orders = orderService.listMyOrders(user, 1, PerPage.ORDERS_ON_PAGE);
+			int orderCount = orderService.countOrders(user.getId());
 
-			List<Order> orders = orderService.listMyOrders(idUser, 1, PerPage.ORDERS_PER_PAGE);
-			int orderCount = orderService.countOrders(idUser);
-
-			req.setAttribute("orders", orders);
-			req.setAttribute("pageCount", getPageCount(orderCount, PerPage.ORDERS_PER_PAGE));
-			req.setAttribute("pageNumber", 1);
+			req.setAttribute(NAME_BEANS, orders);
+			req.setAttribute(PAGE_COUNT, getPageCount(orderCount, PerPage.ORDERS_ON_PAGE));
+			req.setAttribute(PAGE_NUMBER, 1);
 			
-			req.getRequestDispatcher("/WEB-INF/jsp/all_orders.jsp").forward(req, resp);
+			req.getRequestDispatcher(NAME_CURRENT_PAGE).forward(req, resp);
 
 		} catch (ServiceException e) {
 			e.printStackTrace();
+			resp.sendRedirect(ERROR_PAGE);
 		}
 	}
 
 	private int getPageCount(int totalCount, int itemsPerCount) {
-
 		int res = totalCount / itemsPerCount;
 		if (res * itemsPerCount != totalCount) {
 			res++;
 		}
 		return res;
 	}
-
 }

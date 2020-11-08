@@ -10,11 +10,9 @@ import javax.servlet.http.HttpSession;
 
 import by.epamtc.shamuradova.ishop.bean.ModelEdition;
 import by.epamtc.shamuradova.ishop.bean.entity.User;
-import by.epamtc.shamuradova.ishop.constant.UserRole;
 import by.epamtc.shamuradova.ishop.controller.command.Command;
 import by.epamtc.shamuradova.ishop.service.ModelService;
 import by.epamtc.shamuradova.ishop.service.exception.ServiceException;
-import by.epamtc.shamuradova.ishop.service.exception.ValidationException;
 import by.epamtc.shamuradova.ishop.service.factory.ServiceFactory;
 
 public class SaveEditModelCommand implements Command {
@@ -30,16 +28,11 @@ public class SaveEditModelCommand implements Command {
 
 	@Override
 	public void execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
-		HttpSession session = req.getSession();
-		User user = (User) session.getAttribute("user");
-
-		if (user.getRole().equalsIgnoreCase(UserRole.SHOPPER)) {
-			session.invalidate();
-			resp.sendRedirect(MAIN_PAGE);
-		}
-
 		try {
+
+			HttpSession session = req.getSession();
+			User user = (User) session.getAttribute("user");
+
 
 			ModelEdition modelEdition = new ModelEdition();
 			modelEdition.setId(Integer.parseInt(req.getParameter("modelId")));
@@ -50,17 +43,13 @@ public class SaveEditModelCommand implements Command {
 			modelEdition.setCategory(req.getParameter("modelCategory"));
 			modelEdition.setProducer(req.getParameter("modelProducer"));
 
-			modelService.saveEditionModel(modelEdition);
+			modelService.saveEditionModel(user, modelEdition);
 
 			resp.sendRedirect(MAIN_PAGE);
-		} catch (ValidationException e) {
-			e.printStackTrace();
-			resp.sendRedirect(ERROR_PAGE);
+		
 		} catch (ServiceException e) {
 			e.printStackTrace();
 			resp.sendRedirect(ERROR_PAGE);
 		}
-
 	}
-
 }

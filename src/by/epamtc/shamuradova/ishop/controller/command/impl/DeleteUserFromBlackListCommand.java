@@ -8,7 +8,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import by.epamtc.shamuradova.ishop.bean.entity.User;
-import by.epamtc.shamuradova.ishop.constant.UserRole;
 import by.epamtc.shamuradova.ishop.controller.command.Command;
 import by.epamtc.shamuradova.ishop.service.UserService;
 import by.epamtc.shamuradova.ishop.service.exception.ServiceException;
@@ -18,6 +17,7 @@ public class DeleteUserFromBlackListCommand implements Command {
 
 	private UserService userService;
 	private static final String ERROR_PAGE = "controller?command=GET_ERROR_PAGE";
+	private static final String CURRENT_PAGE = "controller?command=BLACK_LIST";
 
 	public DeleteUserFromBlackListCommand() {
 		userService = ServiceFactory.getInstance().getUserService();
@@ -25,18 +25,16 @@ public class DeleteUserFromBlackListCommand implements Command {
 
 	@Override
 	public void execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		final HttpSession session = req.getSession(true);
-		User user = (User) session.getAttribute("user");
 		try {
-			if (user == null || user.getRole().equals(UserRole.SHOPPER)) {
-				resp.sendRedirect("controller?command=GET_MAIN_ALL_MODELS_OR_BY_CATEGORY_PAGE");
-			} else {
-				int userBlackListId = Integer.parseInt(req.getParameter("userId"));
+			final HttpSession session = req.getSession(true);
+			User user = (User) session.getAttribute("user");
 
-				userService.deleteUserBlackList(userBlackListId);
+			int userBlackListId = Integer.parseInt(req.getParameter("userId"));
 
-				resp.sendRedirect("controller?command=BLACK_LIST");
-			}
+			userService.deleteUserBlackList(user, userBlackListId);
+
+			resp.sendRedirect(CURRENT_PAGE);
+
 		} catch (ServiceException e) {
 			e.printStackTrace();
 			resp.sendRedirect(ERROR_PAGE);

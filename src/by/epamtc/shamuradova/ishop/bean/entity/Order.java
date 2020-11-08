@@ -4,11 +4,16 @@ import java.math.BigDecimal;
 import java.sql.Date;
 import java.util.List;
 
+import by.epamtc.shamuradova.ishop.bean.StatusOrder;
+
 public class Order extends AbstractEntity<Integer> {
 
+	private static final long serialVersionUID = 4034038614681077648L;
+	
 	private int idUser;
 	private List<OrderItem> orderItems;
 	private Date created;
+	private StatusOrder status;
 
 	public Order() {
 
@@ -43,6 +48,14 @@ public class Order extends AbstractEntity<Integer> {
 	public void setCreated(Date created) {
 		this.created = created;
 	}
+	
+	public StatusOrder getStatus() {
+		return status;
+	}
+
+	public void setStatus(StatusOrder status) {
+		this.status = status;
+	}
 
 	public BigDecimal getTotalSum() {
 		BigDecimal sum = BigDecimal.ZERO;
@@ -72,6 +85,7 @@ public class Order extends AbstractEntity<Integer> {
 		result = prime * result + ((created == null) ? 0 : created.hashCode());
 		result = prime * result + idUser;
 		result = prime * result + ((orderItems == null) ? 0 : orderItems.hashCode());
+		result = prime * result + ((status == null) ? 0 : status.hashCode());
 		return result;
 	}
 
@@ -96,12 +110,14 @@ public class Order extends AbstractEntity<Integer> {
 				return false;
 		} else if (!orderItems.equals(other.orderItems))
 			return false;
+		if (status != other.status)
+			return false;
 		return true;
 	}
 
 	@Override
 	public String toString() {
-		return "Order [id=" + getId() + ", idUser=" + idUser + ", orderItems=" + orderItems + ", created=" + created
+		return "Order [idUser=" + idUser + ", orderItems=" + orderItems + ", created=" + created + ", status=" + status
 				+ "]";
 	}
 

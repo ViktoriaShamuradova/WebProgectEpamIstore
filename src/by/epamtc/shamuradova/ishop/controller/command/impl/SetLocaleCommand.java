@@ -34,7 +34,5 @@ public class SetLocaleCommand implements Command {
 		
 		String redirectTo = req.getParameter(REDIRECT_TO);
 		req.getRequestDispatcher(redirectTo).forward(req, resp); //решить проблему, на какую страницу переходить
-
 	}
-
 }

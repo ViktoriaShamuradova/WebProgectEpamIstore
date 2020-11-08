@@ -14,8 +14,6 @@ public class CartPageCommand implements Command{
 	@Override
 	public void execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		RequestDispatcher dispatcher = req.getRequestDispatcher("/WEB-INF/jsp/cart.jsp");
-		dispatcher.forward(req, resp);
-		
+		dispatcher.forward(req, resp);		
 	}
-
 }

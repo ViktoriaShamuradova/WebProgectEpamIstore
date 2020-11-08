@@ -9,12 +9,17 @@ import by.epamtc.shamuradova.ishop.bean.ModelEdition;
 import by.epamtc.shamuradova.ishop.bean.entity.Category;
 import by.epamtc.shamuradova.ishop.bean.entity.Model;
 import by.epamtc.shamuradova.ishop.bean.entity.Producer;
+import by.epamtc.shamuradova.ishop.bean.entity.User;
+import by.epamtc.shamuradova.ishop.constant.ErrorMessage;
 import by.epamtc.shamuradova.ishop.dao.ModelDAO;
 import by.epamtc.shamuradova.ishop.dao.exception.DAOException;
 import by.epamtc.shamuradova.ishop.dao.impl.ModelDAOImpl;
 import by.epamtc.shamuradova.ishop.service.ModelService;
+import by.epamtc.shamuradova.ishop.service.exception.InternalServiceException;
+import by.epamtc.shamuradova.ishop.service.exception.ResourceNotFoundServiceException;
 import by.epamtc.shamuradova.ishop.service.exception.ServiceException;
 import by.epamtc.shamuradova.ishop.service.validation.ModelValidation;
+import by.epamtc.shamuradova.ishop.service.validation.UserValidation;
 
 /**
  * page - какую страницу товаров нужно отобразить, limit - максимальное
@@ -24,6 +29,7 @@ import by.epamtc.shamuradova.ishop.service.validation.ModelValidation;
  * @author Шамурадова Виктория 2020
  */
 public class ModelServiceImpl implements ModelService {
+
 	private static final String IMAGE_LINK = "controller?command=GET_IMAGE_BY_MODEL_ID&modelId=";
 
 	private ModelDAO modelDao;
@@ -37,6 +43,10 @@ public class ModelServiceImpl implements ModelService {
 	public List<Model> listAllModels(int page, int count) throws ServiceException {
 		try {
 			List<Model> models = modelDao.listAllModels(page, count);
+
+			if (models == null)
+				throw new ResourceNotFoundServiceException("models " + ErrorMessage.NOT_FOUND);
+
 			addImageLinkToModel(models);
 
 			return models;
@@ -49,20 +59,28 @@ public class ModelServiceImpl implements ModelService {
 	public List<Model> listModelsByCategory(String categoryUrl, int page, int limit) throws ServiceException {
 		try {
 			List<Model> models = modelDao.listModelsByCategory(categoryUrl, page, limit);
+
+			if (models == null)
+				throw new ResourceNotFoundServiceException("models " + ErrorMessage.NOT_FOUND);
+
 			addImageLinkToModel(models);
 
 			return models;
 		} catch (DAOException e) {
 			throw new ServiceException(e);
 		}
-
 	}
 
 	@Override
 	public List<Category> listAllCategories() throws ServiceException {
 
 		try {
-			return modelDao.listAllCategories();
+			List<Category> categories = modelDao.listAllCategories();
+
+			if (categories == null)
+				throw new ResourceNotFoundServiceException("categories " + ErrorMessage.NOT_FOUND);
+
+			return categories;
 		} catch (DAOException e) {
 			throw new ServiceException(e);
 		}
@@ -76,11 +94,13 @@ public class ModelServiceImpl implements ModelService {
 
 	@Override
 	public Model getModel(int idModel) throws ServiceException {
-
 		try {
-			return modelDao.getModelById(idModel);
+			Model model = modelDao.getModelById(idModel);
+			if (model == null)
+				throw new ResourceNotFoundServiceException("model " + ErrorMessage.NOT_FOUND);
+			return model;
 		} catch (DAOException e) {
-			throw new ServiceException(e);
+			throw new InternalServiceException(e);
 		}
 	}
 
@@ -89,7 +109,7 @@ public class ModelServiceImpl implements ModelService {
 		try {
 			return modelDao.countModels();
 		} catch (DAOException e) {
-			throw new ServiceException(e);
+			throw new InternalServiceException(e);
 		}
 	}
 
@@ -101,7 +121,7 @@ public class ModelServiceImpl implements ModelService {
 				return modelDao.countModelsByVategoryUrl(categoryUrl);
 
 			} catch (DAOException e) {
-				throw new ServiceException(e);
+				throw new InternalServiceException(e);
 			}
 		} else {
 			return 0;
@@ -109,22 +129,24 @@ public class ModelServiceImpl implements ModelService {
 	}
 
 	@Override
-	public void saveEditionModel(ModelEdition modelEdition) throws ServiceException {
+	public void saveEditionModel(User user, ModelEdition modelEdition) throws ServiceException {
 		ModelValidation.validate(modelEdition);
+		UserValidation.checkRoleAdmin(user);
 		try {
 			modelDao.updateModel(modelEdition);
 		} catch (DAOException e) {
-			throw new ServiceException(e);
+			throw new InternalServiceException(e);
 		}
 	}
 
 	@Override
-	public void saveNewModel(ModelEdition modelEdition) throws ServiceException {
+	public void saveNewModel(User user, ModelEdition modelEdition) throws ServiceException {
 		ModelValidation.validate(modelEdition);
+		UserValidation.checkRoleAdmin(user);
 		try {
 			modelDao.addNewModel(modelEdition);
 		} catch (DAOException e) {
-			throw new ServiceException(e);
+			throw new InternalServiceException(e);
 		}
 	}
 
@@ -142,7 +164,7 @@ public class ModelServiceImpl implements ModelService {
 
 			return os.toByteArray();
 		} catch (DAOException | IOException e) {
-			throw new ServiceException(e);
+			throw new InternalServiceException(e);
 		}
 	}
 

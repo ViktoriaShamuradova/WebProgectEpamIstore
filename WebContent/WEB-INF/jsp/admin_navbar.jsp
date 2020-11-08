@@ -16,7 +16,7 @@
 			</a></li>
 			
 			<li class="nav-item"><a class="nav-link text-dark"
-				href="#"><i class="fas fa-list"></i>
+				href="controller?command=all_orders"><i class="fas fa-list"></i>
 					<c:out value="${allOrdersLoc}" />
 			</a></li>
 			

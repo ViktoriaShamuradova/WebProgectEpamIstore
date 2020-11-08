@@ -18,6 +18,7 @@
 <fmt:message bundle="${loc}" key="button.back" var="back" />
 <fmt:message bundle="${loc}" key="button.loadMore" var="loadMore" />
 <fmt:message bundle="${loc}" key="message.order" var="orderLoc" />
+<fmt:message bundle="${loc}" key="attribute.order.status" var="statusLoc" />
 
 <link rel="stylesheet"
 	href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
@@ -38,6 +39,7 @@
 						<tr>
 							<th scope="col"><c:out value="${oderIdLoc}"/></th>
 							<th scope="col"><c:out value="${oderDateLoc}"/></th>
+							<th scope="col"><c:out value="${statusLoc}"/></th>
 						
 						</tr>
 					</thead>
@@ -49,7 +51,7 @@
 							</tr>
 						</c:if>
 				
-						<%@ include file="all_orders_body.jsp"%>							
+						<%@ include file="all_my_orders_body.jsp"%>							
 					</tbody>
 				</table>
 			

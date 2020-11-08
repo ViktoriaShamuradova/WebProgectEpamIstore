@@ -10,7 +10,6 @@ import javax.servlet.http.HttpSession;
 
 import by.epamtc.shamuradova.ishop.bean.ModelEdition;
 import by.epamtc.shamuradova.ishop.bean.entity.User;
-import by.epamtc.shamuradova.ishop.constant.UserRole;
 import by.epamtc.shamuradova.ishop.controller.command.Command;
 import by.epamtc.shamuradova.ishop.service.ModelService;
 import by.epamtc.shamuradova.ishop.service.exception.ServiceException;
@@ -34,11 +33,6 @@ public class SaveNewModelCommand implements Command {
 		HttpSession session = req.getSession();
 		User user = (User) session.getAttribute("user");
 
-		if (user.getRole().equalsIgnoreCase(UserRole.SHOPPER)) {
-			session.invalidate();
-			resp.sendRedirect(MAIN_PAGE);
-		}
-
 		try {
 
 			ModelEdition modelEdition = new ModelEdition();
@@ -50,10 +44,10 @@ public class SaveNewModelCommand implements Command {
 			modelEdition.setCategory(req.getParameter("modelCategory"));
 			modelEdition.setProducer(req.getParameter("modelProducer"));
 
-			modelService.saveNewModel(modelEdition);
+			modelService.saveNewModel(user, modelEdition);
 
 			resp.sendRedirect(MAIN_PAGE);
-			
+
 		} catch (ValidationException e) {
 			e.printStackTrace();
 			resp.sendRedirect(ERROR_PAGE);
@@ -61,7 +55,5 @@ public class SaveNewModelCommand implements Command {
 			e.printStackTrace();
 			resp.sendRedirect(ERROR_PAGE);
 		}
-
 	}
-
 }

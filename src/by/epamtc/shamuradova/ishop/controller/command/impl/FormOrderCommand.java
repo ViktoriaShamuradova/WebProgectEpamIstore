@@ -13,12 +13,14 @@ import by.epamtc.shamuradova.ishop.controller.command.Command;
 import by.epamtc.shamuradova.ishop.service.OrderService;
 import by.epamtc.shamuradova.ishop.service.exception.ServiceException;
 import by.epamtc.shamuradova.ishop.service.factory.ServiceFactory;
-//проверить на нал
-public class FormOrderCommand implements Command {
 
-	private static final String CREATE_ORDER_PAGE = "controller?command=create_order&idOrder=";
-	private OrderService orderService;
+public class FormOrderCommand implements Command {
+	
+	private static final String ERROR_PAGE = "controller?command=GET_ERROR_PAGE";
+	private static final String CREATE_ORDER_PAGE = "controller?command=order_detailes&idOrder=";
 	private static final String CURRENT_MESSAGE = "current_message";
+
+	private OrderService orderService;
 
 	public FormOrderCommand() {
 		orderService = ServiceFactory.getInstance().getOrderService();
@@ -31,19 +33,16 @@ public class FormOrderCommand implements Command {
 		User user = (User) session.getAttribute("user");
 
 		try {
-			int orderId = orderService.makeOrder(shopCart, user.getId());
-			// или просто установить значение нал
+			int orderId = orderService.makeOrder(shopCart, user);
+
 			session.removeAttribute("shopcart");
 			session.setAttribute(CURRENT_MESSAGE, "Order created successfully. please wait for our reply");
-			
-			//или в сессию положить. попробовать пока так
+
 			resp.sendRedirect(CREATE_ORDER_PAGE + orderId);
 
 		} catch (ServiceException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			resp.sendRedirect(ERROR_PAGE);
 		}
-
 	}
-
 }

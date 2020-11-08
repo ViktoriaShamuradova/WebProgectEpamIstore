@@ -15,6 +15,8 @@ public class ImageByModelIdCommand implements Command {
 
 	private ModelService modelService;
 
+	private static final String ERROR_PAGE = "controller?command=GET_ERROR_PAGE";
+	
 	public ImageByModelIdCommand() {
 		this.modelService = ServiceFactory.getInstance().getModelService();
 	}
@@ -24,18 +26,15 @@ public class ImageByModelIdCommand implements Command {
 		try {
 			int modelId = Integer.parseInt(req.getParameter("modelId"));
 
-			byte[] image;
-
-			image = modelService.getImageByModelId(modelId);
+			byte[] image = modelService.getImageByModelId(modelId);
 
 			resp.setContentType("image/jpeg");
 			resp.setContentLength(image.length);
 			resp.getOutputStream().write(image);
 
 		} catch (ServiceException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
+			resp.sendRedirect(ERROR_PAGE);
 		}
 	}
-
 }

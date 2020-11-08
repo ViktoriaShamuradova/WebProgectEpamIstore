@@ -3,10 +3,14 @@ package by.epamtc.shamuradova.ishop.service.impl;
 import java.util.List;
 
 import by.epamtc.shamuradova.ishop.bean.entity.User;
+import by.epamtc.shamuradova.ishop.constant.ErrorMessage;
+import by.epamtc.shamuradova.ishop.constant.UserRole;
 import by.epamtc.shamuradova.ishop.dao.UserDAO;
 import by.epamtc.shamuradova.ishop.dao.exception.DAOException;
 import by.epamtc.shamuradova.ishop.dao.impl.UserDAOImpl;
 import by.epamtc.shamuradova.ishop.service.UserService;
+import by.epamtc.shamuradova.ishop.service.exception.AccessDeniedServiceException;
+import by.epamtc.shamuradova.ishop.service.exception.ResourceNotFoundServiceException;
 import by.epamtc.shamuradova.ishop.service.exception.ServiceException;
 import by.epamtc.shamuradova.ishop.service.validation.UserValidation;
 
@@ -19,9 +23,15 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public List<User> getBlackList(int page, int limit) throws ServiceException {
+	public List<User> getBlackList(User user, int page, int limit) throws ServiceException {
 		try {
-			return userDAO.getBlackList(page, limit);
+			UserValidation.checkRoleAdmin(user);
+			List<User> users = userDAO.getBlackList(page, limit);
+
+			if (users == null)
+				throw new ResourceNotFoundServiceException("users " + ErrorMessage.NOT_FOUND);
+
+			return users;
 		} catch (DAOException e) {
 			throw new ServiceException(e);
 		}
@@ -37,9 +47,16 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public List<User> allUsers(int page, int limit) throws ServiceException {
+	public List<User> allUsers(User user, int page, int limit) throws ServiceException {
 		try {
-			return userDAO.getUsers(page, limit);
+			UserValidation.checkRoleAdmin(user);
+
+			List<User> users = userDAO.getUsers(page, limit);
+
+			if (users == null)
+				throw new ResourceNotFoundServiceException("users " + ErrorMessage.NOT_FOUND);
+
+			return users;
 		} catch (DAOException e) {
 			throw new ServiceException(e);
 		}
@@ -55,30 +72,38 @@ public class UserServiceImpl implements UserService {
 	}
 
 	@Override
-	public void addUserInBlackList(int userId) throws ServiceException {
+	public void addUserInBlackList(User user, int userId) throws ServiceException {
 		try {
+			UserValidation.checkRoleAdmin(user);
+
 			userDAO.toggleBlackListInUsers(userId, true);
 		} catch (DAOException e) {
 			throw new ServiceException(e);
 		}
-
 	}
 
 	@Override
-	public void deleteUserBlackList(int userId) throws ServiceException {
+	public void deleteUserBlackList(User user, int userId) throws ServiceException {
 		try {
+			UserValidation.checkRoleAdmin(user);
 			userDAO.toggleBlackListInUsers(userId, false);
 		} catch (DAOException e) {
 			throw new ServiceException(e);
 		}
-
 	}
 
 	@Override
-	public List<User> getUsersByRole(int page, int limit, int roleId) throws ServiceException {
+	public List<User> getUsersByRole(User user, int page, int limit, int roleId) throws ServiceException {
 		UserValidation.validateRoleId(roleId);
 		try {
-			return userDAO.getUsersByRole(page, limit, roleId);
+			UserValidation.checkRoleAdmin(user);
+
+			List<User> users = userDAO.getUsersByRole(page, limit, roleId);
+
+			if (users == null)
+				throw new ResourceNotFoundServiceException("users " + ErrorMessage.NOT_FOUND);
+
+			return users;
 		} catch (DAOException e) {
 			throw new ServiceException(e);
 		}
@@ -86,6 +111,7 @@ public class UserServiceImpl implements UserService {
 
 	@Override
 	public int countByRole(int roleId) throws ServiceException {
+
 		UserValidation.validateRoleId(roleId);
 		try {
 			return userDAO.countUsersByRole(roleId);
@@ -94,4 +120,22 @@ public class UserServiceImpl implements UserService {
 		}
 	}
 
+	@Override
+	public User getUser(User user, int userId) throws ServiceException {
+		try {
+			User userRes = userDAO.getUserById(userId);
+
+			if (userRes == null)
+				throw new ResourceNotFoundServiceException("user " + ErrorMessage.NOT_FOUND);
+
+			if (user.getRole().equals(UserRole.ADMIN) || user.getId() == userId) {
+				return userRes;
+			} else {
+				throw new AccessDeniedServiceException(
+						"You do not have the appropriate right to receive personal data about another user");
+			}
+		} catch (DAOException e) {
+			throw new ServiceException(e);
+		}
+	}
 }
