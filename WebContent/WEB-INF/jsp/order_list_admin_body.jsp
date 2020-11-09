@@ -7,7 +7,7 @@
 
 <c:forEach var="order" items="${orders}">
 						<tr>
-							<td><a class="text-dark " href="controller?command=create_order&idOrder=${order.id}"><c:out value="${order.id}"></c:out></a></td>
+							<td><a class="text-dark " href="controller?command=ORDER_DETAILES&idOrder=${order.id}"><c:out value="${order.id}"></c:out></a></td>
 							<td><a class="text-dark " href="controller?command=user_detailes&userId=${order.idUser}"><c:out value="${order.idUser}"></c:out></a></td>
 							<td><fmt:formatDate value="${order.created}" pattern="dd-MM-yyyy" /></td>
 							<td><c:out value="${order.status}"></c:out></td>

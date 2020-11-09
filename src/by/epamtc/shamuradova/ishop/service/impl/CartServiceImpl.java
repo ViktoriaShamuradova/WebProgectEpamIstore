@@ -17,8 +17,8 @@ import by.epamtc.shamuradova.ishop.constant.ErrorMessage;
 import by.epamtc.shamuradova.ishop.dao.CartDAO;
 import by.epamtc.shamuradova.ishop.dao.ModelDAO;
 import by.epamtc.shamuradova.ishop.dao.exception.DAOException;
-import by.epamtc.shamuradova.ishop.dao.impl.CartDAOImpl;
-import by.epamtc.shamuradova.ishop.dao.impl.ModelDAOImpl;
+import by.epamtc.shamuradova.ishop.dao.impl.SQLCartDAOImpl;
+import by.epamtc.shamuradova.ishop.dao.impl.SQLModelDAOImpl;
 import by.epamtc.shamuradova.ishop.service.CartService;
 import by.epamtc.shamuradova.ishop.service.exception.ResourceNotFoundServiceException;
 import by.epamtc.shamuradova.ishop.service.exception.ServiceException;
@@ -29,8 +29,8 @@ public class CartServiceImpl implements CartService {
 	private ModelDAO modelDAO;
 
 	public CartServiceImpl() {
-		cartDAO = new CartDAOImpl();
-		modelDAO = new ModelDAOImpl();
+		cartDAO = new SQLCartDAOImpl();
+		modelDAO = new SQLModelDAOImpl();
 	}
 
 	//запись о корзине может отсуствовать

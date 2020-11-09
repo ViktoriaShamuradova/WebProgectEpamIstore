@@ -6,14 +6,19 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.List;
 
-import by.epamtc.shamuradova.ishop.bean.entity.AbstractEntity;
 import by.epamtc.shamuradova.ishop.constant.ErrorMessage;
-import by.epamtc.shamuradova.ishop.dao.handler.ResultSetHandler;
 import by.epamtc.shamuradova.ishop.dao.handler.ResultSetHandler2;
 
-//разобраться с дженериками, фигня какая-то
+/** Класс, который умеет выполнять запросы и преобразовывать результаты запросов в объект
+ * 
+ * @param Connection connection - объект для соединения с базой данных
+ * @param String sql- sql запрос
+ * @param ResultSetHandler2<T> - объект, который преобразовывает результат запроса в java-объект
+ *
+ * @author Шамурадова Виктория 2020
+ */
+
 public final class JDBCUtil {
 
 	private JDBCUtil() {
@@ -113,5 +118,4 @@ public final class JDBCUtil {
 			closeResultSet(resultSet);
 		}
 	}
-
 }

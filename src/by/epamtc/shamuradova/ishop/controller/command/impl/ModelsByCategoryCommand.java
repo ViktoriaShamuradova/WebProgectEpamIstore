@@ -1,6 +1,7 @@
 package by.epamtc.shamuradova.ishop.controller.command.impl;
 
 import java.io.IOException;
+
 import java.util.List;
 
 import javax.servlet.ServletException;
@@ -18,13 +19,21 @@ import by.epamtc.shamuradova.ishop.service.ModelService;
 import by.epamtc.shamuradova.ishop.service.exception.ServiceException;
 import by.epamtc.shamuradova.ishop.service.factory.ServiceFactory;
 
+/**
+ * Класс, который в зависимости от наличия или роли объекта User, переданный в сессии,
+ * связываемся с соответствующим jsp объектом, передавая в объект типа HttpServletRequest
+ * список моделей и категорий моделей
+ * 
+ * 
+ * @author Виктория Шамурадова 2020
+ */
 public class ModelsByCategoryCommand implements Command {
 
 	private static final int FIRST_PAGE = 1;
-	
+
 	private static final String ERROR_PAGE = "controller?command=GET_ERROR_PAGE";
 	private static final String CURRENT_COMMAND = "controller?command=ALL_MODELS_OR_BY_CATEGORY";
-	
+
 	private static final String MODELS_PARAM = "models";
 	private static final String CATEGORIES = "categories";
 	private static final String MODELS_COUNT = "modelsCount";
@@ -35,12 +44,11 @@ public class ModelsByCategoryCommand implements Command {
 	private static final String PAGE_NUMBER = "pageNumber";
 	private static final String PAGE_COUNT = "pageCount";
 	private static final String PER_PAGE = "modelsPerPage";
-	
+
 	private static final String MAIN_PAGE = "/main.jsp";
 	private static final String SHOPPER_PAGE = "/WEB-INF/jsp/shopper_page.jsp";
 	private static final String ADMIN_PAGE = "/WEB-INF/jsp/model_list_admin.jsp";
 
-	
 	private ModelService modelService;
 
 	public ModelsByCategoryCommand() {
@@ -55,7 +63,7 @@ public class ModelsByCategoryCommand implements Command {
 			String message = (String) session.getAttribute(CURRENT_MESSAGE);
 			session.removeAttribute(CURRENT_MESSAGE);
 			req.setAttribute(CURRENT_MESSAGE, message);
-			
+
 			User user = (User) session.getAttribute("user");
 			if (user == null) {
 				setCategories(req, resp);
@@ -68,14 +76,13 @@ public class ModelsByCategoryCommand implements Command {
 				setModels(req, resp);
 
 				req.getRequestDispatcher(SHOPPER_PAGE).forward(req, resp);
-				
-			} else if(user.getRole().equals(UserRole.ADMIN)) {
+
+			} else if (user.getRole().equals(UserRole.ADMIN)) {
 				setModels(req, resp);
-				req.setAttribute(COMMAND,CURRENT_COMMAND);
-				
+				req.setAttribute(COMMAND, CURRENT_COMMAND);
+
 				req.getRequestDispatcher(ADMIN_PAGE).forward(req, resp);
 			}
-
 		} catch (ServiceException e) {
 			e.printStackTrace();
 			resp.sendRedirect(ERROR_PAGE);
@@ -115,11 +122,14 @@ public class ModelsByCategoryCommand implements Command {
 		req.setAttribute(PAGE_NUMBER, pageNumber);
 		req.setAttribute(MODELS_COUNT, modelsCount);
 	}
-	private void setCategories(HttpServletRequest req, HttpServletResponse resp)throws ServiceException {
+	/**
+	 * Метод, который помещает в объект HttpServletRequest список всех категорий моделей, и текущую категорию
+	 */
+	private void setCategories(HttpServletRequest req, HttpServletResponse resp) throws ServiceException {
 		String category = req.getParameter(CATEGORY);
 		List<Category> categories = modelService.listAllCategories();
 		req.setAttribute(CATEGORIES, categories);
-		req.setAttribute(CURRENT_CATEGORY_URL_PARAM, category);	// сохранить текущую выбранную категорию, чтобы
+		req.setAttribute(CURRENT_CATEGORY_URL_PARAM, category); // сохранить текущую выбранную категорию, чтобы
 		// загружать далее по категориям
 	}
 }

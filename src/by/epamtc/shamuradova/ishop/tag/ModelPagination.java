@@ -2,15 +2,23 @@ package by.epamtc.shamuradova.ishop.tag;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Locale;
-import java.util.ResourceBundle;
 
-import javax.servlet.http.HttpSession;
 import javax.servlet.jsp.JspException;
 import javax.servlet.jsp.JspWriter;
 import javax.servlet.jsp.tagext.TagSupport;
 
 import by.epamtc.shamuradova.ishop.bean.entity.Model;
+
+/**
+ * Пользовательский тег, предназначенный для отображения моделей Поля класса:
+ * List<Model> models - список моделей int totalModels - количество всех моделей
+ * int currentPage - текущая страница, которую нужно отобразить int
+ * modelsPerPage - количество моделей, которые нужно отобразить на странице
+ * String category - какой категории нужно отобразить модели
+ * 
+ * 
+ * @author Виктория Шамурадова 2020
+ */
 
 public class ModelPagination extends TagSupport {
 	private static final long serialVersionUID = 2579972393677888552L;
@@ -22,7 +30,7 @@ public class ModelPagination extends TagSupport {
 	private int totalModels;
 
 	private int modelsPerPage;
-	
+
 	private String category;
 
 	public void setModels(List<Model> models) {
@@ -40,35 +48,15 @@ public class ModelPagination extends TagSupport {
 	public void setModelsPerPage(int modelsPerPage) {
 		this.modelsPerPage = modelsPerPage;
 	}
-	
+
 	public void setCategory(String category) {
 		this.category = category;
 	}
 
 	@Override
 	public int doStartTag() throws JspException {
-		int pageCount = (int) Math.ceil((double) totalModels / modelsPerPage);
-		
-		
-	//	HttpSession session = pageContext.getSession();		
-//		String localeName = (String) session.getAttribute("locale");
-//		Locale locale;
-//		switch (localeName){
-//		case "ru_RU":
-//			locale = new Locale("ru", "RU");
-//			break;
-//		case "en_US":
-//			locale = new Locale("en", "US");
-//			break;
-//			default:
-//				locale = Locale.getDefault();
-//				break;
-//		}
-//		
-//		// TODO bundle name
-//		ResourceBundle bundle = ResourceBundle.getBundle("locale", locale);
+		int pageCount = countNumberOfPages(totalModels, modelsPerPage);
 
-		
 		JspWriter out = pageContext.getOut();
 		try {
 			out.write("<main role=\"main\" class=\"col-md-9 ml-sm-auto col-lg-10 pt-3 px-4\">");
@@ -82,12 +70,13 @@ public class ModelPagination extends TagSupport {
 				out.write("<h5 class=\"card-title\">" + model.getName() + "</h5>");
 				out.write("<h6 class=\"card-price\">" + model.getPrice() + "</h6>");
 				out.write("<p class=\"card-text\">" + model.getDescription() + "</p>");
-				
+
 				out.write("<p class=\"card-text\"><small class=\"text-muted\">" + model.getProducer() + "</small></p>");
-				
+
 				out.write("</div>");
 				out.write("<p>");
-				out.write("<a href=\"controller?command=add_to_cart&modelId=" + model.getId()+ "\" class=\"btn btn-secondary \" style=\"width: 200px;\">Добавить в корзину</a>");
+				out.write("<a href=\"controller?command=add_to_cart&modelId=" + model.getId()
+						+ "\" class=\"btn btn-secondary \" style=\"width: 200px;\">Добавить в корзину</a>");
 				out.write("</p>");
 				out.write("</div>");
 				out.write("</div>");
@@ -99,9 +88,9 @@ public class ModelPagination extends TagSupport {
 			if (pageCount != 1) {
 				for (int i = 1; i <= pageCount; i++) {
 					String active = i == currentPage ? " active" : "";
-					out.append("<a class=\"btn btn-secondary btn-sm " + active + "\" href=\"controller?command=ALL_MODELS_OR_BY_CATEGORY" + 
-							categoryParam + "&pageNumber=" + i
-							+ "\">" + i + " </a> ");
+					out.append("<a class=\"btn btn-secondary btn-sm " + active
+							+ "\" href=\"controller?command=ALL_MODELS_OR_BY_CATEGORY" + categoryParam + "&pageNumber="
+							+ i + "\">" + i + " </a> ");
 				}
 			}
 			out.write("</div>");
@@ -113,5 +102,9 @@ public class ModelPagination extends TagSupport {
 		}
 
 		return SKIP_BODY;
+	}
+
+	private int countNumberOfPages(int totalModels, int modelsPerPage) {
+		return (int) Math.ceil((double) totalModels / modelsPerPage);
 	}
 }

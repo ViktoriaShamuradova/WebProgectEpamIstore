@@ -7,7 +7,7 @@ import by.epamtc.shamuradova.ishop.constant.ErrorMessage;
 import by.epamtc.shamuradova.ishop.constant.UserRole;
 import by.epamtc.shamuradova.ishop.dao.UserDAO;
 import by.epamtc.shamuradova.ishop.dao.exception.DAOException;
-import by.epamtc.shamuradova.ishop.dao.impl.UserDAOImpl;
+import by.epamtc.shamuradova.ishop.dao.impl.SQLUserDAOImpl;
 import by.epamtc.shamuradova.ishop.service.UserService;
 import by.epamtc.shamuradova.ishop.service.exception.AccessDeniedServiceException;
 import by.epamtc.shamuradova.ishop.service.exception.ResourceNotFoundServiceException;
@@ -19,7 +19,7 @@ public class UserServiceImpl implements UserService {
 	private UserDAO userDAO;
 
 	public UserServiceImpl() {
-		userDAO = new UserDAOImpl();
+		userDAO = new SQLUserDAOImpl();
 	}
 
 	@Override

@@ -1,5 +1,18 @@
 package by.epamtc.shamuradova.ishop.bean.entity;
 
+/**
+ * Класс-сущность, котоая представляет собой информацию из таблицы сategories(у каждой категории есть имя,
+ * url, по которому можно получить список моделей данной категории) в базе данных
+ * Параметризируется по типу Integer ключа id в базе данных
+ * 
+ * An entity class that represents information from the сategories(each category has a name,
+  url, where you can get a list of models in this category) table in the database
+ * Parameterized by type Integer of the id key in the database
+ * 
+ * @author Виктория Шамурадова 2020
+ */
+
+
 public class Category extends AbstractEntity<Integer> {
 	
 	private static final long serialVersionUID = -6588428119548273094L;
@@ -46,7 +59,6 @@ public class Category extends AbstractEntity<Integer> {
 		return result;
 	}
 
-
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -75,5 +87,4 @@ public class Category extends AbstractEntity<Integer> {
 	public String toString() {
 		return "Category [name=" + name + ", modelCount=" + modelCount + ", url=" + url + "]";
 	}
-
 }

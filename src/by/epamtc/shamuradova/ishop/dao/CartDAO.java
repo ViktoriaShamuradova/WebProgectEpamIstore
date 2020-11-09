@@ -10,6 +10,13 @@ import by.epamtc.shamuradova.ishop.bean.entity.Cart;
 import by.epamtc.shamuradova.ishop.bean.entity.CartItem;
 import by.epamtc.shamuradova.ishop.dao.exception.DAOException;
 
+/** Интерфейс CartDAO, содержащий методы для работы с объектами типов Cart, CartItem
+* 
+* ModelDAO interface, containing methods for working with objects of the Cart, CartItem
+*
+* @author Шамурадова Виктория 2020
+*/
+
 public interface CartDAO {
 
 	public Cart getCartByUserId(int userId) throws DAOException;

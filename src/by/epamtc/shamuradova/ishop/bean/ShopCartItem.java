@@ -6,6 +6,8 @@ import by.epamtc.shamuradova.ishop.bean.entity.Model;
 
 public class ShopCartItem implements Serializable{
 	
+	private static final long serialVersionUID = 5720727113433815909L;
+	
 	private Model model;
 	private int count;
 	
@@ -67,6 +69,4 @@ public class ShopCartItem implements Serializable{
 	public String toString() {
 		return "ShopCartItem [model=" + model + ", count=" + count + "]";
 	}
-	
-
 }

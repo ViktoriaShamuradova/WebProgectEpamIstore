@@ -1,17 +1,23 @@
 package by.epamtc.shamuradova.ishop.bean.entity;
 
-import java.io.Serializable;
 
 /**
+ * 
+ * Класс-сущность, котоая представляет собой информацию из таблицы сartItems(представляет собой часть корзины(cart): модель - количество) в базе данных
+ * Параметризируется по типу Integer ключа id в базе данных
+ * 
+ * An entity class that represents information from the сartItems(represents a part of a cart: model - quantity) table in the database
+ * Parameterized by type Integer of the id key in the database
+ * @author Виктория Шамурадова 2020
+ *
  * Корзина, в которой хранится модель и ее кол-во  и id из таблицы всех корзин, представляет собой таблицу из бд
  * 
  * @author Шамурадова Виктория 2020
  */
-//корзина же может содержать лист моделей. Думай!!!исправь
+
 public class CartItem extends AbstractEntity<Integer> {
 
 	private static final long serialVersionUID = 4871458939014195841L;
-	
 	
 	private int count;
 	private int modelId;
@@ -54,7 +60,6 @@ public class CartItem extends AbstractEntity<Integer> {
 		this.count = count;
 	}
 
-
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -83,7 +88,6 @@ public class CartItem extends AbstractEntity<Integer> {
 			return false;
 		return true;
 	}
-
 
 	@Override
 	public String toString() {

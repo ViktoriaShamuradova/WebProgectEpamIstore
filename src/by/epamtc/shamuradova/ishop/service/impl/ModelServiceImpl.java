@@ -13,7 +13,7 @@ import by.epamtc.shamuradova.ishop.bean.entity.User;
 import by.epamtc.shamuradova.ishop.constant.ErrorMessage;
 import by.epamtc.shamuradova.ishop.dao.ModelDAO;
 import by.epamtc.shamuradova.ishop.dao.exception.DAOException;
-import by.epamtc.shamuradova.ishop.dao.impl.ModelDAOImpl;
+import by.epamtc.shamuradova.ishop.dao.impl.SQLModelDAOImpl;
 import by.epamtc.shamuradova.ishop.service.ModelService;
 import by.epamtc.shamuradova.ishop.service.exception.InternalServiceException;
 import by.epamtc.shamuradova.ishop.service.exception.ResourceNotFoundServiceException;
@@ -21,13 +21,20 @@ import by.epamtc.shamuradova.ishop.service.exception.ServiceException;
 import by.epamtc.shamuradova.ishop.service.validation.ModelValidation;
 import by.epamtc.shamuradova.ishop.service.validation.UserValidation;
 
-/**
- * page - какую страницу товаров нужно отобразить, limit - максимальное
- * количество товаров, которое должно вернуться данным запросом
+/* Класс, реализующий интерфейс ModelService, в котром содержатся методы для объектов Model, Category 
+ * В этом классе проводится валидация
  * 
+ * @param int page - какую страницу товаров нужно отобразить, 
+ * @param int limit - максимальное количество товаров, которое должно вернуться данным запросом
+ * 
+ * A class that implements the ModelService interface, which contains methods for the Model object, Category
+ *
+ * @param int page - какую страницу товаров нужно отобразить, 
+ * @param int limit - максимальное количество товаров, которое должно вернуться данным запросом
  *
  * @author Шамурадова Виктория 2020
  */
+
 public class ModelServiceImpl implements ModelService {
 
 	private static final String IMAGE_LINK = "controller?command=GET_IMAGE_BY_MODEL_ID&modelId=";
@@ -35,14 +42,14 @@ public class ModelServiceImpl implements ModelService {
 	private ModelDAO modelDao;
 
 	public ModelServiceImpl() {
-		modelDao = new ModelDAOImpl();
+		modelDao = new SQLModelDAOImpl();
 
 	}
 
 	@Override
-	public List<Model> listAllModels(int page, int count) throws ServiceException {
+	public List<Model> listAllModels(int page, int limit) throws ServiceException {
 		try {
-			List<Model> models = modelDao.listAllModels(page, count);
+			List<Model> models = modelDao.listAllModels(page, limit);
 
 			if (models == null)
 				throw new ResourceNotFoundServiceException("models " + ErrorMessage.NOT_FOUND);

@@ -8,7 +8,14 @@ import by.epamtc.shamuradova.ishop.bean.entity.Category;
 import by.epamtc.shamuradova.ishop.bean.entity.Model;
 import by.epamtc.shamuradova.ishop.bean.entity.Producer;
 import by.epamtc.shamuradova.ishop.dao.exception.DAOException;
-import by.epamtc.shamuradova.ishop.service.exception.ServiceException;
+
+/** Интерфейс ModelDAO, содержащий методы для работы с объектами типов Model, Category, Producer
+ * 
+ * ModelDAO interface, containing methods for working with objects of the Model, Category, Producer types
+ *
+ * @author Шамурадова Виктория 2020
+ */
+
 
 public interface ModelDAO {
 

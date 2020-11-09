@@ -1,11 +1,21 @@
 package by.epamtc.shamuradova.ishop.bean.entity;
 
+/**
+ * Класс-сущность, котоая представляет собой информацию из таблицы producers(представляет собой назвоние производителей) в базе данных
+ * Параметризируется по типу Integer ключа id в базе данных
+ * 
+ * An entity class that represents information from the producers table in the database
+ * Parameterized by type Integer of the id key in the database
+ * 
+ * @author Виктория Шамурадова 2020
+ */
+
+
 public class Producer extends AbstractEntity<Integer> {
 
 	private static final long serialVersionUID = 502280979690366206L;
 	
 	private String name;
-	private int modelCount;
 
 	public Producer() {
 	}
@@ -18,19 +28,10 @@ public class Producer extends AbstractEntity<Integer> {
 		this.name = name;
 	}
 
-	public int getModeltCount() {
-		return modelCount;
-	}
-
-	public void setModelCount(int modelCount) {
-		this.modelCount = modelCount;
-	}
-
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = super.hashCode();
-		result = prime * result + modelCount;
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
 		return result;
 	}
@@ -44,8 +45,6 @@ public class Producer extends AbstractEntity<Integer> {
 		if (getClass() != obj.getClass())
 			return false;
 		Producer other = (Producer) obj;
-		if (modelCount != other.modelCount)
-			return false;
 		if (name == null) {
 			if (other.name != null)
 				return false;
@@ -56,9 +55,7 @@ public class Producer extends AbstractEntity<Integer> {
 
 	@Override
 	public String toString() {
-		return "Producer [name=" + name + ", modelCount=" + modelCount + "]";
+		return "Producer [name=" + name + "]";
 	}
-
-	
 
 }

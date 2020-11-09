@@ -7,7 +7,7 @@ import by.epamtc.shamuradova.ishop.bean.entity.Producer;
 import by.epamtc.shamuradova.ishop.constant.database_column_name.ProducerColumnName;
 import by.epamtc.shamuradova.ishop.dao.handler.ResultSetHandler2;
 
-public class ResultSetHandlerProducer2 implements ResultSetHandler2<Producer>{
+public class ResultSetHandlerProducer2 implements ResultSetHandler2<Producer> {
 
 	public ResultSetHandlerProducer2() {
 	}
@@ -17,8 +17,6 @@ public class ResultSetHandlerProducer2 implements ResultSetHandler2<Producer>{
 		Producer producer = new Producer();
 		producer.setName(rs.getString(ProducerColumnName.NAME));
 		producer.setId(rs.getInt(ProducerColumnName.ID));
-		producer.setModelCount(rs.getInt(ProducerColumnName.COUNT));
-
 		return producer;
 	}
 

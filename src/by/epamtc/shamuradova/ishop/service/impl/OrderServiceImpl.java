@@ -15,8 +15,8 @@ import by.epamtc.shamuradova.ishop.constant.UserRole;
 import by.epamtc.shamuradova.ishop.dao.CartDAO;
 import by.epamtc.shamuradova.ishop.dao.OrderDAO;
 import by.epamtc.shamuradova.ishop.dao.exception.DAOException;
-import by.epamtc.shamuradova.ishop.dao.impl.CartDAOImpl;
-import by.epamtc.shamuradova.ishop.dao.impl.OrderDAOImpl;
+import by.epamtc.shamuradova.ishop.dao.impl.SQLCartDAOImpl;
+import by.epamtc.shamuradova.ishop.dao.impl.SQLOrderDAOImpl;
 import by.epamtc.shamuradova.ishop.service.OrderService;
 import by.epamtc.shamuradova.ishop.service.exception.AccessDeniedServiceException;
 import by.epamtc.shamuradova.ishop.service.exception.InternalServiceException;
@@ -32,8 +32,8 @@ public class OrderServiceImpl implements OrderService {
 	private StatusOrderLine statusOrderLine;
 
 	public OrderServiceImpl() {
-		orderDAO = new OrderDAOImpl();
-		cartDAO = new CartDAOImpl();
+		orderDAO = new SQLOrderDAOImpl();
+		cartDAO = new SQLCartDAOImpl();
 		statusOrderLine = new StatusOrderLine();
 	}
 

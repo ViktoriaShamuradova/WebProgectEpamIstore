@@ -1,6 +1,15 @@
 package by.epamtc.shamuradova.ishop.bean.entity;
 
-import java.util.Arrays;
+/**
+ * Класс-сущность, котоая представляет собой информацию из таблицы users(представляет сосбой пользователя, у которой есть имя,
+ * фамилия, догин, email, статус, роль и находится ли он в черном списке) в базе данных
+ * Параметризируется по типу Integer ключа id в базе данных
+ * 
+ * An entity class that represents information from the users table in the database
+ * Parameterized by type Integer of the id key in the database
+ * 
+ * @author Виктория Шамурадова 2020
+ */
 
 public class User extends AbstractEntity<Integer> {
 

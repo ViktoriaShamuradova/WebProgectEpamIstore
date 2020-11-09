@@ -5,6 +5,12 @@ import java.util.List;
 import by.epamtc.shamuradova.ishop.bean.entity.User;
 import by.epamtc.shamuradova.ishop.dao.exception.DAOException;
 
+/** Интерфейс UserDAO, содержащий методы для работы с объектами типов User
+* 
+* ModelDAO interface, containing methods for working with objects of the User
+*
+* @author Шамурадова Виктория 2020
+*/
 public interface UserDAO {
 
 	public User getUserByLogin(String login) throws DAOException;

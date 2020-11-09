@@ -6,6 +6,17 @@ import java.util.List;
 
 import by.epamtc.shamuradova.ishop.bean.StatusOrder;
 
+/**
+ * Класс-сущность, котоая представляет собой информацию из таблицы orders(записи о наличии заказов у пользователей и статус заказов) в базе данных
+ * Параметризируется по типу Integer ключа id в базе данных
+ * 
+ * An entity class that represents information from the orders(user orders and order status records) table in the database
+ * Parameterized by type Integer of the id key in the database
+ * 
+ * @author Виктория Шамурадова 2020
+ */
+
+
 public class Order extends AbstractEntity<Integer> {
 
 	private static final long serialVersionUID = 4034038614681077648L;

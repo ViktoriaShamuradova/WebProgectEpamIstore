@@ -12,8 +12,8 @@ import by.epamtc.shamuradova.ishop.constant.PatternContainer;
 import by.epamtc.shamuradova.ishop.dao.SignUpDAO;
 import by.epamtc.shamuradova.ishop.dao.UserDAO;
 import by.epamtc.shamuradova.ishop.dao.exception.DAOException;
-import by.epamtc.shamuradova.ishop.dao.impl.SignUpImplDAO;
-import by.epamtc.shamuradova.ishop.dao.impl.UserDAOImpl;
+import by.epamtc.shamuradova.ishop.dao.impl.SQLSignUpImplDAO;
+import by.epamtc.shamuradova.ishop.dao.impl.SQLUserDAOImpl;
 import by.epamtc.shamuradova.ishop.service.SignUpService;
 import by.epamtc.shamuradova.ishop.service.exception.ServiceException;
 import by.epamtc.shamuradova.ishop.service.exception.ValidationException;
@@ -24,7 +24,7 @@ public class SignUpServiceImpl implements SignUpService {
 	private SignUpDAO signUpDAO;
 
 	public SignUpServiceImpl() {
-		signUpDAO = new SignUpImplDAO();
+		signUpDAO = new SQLSignUpImplDAO();
 	}
 
 	@Override
@@ -42,7 +42,7 @@ public class SignUpServiceImpl implements SignUpService {
 			regInfo.setPassword(hashPassword.toCharArray());
 			signUpDAO.signUp(regInfo);
 
-			UserDAO userDAO = new UserDAOImpl();
+			UserDAO userDAO = new SQLUserDAOImpl();
 			User user = userDAO.getUserByLogin(regInfo.getLogin());
 
 			return user;

@@ -2,6 +2,15 @@ package by.epamtc.shamuradova.ishop.bean.entity;
 
 import java.sql.Date;
 
+/**
+ * Класс-сущность, котоая представляет собой информацию из таблицы сarts(записи о наличии корзин у пользователей) в базе данных
+ * Параметризируется по типу Integer ключа id в базе данных
+ * 
+ * An entity class that represents information from the сarts table in the database
+ * Parameterized by type Integer of the id key in the database
+ * @author Виктория Шамурадова 2020
+ */
+
 public class Cart extends AbstractEntity<Integer> {
 
 	private static final long serialVersionUID = 3951881799324241955L;
@@ -9,9 +18,7 @@ public class Cart extends AbstractEntity<Integer> {
 	int userId;
 	private Date created;
 	
-	public Cart() {
-
-	}
+	public Cart() {}
 
 	public Cart(int userId, Date created) {
 		super();
@@ -67,5 +74,4 @@ public class Cart extends AbstractEntity<Integer> {
 	public String toString() {
 		return "Cart [userId=" + userId + ", created=" + created + "]";
 	}
-
 }

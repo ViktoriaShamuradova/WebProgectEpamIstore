@@ -2,6 +2,18 @@ package by.epamtc.shamuradova.ishop.bean.entity;
 
 import java.math.BigDecimal;
 
+/**
+ * Класс-сущность, котоая представляет собой информацию из таблицы models(представляет сосбой модель, у которой есть название,
+ * описание, цена, изображение, категория, производитель, количество) в базе данных
+ * Параметризируется по типу Integer ключа id в базе данных
+ * 
+ * An entity class that represents information from the models(represents a model that has a name,
+ * description, price, image, category, producer, count) table in the database
+ * Parameterized by type Integer of the id key in the database
+ * 
+ * @author Виктория Шамурадова 2020
+ */
+
 public class Model extends AbstractEntity<Integer> {
 
 	private static final long serialVersionUID = 8928391057379672914L;
