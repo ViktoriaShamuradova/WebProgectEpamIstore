@@ -31,7 +31,7 @@ public interface CartDAO {
 
 	public int getTotalCountOfModelsInCart(int idUser) throws DAOException;
 
-	public boolean deleteCartByidUser(int idUser) throws DAOException;
+	public void deleteCartByidUser(int idUser) throws DAOException;
 
 	public void deleteCartItemByIdModel(int idModel) throws DAOException;
 

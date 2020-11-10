@@ -20,20 +20,18 @@ import by.epamtc.shamuradova.ishop.dao.CartDAO;
 import by.epamtc.shamuradova.ishop.dao.exception.ConnectionPoolException;
 import by.epamtc.shamuradova.ishop.dao.exception.DAOException;
 import by.epamtc.shamuradova.ishop.dao.handler.ResultSetHandler2;
-import by.epamtc.shamuradova.ishop.dao.handler.impl.ResultSetHandlerCart2;
 import by.epamtc.shamuradova.ishop.dao.handler.impl.ResultSetHandlerCartItem2;
 import by.epamtc.shamuradova.ishop.dao.handler.impl.ResultSetHandlerFactory;
 import by.epamtc.shamuradova.ishop.dao.pool.ConnectionPool;
 import by.epamtc.shamuradova.ishop.dao.util.JDBCUtil;
 
-
-/** Класс, реализующий интерфейс CartDAO, использующий sql- запросы
+/**
+ * Класс, реализующий интерфейс CartDAO, использующий sql- запросы
  * 
  * Class that implements the CartDAO interface using sql queries
  *
  * @author Шамурадова Виктория 2020
  */
-
 
 public class SQLCartDAOImpl implements CartDAO {
 
@@ -42,11 +40,15 @@ public class SQLCartDAOImpl implements CartDAO {
 	private ResultSetHandler2<CartItem> resultSetHandlerCartItem;
 	private ResultSetHandler2<List<CartItem>> resultSetHandlerCartIems;
 
-	public SQLCartDAOImpl() {
-		pool = ConnectionPool.getInstance();
-		resultSetHandlerCart = ResultSetHandlerFactory.getSingleResultSetHandler(new ResultSetHandlerCart2());
+	public SQLCartDAOImpl(ConnectionPool connectionPool) {
+		pool = connectionPool;
+		resultSetHandlerCart = ResultSetHandlerFactory.getSingleResultSetHandler(ResultSetHandlerFactory.CART_RESULT_SET_HANDLER);
 		resultSetHandlerCartItem = ResultSetHandlerFactory.getSingleResultSetHandler(new ResultSetHandlerCartItem2());
 		resultSetHandlerCartIems = ResultSetHandlerFactory.getListResultSetHandler(new ResultSetHandlerCartItem2());
+	}
+
+	public SQLCartDAOImpl() {
+		this(ConnectionPool.getInstance());
 	}
 
 	@Override
@@ -136,7 +138,7 @@ public class SQLCartDAOImpl implements CartDAO {
 			freeConnection(connection);
 		}
 	}
-	
+
 	@Override
 	public void updateCartItemCountByModelIdCartId(int modelId, int count, int cartId) throws DAOException {
 
@@ -145,14 +147,15 @@ public class SQLCartDAOImpl implements CartDAO {
 
 			connection = pool.getConnection();
 
-			JDBCUtil.insertDeleteUpdate(connection, SQLQuery.UPDATE_CART_ITEM_COUNT_BY_MODEL_ID_CART_ID,count, modelId, cartId);
+			JDBCUtil.insertDeleteUpdate(connection, SQLQuery.UPDATE_CART_ITEM_COUNT_BY_MODEL_ID_CART_ID, count, modelId,
+					cartId);
 
 		} catch (ConnectionPoolException | SQLException e) {
 			throw new DAOException(e);
 		} finally {
 			freeConnection(connection);
 		}
-		
+
 	}
 
 	@Override
@@ -241,16 +244,16 @@ public class SQLCartDAOImpl implements CartDAO {
 	}
 
 	@Override
-	public boolean deleteCartByidUser(int idUser) throws DAOException {
+	public void deleteCartByidUser(int idUser) throws DAOException {
 		Connection connection = null;
 
 		try {
 			connection = pool.getConnection();
 
 			JDBCUtil.insertDeleteUpdate(connection, SQLQuery.DELETE_CART_BY_ID, idUser);
-			return true;
+
 		} catch (ConnectionPoolException | SQLException e) {
-			return false;
+			throw new DAOException(e);
 
 		} finally {
 			freeConnection(connection);
@@ -275,7 +278,6 @@ public class SQLCartDAOImpl implements CartDAO {
 		}
 	}
 
-	
 	@Override
 	public void deleteCartItemByIdModel(int idModel) throws DAOException {
 		Connection connection = null;

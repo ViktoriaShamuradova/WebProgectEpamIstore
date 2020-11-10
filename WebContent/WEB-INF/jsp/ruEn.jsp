@@ -13,14 +13,14 @@
 	<form action="controller" method="post">
 		<input type="hidden" name="command" value="set_locale" /> 
 		<input type="hidden" name="locale" value="ru" /> 
-		<input type="hidden" name="redirect_to" value="/WEB-INF/jsp/registration.jsp" /> 
+		<input type="hidden" name="redirect_to" value="${redirectTo}" /> 
 		<button type="submit" class="btn btn-secondary">${ru_button}</button>
 	</form>
 
 	<form action="controller" method="post">
 		<input type="hidden" name="command" value="set_locale" /> 
 		<input type="hidden" name="locale" value="en" /> 
-		<input type="hidden" name="redirect_to" value="/WEB-INF/jsp/registration.jsp" /> 
+		<input type="hidden" name="redirect_to" value="${redirectTo}" /> 
 		<button type="submit" class="btn btn-secondary">${en_button}</button>
 		
 	</form>

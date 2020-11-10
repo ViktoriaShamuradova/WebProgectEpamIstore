@@ -20,9 +20,9 @@ import by.epamtc.shamuradova.ishop.service.exception.ServiceException;
 import by.epamtc.shamuradova.ishop.service.factory.ServiceFactory;
 
 /**
- * Класс, который в зависимости от наличия или роли объекта User, переданный в сессии,
- * связываемся с соответствующим jsp объектом, передавая в объект типа HttpServletRequest
- * список моделей и категорий моделей
+ * Класс, который в зависимости от наличия или роли объекта User, переданный в
+ * сессии, связываемся с соответствующим jsp объектом, передавая в объект типа
+ * HttpServletRequest список моделей и категорий моделей
  * 
  * 
  * @author Виктория Шамурадова 2020
@@ -59,12 +59,16 @@ public class ModelsByCategoryCommand implements Command {
 	public void execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 
 		try {
-			HttpSession session = req.getSession();
+			HttpSession session = req.getSession(true);
+			
 			String message = (String) session.getAttribute(CURRENT_MESSAGE);
 			session.removeAttribute(CURRENT_MESSAGE);
 			req.setAttribute(CURRENT_MESSAGE, message);
 
 			User user = (User) session.getAttribute("user");
+			
+			req.setAttribute("redirectTo", CURRENT_COMMAND);
+			
 			if (user == null) {
 				setCategories(req, resp);
 				setModels(req, resp);
@@ -122,8 +126,10 @@ public class ModelsByCategoryCommand implements Command {
 		req.setAttribute(PAGE_NUMBER, pageNumber);
 		req.setAttribute(MODELS_COUNT, modelsCount);
 	}
+
 	/**
-	 * Метод, который помещает в объект HttpServletRequest список всех категорий моделей, и текущую категорию
+	 * Метод, который помещает в объект HttpServletRequest список всех категорий
+	 * моделей, и текущую категорию
 	 */
 	private void setCategories(HttpServletRequest req, HttpServletResponse resp) throws ServiceException {
 		String category = req.getParameter(CATEGORY);

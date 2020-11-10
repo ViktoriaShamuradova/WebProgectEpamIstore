@@ -21,6 +21,10 @@ public class SetLocaleCommand implements Command {
 	@Override
 	public void execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		HttpSession session = req.getSession(true);
+		String page = (String )session.getAttribute("current_page");
+		session.removeAttribute("current_page");
+		req.setAttribute("current_page", page);
+		
 		String locale = req.getParameter(REQUEST_PARAMETER_LOCALE).toLowerCase();		
 
 		switch (locale) {
@@ -33,6 +37,6 @@ public class SetLocaleCommand implements Command {
 		}
 		
 		String redirectTo = req.getParameter(REDIRECT_TO);
-		req.getRequestDispatcher(redirectTo).forward(req, resp); //решить проблему, на какую страницу переходить
+		resp.sendRedirect(redirectTo);
 	}
 }

@@ -39,32 +39,24 @@ public class OrderServiceImpl implements OrderService {
 
 	@Override
 	public int makeOrder(ShopCart shopCart, User user) throws ServiceException {
-		
+
 		OrderValidation.validate(shopCart);
-		
+
 		try {
-			Cart cart = cartDAO.getCartByUserId(user.getId());			
+			Cart cart = cartDAO.getCartByUserId(user.getId());
 			int idOrder = createOrder(shopCart, user.getId());
 
-			if (cartDAO.deleteCartByidUser(user.getId())) {
-				try {
+			deleteCart(cart, user);
 
-					cartDAO.deleteCartItemByIdCart(cart.getId());
-				} catch (DAOException e) {
-					cartDAO.addCart(user.getId(), cart.getCreated());
-					orderDAO.deleteOrderById(idOrder);
-					orderDAO.deleteOrderItemByIdOrder(idOrder);
-					throw new InternalServiceException("not make order", e);
-				}
-			} else {
-				orderDAO.deleteOrderById(idOrder);
-				orderDAO.deleteOrderItemByIdOrder(idOrder);
-				throw new InternalServiceException("not make order");
-			}
 			return idOrder;
 		} catch (DAOException e) {
 			throw new InternalServiceException("not make order", e);
 		}
+	}
+
+	private void deleteCart(Cart cart, User user) throws DAOException {
+		cartDAO.deleteCartItemByIdCart(cart.getId());
+		cartDAO.deleteCartByidUser(user.getId());
 	}
 
 	private int createOrder(ShopCart shopCart, int userId) throws ServiceException, DAOException {
@@ -90,14 +82,14 @@ public class OrderServiceImpl implements OrderService {
 			if (order == null) {
 				throw new ResourceNotFoundServiceException("Order not found by id: " + orderId);
 			}
-			
-			if(user.getRole().equals(UserRole.SHOPPER)) {
+
+			if (user.getRole().equals(UserRole.SHOPPER)) {
 				if (order.getIdUser() != user.getId()) {
 					throw new AccessDeniedServiceException(
 							"Account with id=" + user.getId() + " is not owner for order with id=" + orderId);
 				}
 			}
-			
+
 			List<OrderItem> orderItems = orderDAO.getOrderItemsByIdOrder(orderId);
 			order.setItems(orderItems);
 
@@ -108,7 +100,6 @@ public class OrderServiceImpl implements OrderService {
 		}
 	}
 
-	
 	@Override
 	public List<Order> listMyOrders(User user, int page, int limit) throws ServiceException {
 		try {
@@ -154,25 +145,25 @@ public class OrderServiceImpl implements OrderService {
 		}
 	}
 
-	
 	@Override
 	public void changeStatusOrder(User user, int orderId) throws ServiceException {
 		Order order = null;
 		StatusOrder currentStatus = null;
-		
+
 		try {
 			order = orderDAO.getOrderById(orderId);
 		} catch (DAOException e) {
 			throw new InternalServiceException(e);
 		}
-		
-		if (order == null) throw new ResourceNotFoundServiceException("Order not found by id " + orderId);
-			
-		if(user.getRole().equals(UserRole.SHOPPER)) {
+
+		if (order == null)
+			throw new ResourceNotFoundServiceException("Order not found by id " + orderId);
+
+		if (user.getRole().equals(UserRole.SHOPPER)) {
 			if (order.getIdUser() != user.getId())
-				throw new AccessDeniedServiceException("Account with id=" + user.getId() + " is not owner for orders");	
-		}	
-		
+				throw new AccessDeniedServiceException("Account with id=" + user.getId() + " is not owner for orders");
+		}
+
 		currentStatus = order.getStatus();
 		order.setStatus(statusOrderLine.nextStatus(currentStatus));
 
@@ -204,7 +195,7 @@ public class OrderServiceImpl implements OrderService {
 //
 //		// System.out.println(orderService.makeOrder(shopCart, idUser));
 		// System.out.println(orderService.listMyOrders(17, 3, 5));
-		
+
 	}
 
 }

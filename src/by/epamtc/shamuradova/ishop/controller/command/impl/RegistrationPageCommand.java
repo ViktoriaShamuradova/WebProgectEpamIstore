@@ -13,6 +13,7 @@ import by.epamtc.shamuradova.ishop.controller.command.Command;
 public class RegistrationPageCommand implements Command{
 	
 	private static final String CURRENT_MESSAGE = "current_message";
+	private static final String CURRENT_COMMAND = "controller?command=REGISTRATION_PAGE";
 	
 	@Override
 	public void execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -21,6 +22,8 @@ public class RegistrationPageCommand implements Command{
 		String message = (String)session.getAttribute(CURRENT_MESSAGE);
 		session.removeAttribute(CURRENT_MESSAGE);
 		req.setAttribute(CURRENT_MESSAGE, message);
+		
+		req.setAttribute("redirectTo", CURRENT_COMMAND);
 		
 		RequestDispatcher dispatcher = req.getRequestDispatcher("/WEB-INF/jsp/registration.jsp");
 		dispatcher.forward(req, resp);

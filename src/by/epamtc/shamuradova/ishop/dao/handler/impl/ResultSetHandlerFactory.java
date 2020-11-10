@@ -6,9 +6,11 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import by.epamtc.shamuradova.ishop.bean.entity.Cart;
 import by.epamtc.shamuradova.ishop.bean.entity.Model;
 import by.epamtc.shamuradova.ishop.bean.entity.OrderItem;
 import by.epamtc.shamuradova.ishop.bean.entity.User;
+import by.epamtc.shamuradova.ishop.constant.database_column_name.CartColumnName;
 import by.epamtc.shamuradova.ishop.constant.database_column_name.ModelColumnName;
 import by.epamtc.shamuradova.ishop.constant.database_column_name.OrderItemColumnName;
 import by.epamtc.shamuradova.ishop.constant.database_column_name.UserColumnName;
@@ -108,7 +110,20 @@ public class ResultSetHandlerFactory {
 		}
 
 	};
-
+	
+	public final static ResultSetHandler2<Cart> CART_RESULT_SET_HANDLER = new ResultSetHandler2<Cart>() {
+		
+		@Override
+		public Cart handle(ResultSet resultSet) throws SQLException {
+			Cart cart = new Cart();
+			cart.setUserId(resultSet.getInt(CartColumnName.ID_USER));
+			cart.setCreated(resultSet.getDate(CartColumnName.CREATED));
+			cart.setId(resultSet.getInt(CartColumnName.ID));
+			
+			return cart;	
+		}	
+	};
+	
 	/**
 	 * Анонимный класс, который обрабатывает одну строчку ResultSet-а и возвращает
 	 * количество

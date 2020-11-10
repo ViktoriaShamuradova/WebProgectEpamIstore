@@ -27,7 +27,7 @@ import by.epamtc.shamuradova.ishop.service.factory.ServiceFactory;
 
 public class SignUpShopperCommand implements Command {
 
-	private static final String SHOPPER_PAGE = "controller?command=GET_SHOPPER_PAGE";
+	private static final String SHOPPER_PAGE = "controller?command=ALL_MODELS_OR_BY_CATEGORY";
 
 	private static final String REGISTRATION_PAGE_COMMAND = "controller?command=REGISTRATION_PAGE";
 	private static final String ERROR_PAGE = "controller?command=GET_ERROR_PAGE";

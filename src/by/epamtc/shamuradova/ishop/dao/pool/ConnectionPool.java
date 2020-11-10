@@ -24,7 +24,7 @@ public class ConnectionPool {
 
 	private final static ConnectionPool instance = new ConnectionPool();
 
-	private ConnectionPool() {
+	protected ConnectionPool() {
 	}
 
 	public static ConnectionPool getInstance() {
@@ -121,21 +121,6 @@ public class ConnectionPool {
 					throw new ConnectionPoolException(ErrorMessage.DATABASE_ERROR, e);
 				}
 			}
-		}
-	}
-
-	public static void main(String[] args) throws ConnectionPoolException, SQLException {
-		ConnectionPool connectionPool = ConnectionPool.getInstance();
-		connectionPool.initPoolData();
-		Connection connection = connectionPool.getConnection();
-		Statement state = connection.createStatement();
-
-		// 3. Execute query
-		ResultSet res = state.executeQuery("select * from users");
-
-		// 4. Process the result set
-		while (res.next()) {
-			System.out.println(res.getString("name") + ", " + res.getNString("email"));
 		}
 	}
 
