@@ -13,7 +13,7 @@ import by.epamtc.shamuradova.ishop.bean.entity.User;
 import by.epamtc.shamuradova.ishop.constant.ErrorMessage;
 import by.epamtc.shamuradova.ishop.dao.ModelDAO;
 import by.epamtc.shamuradova.ishop.dao.exception.DAOException;
-import by.epamtc.shamuradova.ishop.dao.impl.SQLModelDAOImpl;
+import by.epamtc.shamuradova.ishop.dao.factory.DAOFactory;
 import by.epamtc.shamuradova.ishop.service.ModelService;
 import by.epamtc.shamuradova.ishop.service.exception.InternalServiceException;
 import by.epamtc.shamuradova.ishop.service.exception.ResourceNotFoundServiceException;
@@ -21,16 +21,20 @@ import by.epamtc.shamuradova.ishop.service.exception.ServiceException;
 import by.epamtc.shamuradova.ishop.service.validation.ModelValidation;
 import by.epamtc.shamuradova.ishop.service.validation.UserValidation;
 
-/* Класс, реализующий интерфейс ModelService, в котром содержатся методы для объектов Model, Category 
- * В этом классе проводится валидация
+/**
+ * Класс, реализующий интерфейс ModelService, в котром содержатся методы для
+ * объектов Model, Category В этом классе проводится валидация
  * 
- * @param int page - какую страницу товаров нужно отобразить, 
- * @param int limit - максимальное количество товаров, которое должно вернуться данным запросом
+ * @param int page - какую страницу товаров нужно отобразить,
+ * @param int limit - максимальное количество товаров, которое должно вернуться
+ *            данным запросом
  * 
- * A class that implements the ModelService interface, which contains methods for the Model object, Category
+ *            A class that implements the ModelService interface, which contains
+ *            methods for the Model object, Category
  *
- * @param int page - какую страницу товаров нужно отобразить, 
- * @param int limit - максимальное количество товаров, которое должно вернуться данным запросом
+ * @param int page - какую страницу товаров нужно отобразить,
+ * @param int limit - максимальное количество товаров, которое должно вернуться
+ *            данным запросом
  *
  * @author Шамурадова Виктория 2020
  */
@@ -42,7 +46,7 @@ public class ModelServiceImpl implements ModelService {
 	private ModelDAO modelDao;
 
 	public ModelServiceImpl() {
-		modelDao = new SQLModelDAOImpl();
+		modelDao = DAOFactory.getInstance().getModelDAO();
 
 	}
 
@@ -63,9 +67,9 @@ public class ModelServiceImpl implements ModelService {
 	}
 
 	@Override
-	public List<Model> listModelsByCategory(String categoryUrl, int page, int limit) throws ServiceException {
+	public List<Model> listModelsByCategory(int categoryId, int page, int limit) throws ServiceException {
 		try {
-			List<Model> models = modelDao.listModelsByCategory(categoryUrl, page, limit);
+			List<Model> models = modelDao.listModelsByCategory(categoryId, page, limit);
 
 			if (models == null)
 				throw new ResourceNotFoundServiceException("models " + ErrorMessage.NOT_FOUND);
@@ -94,12 +98,6 @@ public class ModelServiceImpl implements ModelService {
 	}
 
 	@Override
-	public List<Producer> listAllProducer() throws ServiceException {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public Model getModel(int idModel) throws ServiceException {
 		try {
 			Model model = modelDao.getModelById(idModel);
@@ -121,17 +119,13 @@ public class ModelServiceImpl implements ModelService {
 	}
 
 	@Override
-	public int countModelsByCategoryUrl(String categoryUrl) throws ServiceException {
-		if (categoryUrl != null) {
-			try {
+	public int countModelsByCategoryId(int categoryId) throws ServiceException {
+		try {
 
-				return modelDao.countModelsByVategoryUrl(categoryUrl);
+			return modelDao.countModelsByCategoryId(categoryId);
 
-			} catch (DAOException e) {
-				throw new InternalServiceException(e);
-			}
-		} else {
-			return 0;
+		} catch (DAOException e) {
+			throw new InternalServiceException(e);
 		}
 	}
 
@@ -179,5 +173,11 @@ public class ModelServiceImpl implements ModelService {
 		for (Model model : models) {
 			model.setImageLink(IMAGE_LINK + model.getId());
 		}
+	}
+
+	@Override
+	public List<Producer> listAllProducer() throws ServiceException {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

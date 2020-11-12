@@ -20,10 +20,9 @@ public class SQLQuery {
 	public static final String CHECK_LOGIN = "CALL check_login(?)";
 	public static final String LIST_MODELS = "select m.*, c.name as category, p.name as producer from models m, producers p, categories c where c.id=m.id_category and p.id=m.id_producer limit ? offset ?";
 	public static final String LIST_MODELS_BY_CATEGORY = "select m.*, c.name as category, pr.name as producer from models m, categories c, producers pr \r\n"
-			+ "where c.url=? and pr.id=m.id_producer and c.id=m.id_category \r\n" + "order by m.id limit ? offset ?";
-	// public static final String LIST_CATEGORY = "select* from categories order by
-	// id";
-	public static final String LIST_CATEGORY = "select c.name, c.url, SUM(m.count) AS count, c.id from categories c, models m WHERE c.id=m.id_category group by m.id_category";
+			+ "where c.id=? and pr.id=m.id_producer and c.id=m.id_category order by m.id limit ? offset ?";
+
+	public static final String LIST_CATEGORY = "select c.name, SUM(m.count) AS count, c.id from categories c, models m WHERE c.id=m.id_category group by m.id_category";
 	public static final String LIST_ORDER_ITEMS_BY_ID_ORDER = "select o.id as oid, o.id_order, o.id_model, o.count, m.* , c.name as category, p.name as producer "
 			+ "from order_items o, models m, categories c, producers p "
 			+ "where p.id=m.id_producer and c.id=m.id_category and o.id_model=m.id and o.id_order=?";
@@ -55,7 +54,7 @@ public class SQLQuery {
 	public static final String LIST_ORDER_BY_ID_USER = "SELECT o.id, o.created,o.id_user, s.name as status from orders o, status_order s where o.id_user=? and o.id_status_order=s.id ORDER BY id DESC limit ? offset ?";
 	public static final String COUNT_ORDERS_BY_ID_USER = "select count(*) from orders where id_user=?";
 	public static final String COUNT_MODELS = "select count(*) from models";
-	public static final String COUNT_MODELS_BY_CATEGORY_URL = "select count(*) from models INNER JOIN categories ON models.id_category=categories.id where categories.url=?";
+	public static final String COUNT_MODELS_BY_CATEGORY_ID = "select count(*) from models INNER JOIN categories ON models.id_category=categories.id where categories.id=?";
 	public static final String BLACK_LIST = "select u.id, u.name, u.surname, u.login, u.email, u.black_list, s.name as stat, r.name as role from  users u, statuses s, roles r where u.black_list=true and u.id_user_role=r.id and\r\n"
 			+ "u.id_user_status=s.id order by surname limit ? offset ?";
 	public static final String COUNT_USERS_IN_BLACK_LIST = "select count(*) from users where users.black_list=true";
@@ -70,10 +69,9 @@ public class SQLQuery {
 	public static final String COUNT_USERS_BY_ROLE = "select count(*) from users where id_user_role=?";
 	public static final String MODEL_IMAGE_BY_ID = "select image_link from models where id=?";
 	public static final String CART_ITEM_BY_CART_ID_MODEL_ID = "select * from cart_items where id_cart=? and id_model=?";
-	public static final String UPDATE_CART_ITEM_COUNT_BY_MODEL_ID_CART_ID ="update cart_items set count=? where id_model=? and id_cart=?";
+	public static final String UPDATE_CART_ITEM_COUNT_BY_MODEL_ID_CART_ID = "update cart_items set count=? where id_model=? and id_cart=?";
 	public static final String LIST_ORDER = "select o.id, o.id_user, o.created, s.name as status from orders o, status_order s where o.id_status_order=s.id order by o.created desc limit ? offset ?";
 	public static final String COUNT_ORDERS = "select count(*) from orders";
 	public static final String UPDATE_ORDER_STATUS_BY_ID = "update orders set id_status_order=(select s.id from status_order s where s.name=?) where id=?";
-	
 
 }

@@ -1,10 +1,7 @@
 package by.epamtc.shamuradova.ishop.dao.impl;
 
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.io.InputStream;
 import java.sql.Connection;
-
 import java.sql.SQLException;
 import java.util.List;
 
@@ -17,41 +14,25 @@ import by.epamtc.shamuradova.ishop.constant.SQLQuery;
 import by.epamtc.shamuradova.ishop.dao.ModelDAO;
 import by.epamtc.shamuradova.ishop.dao.exception.ConnectionPoolException;
 import by.epamtc.shamuradova.ishop.dao.exception.DAOException;
-import by.epamtc.shamuradova.ishop.dao.handler.ResultSetHandler2;
-import by.epamtc.shamuradova.ishop.dao.handler.impl.ResultSetHandlerCategory2;
 import by.epamtc.shamuradova.ishop.dao.handler.impl.ResultSetHandlerFactory;
-import by.epamtc.shamuradova.ishop.dao.handler.impl.ResultSetHandlerProducer2;
 import by.epamtc.shamuradova.ishop.dao.pool.ConnectionPool;
 import by.epamtc.shamuradova.ishop.dao.util.JDBCUtil;
 
-/** Класс, реализующий интерфейс ModelDAO, использующий sql- запросы
+/**
+ * Класс, реализующий интерфейс ModelDAO, использующий sql- запросы
  * 
  * Class that implements the ModelDAO interface using sql queries
  *
- * @author Шамурадова Виктория 2020
+ * @author Victoria Shamuradova 2020
  */
 
 public class SQLModelDAOImpl implements ModelDAO {
-
-	private ResultSetHandler2<List<Producer>> resultSetHandlerProducers;
-	private ResultSetHandler2<List<Model>> resultSetHandlerModels;
-	private ResultSetHandler2<List<Category>> resultSetHandlerCategories;
-
-	private ResultSetHandler2<Model> resultSetHandlerModel;
-	private ResultSetHandler2<Integer> countResultSetHandler;
-	private ResultSetHandler2<InputStream> resultSetHandlerImage;
 
 	private ConnectionPool pool;
 
 	public SQLModelDAOImpl() {
 		pool = ConnectionPool.getInstance();
 
-		resultSetHandlerModel = ResultSetHandlerFactory.getSingleResultSetHandler(ResultSetHandlerFactory.MODEL_RESULT_SET_HANDLER);
-		resultSetHandlerCategories = ResultSetHandlerFactory.getListResultSetHandler(new ResultSetHandlerCategory2());
-		resultSetHandlerModels = ResultSetHandlerFactory.getListResultSetHandler(ResultSetHandlerFactory.MODEL_RESULT_SET_HANDLER);
-		resultSetHandlerProducers = ResultSetHandlerFactory.getListResultSetHandler(new ResultSetHandlerProducer2());
-		countResultSetHandler = ResultSetHandlerFactory.COUNT_RESULT_SET_HANDLER;
-		resultSetHandlerImage = ResultSetHandlerFactory.getImageResultSetHandler();
 	}
 
 	@Override
@@ -62,7 +43,9 @@ public class SQLModelDAOImpl implements ModelDAO {
 			connection = pool.getConnection();
 			int offset = (page - 1) * limit;// сколько отступаем
 
-			return JDBCUtil.select(connection, SQLQuery.LIST_MODELS, resultSetHandlerModels, limit, offset);
+			return JDBCUtil.select(connection, SQLQuery.LIST_MODELS,
+					ResultSetHandlerFactory.getListResultSetHandler(ResultSetHandlerFactory.MODEL_RESULT_SET_HANDLER),
+					limit, offset);
 
 		} catch (ConnectionPoolException | SQLException e) {
 			throw new DAOException("can not execute query", e);
@@ -77,7 +60,9 @@ public class SQLModelDAOImpl implements ModelDAO {
 		try {
 			connection = pool.getConnection();
 			String sql = SQLQuery.MODEL_BY_ID;
-			return JDBCUtil.select(connection, sql, resultSetHandlerModel, idModel);
+			return JDBCUtil.select(connection, sql,
+					ResultSetHandlerFactory.getSingleResultSetHandler(ResultSetHandlerFactory.MODEL_RESULT_SET_HANDLER),
+					idModel);
 
 		} catch (ConnectionPoolException | SQLException e) {
 			throw new DAOException(ErrorMessage.DATABASE_ERROR, e);
@@ -88,15 +73,16 @@ public class SQLModelDAOImpl implements ModelDAO {
 	}
 
 	@Override
-	public List<Model> listModelsByCategory(String categoryUrl, int page, int limit) throws DAOException {
+	public List<Model> listModelsByCategory(int categoryId, int page, int limit) throws DAOException {
 		Connection connection = null;
 
 		try {
 			connection = pool.getConnection();
 			int offset = (page - 1) * limit;
 
-			return JDBCUtil.select(connection, SQLQuery.LIST_MODELS_BY_CATEGORY, resultSetHandlerModels, categoryUrl,
-					limit, offset);
+			return JDBCUtil.select(connection, SQLQuery.LIST_MODELS_BY_CATEGORY,
+					ResultSetHandlerFactory.getListResultSetHandler(ResultSetHandlerFactory.MODEL_RESULT_SET_HANDLER),
+					categoryId, limit, offset);
 
 		} catch (ConnectionPoolException | SQLException e) {
 			throw new DAOException(e);
@@ -112,7 +98,8 @@ public class SQLModelDAOImpl implements ModelDAO {
 		try {
 			connection = pool.getConnection();
 
-			return JDBCUtil.select(connection, SQLQuery.LIST_CATEGORY, resultSetHandlerCategories);
+			return JDBCUtil.select(connection, SQLQuery.LIST_CATEGORY, ResultSetHandlerFactory
+					.getListResultSetHandler(ResultSetHandlerFactory.CATEGORY_RESULT_SET_HANDLER));
 
 		} catch (ConnectionPoolException | SQLException e) {
 			throw new DAOException(e);
@@ -128,7 +115,8 @@ public class SQLModelDAOImpl implements ModelDAO {
 		try {
 			connection = pool.getConnection();
 
-			return JDBCUtil.select(connection, SQLQuery.LIST_PRODUCER, resultSetHandlerProducers);
+			return JDBCUtil.select(connection, SQLQuery.LIST_PRODUCER, ResultSetHandlerFactory
+					.getListResultSetHandler(ResultSetHandlerFactory.PRODUCER_RESULT_SET_HANDLER));
 
 		} catch (ConnectionPoolException | SQLException e) {
 			throw new DAOException(e);
@@ -153,7 +141,7 @@ public class SQLModelDAOImpl implements ModelDAO {
 		try {
 			connection = pool.getConnection();
 
-			return JDBCUtil.select(connection, SQLQuery.COUNT_MODELS, countResultSetHandler);
+			return JDBCUtil.select(connection, SQLQuery.COUNT_MODELS, ResultSetHandlerFactory.COUNT_RESULT_SET_HANDLER);
 
 		} catch (ConnectionPoolException | SQLException e) {
 			throw new DAOException(e);
@@ -163,13 +151,13 @@ public class SQLModelDAOImpl implements ModelDAO {
 	}
 
 	@Override
-	public int countModelsByVategoryUrl(String categoryUrl) throws DAOException {
+	public int countModelsByCategoryId(int categoryId) throws DAOException {
 		Connection connection = null;
 		try {
 			connection = pool.getConnection();
 
-			return JDBCUtil.select(connection, SQLQuery.COUNT_MODELS_BY_CATEGORY_URL, countResultSetHandler,
-					categoryUrl);
+			return JDBCUtil.select(connection, SQLQuery.COUNT_MODELS_BY_CATEGORY_ID,
+					ResultSetHandlerFactory.COUNT_RESULT_SET_HANDLER, categoryId);
 
 		} catch (ConnectionPoolException | SQLException e) {
 			throw new DAOException(e);
@@ -203,9 +191,8 @@ public class SQLModelDAOImpl implements ModelDAO {
 			connection = pool.getConnection();
 
 			JDBCUtil.insertDeleteUpdate(connection, SQLQuery.ADD_NEW_MODEL, modelEdition.getName(),
-					modelEdition.getDescription(), modelEdition.getPrice(),
-
-					modelEdition.getCategory(), modelEdition.getProducer(), modelEdition.getCount());
+					modelEdition.getDescription(), modelEdition.getPrice(), modelEdition.getCategory(),
+					modelEdition.getProducer(), modelEdition.getCount());
 
 		} catch (ConnectionPoolException | SQLException e) {
 			throw new DAOException(e);
@@ -220,59 +207,13 @@ public class SQLModelDAOImpl implements ModelDAO {
 		try {
 			connection = pool.getConnection();
 
-			return JDBCUtil.select(connection, SQLQuery.MODEL_IMAGE_BY_ID, resultSetHandlerImage, modelId);
+			return JDBCUtil.select(connection, SQLQuery.MODEL_IMAGE_BY_ID,
+					ResultSetHandlerFactory.getImageResultSetHandler(), modelId);
 
 		} catch (ConnectionPoolException | SQLException e) {
 			throw new DAOException(e);
 		} finally {
 			freeConnection(connection);
-		}
-	}
-
-	public static void main(String[] args) throws ConnectionPoolException, SQLException, DAOException, IOException {
-
-		SQLModelDAOImpl dao = new SQLModelDAOImpl();
-
-//		dao.pool.initPoolData();
-//		Connection conn = dao.pool.getConnection();
-//
-//		File file = new File("./WebContent/front/img/laptop.jpg");
-//		FileInputStream input = new FileInputStream(file);
-//
-//		PreparedStatement st = conn.prepareStatement("update models set image_link=? where id=41");
-//
-//		st.setBinaryStream(1, input);
-//
-//		st.executeUpdate();
-//		dao.freeConnection(conn);
-//		System.out.println(file.getAbsolutePath());
-//
-//		// еперь читаем
-//		Connection conn2 = dao.pool.getConnection();
-//		PreparedStatement st2 = conn.prepareStatement("select image_link from models where id=41");
-//		ResultSet rs = st2.executeQuery();
-//
-//		ByteArrayOutputStream os = new ByteArrayOutputStream();
-//		if (rs.next()) {
-//			InputStream in = rs.getBinaryStream("image_link");
-//
-//			byte[] buffer = new byte[1024];
-//			while (in.read(buffer) > 0) {
-//				os.write(buffer);
-//			}
-//		}
-//		dao.freeConnection(conn2);
-		InputStream in = dao.getModelImageById(41);
-		ByteArrayOutputStream os = new ByteArrayOutputStream();
-		
-		byte[] buffer = new byte[1024];
-		while (in.read(buffer) > 0) {
-			os.write(buffer);
-		}
-		
-		byte[] imageByte = os.toByteArray();
-		for (int i = 0; i < imageByte.length; i++) {
-			System.out.println(imageByte[i]);
 		}
 	}
 }

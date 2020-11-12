@@ -9,7 +9,7 @@ import by.epamtc.shamuradova.ishop.bean.entity.Producer;
 import by.epamtc.shamuradova.ishop.bean.entity.User;
 import by.epamtc.shamuradova.ishop.service.exception.ServiceException;
 
-/* Интерфейс ModelService, в котром содержатся методы для объекта Model, Category 
+/** Интерфейс ModelService, в котром содержатся методы для объекта Model, Category 
  * 
  * @param int page - какую страницу товаров нужно отобразить, 
  * @param int limit - максимальное количество товаров, которое должно вернуться данным запросом
@@ -19,7 +19,7 @@ import by.epamtc.shamuradova.ishop.service.exception.ServiceException;
  * @param int page - какую страницу товаров нужно отобразить, 
  * @param int limit - максимальное количество товаров, которое должно вернуться данным запросом
  *
- * @author Шамурадова Виктория 2020
+ * @author Victoria Shamuradova 2020
  */
 
 
@@ -29,7 +29,7 @@ public interface ModelService {
 
 	public List<Model> listAllModels(int page, int limit) throws ServiceException;
 
-	public List<Model> listModelsByCategory(String categoryUrl, int page, int limit) throws ServiceException;
+	public List<Model> listModelsByCategory(int categoryId, int page, int limit) throws ServiceException;
 
 	public List<Category> listAllCategories() throws ServiceException;
 
@@ -37,7 +37,7 @@ public interface ModelService {
 
 	public int countModels() throws ServiceException;
 
-	public int countModelsByCategoryUrl(String categoryUrl) throws ServiceException;
+	public int countModelsByCategoryId(int categoryId) throws ServiceException;
 
 	public void saveEditionModel(User user, ModelEdition modelEdition) throws ServiceException;
 

@@ -15,8 +15,7 @@ import by.epamtc.shamuradova.ishop.constant.UserRole;
 import by.epamtc.shamuradova.ishop.dao.CartDAO;
 import by.epamtc.shamuradova.ishop.dao.OrderDAO;
 import by.epamtc.shamuradova.ishop.dao.exception.DAOException;
-import by.epamtc.shamuradova.ishop.dao.impl.SQLCartDAOImpl;
-import by.epamtc.shamuradova.ishop.dao.impl.SQLOrderDAOImpl;
+import by.epamtc.shamuradova.ishop.dao.factory.DAOFactory;
 import by.epamtc.shamuradova.ishop.service.OrderService;
 import by.epamtc.shamuradova.ishop.service.exception.AccessDeniedServiceException;
 import by.epamtc.shamuradova.ishop.service.exception.InternalServiceException;
@@ -32,8 +31,8 @@ public class OrderServiceImpl implements OrderService {
 	private StatusOrderLine statusOrderLine;
 
 	public OrderServiceImpl() {
-		orderDAO = new SQLOrderDAOImpl();
-		cartDAO = new SQLCartDAOImpl();
+		orderDAO = DAOFactory.getInstance().getOrderDAO();
+		cartDAO = DAOFactory.getInstance().getCartDAO();
 		statusOrderLine = new StatusOrderLine();
 	}
 
@@ -175,27 +174,5 @@ public class OrderServiceImpl implements OrderService {
 		}
 	}
 
-	public static void main(String[] args) throws ServiceException {
-		OrderServiceImpl orderService = new OrderServiceImpl();
-//		int idUser = 17;
-//
-//		ShopCart shopCart = new ShopCart();
-//
-//		// create model, item
-//		Model m45 = new Model();
-//		m45.setId(45);
-//		m45.setPrice(new BigDecimal(5000));
-//		ShopCartItem item1 = new ShopCartItem(m45, 2);
-//
-////create shopcart
-//		Map<Integer, ShopCartItem> ex = new HashMap();
-//		ex.put(45, item1);
-//
-//		shopCart.setShopCartItems(ex);
-//
-//		// System.out.println(orderService.makeOrder(shopCart, idUser));
-		// System.out.println(orderService.listMyOrders(17, 3, 5));
-
-	}
 
 }

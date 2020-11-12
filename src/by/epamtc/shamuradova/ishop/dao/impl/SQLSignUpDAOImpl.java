@@ -5,7 +5,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import by.epamtc.shamuradova.ishop.bean.RegInfo;
-import by.epamtc.shamuradova.ishop.bean.entity.User;
 import by.epamtc.shamuradova.ishop.constant.ErrorMessage;
 import by.epamtc.shamuradova.ishop.constant.SQLQuery;
 import by.epamtc.shamuradova.ishop.constant.UserRole;
@@ -13,8 +12,6 @@ import by.epamtc.shamuradova.ishop.constant.UserStatus;
 import by.epamtc.shamuradova.ishop.dao.SignUpDAO;
 import by.epamtc.shamuradova.ishop.dao.exception.ConnectionPoolException;
 import by.epamtc.shamuradova.ishop.dao.exception.DAOException;
-import by.epamtc.shamuradova.ishop.dao.handler.ResultSetHandler2;
-import by.epamtc.shamuradova.ishop.dao.handler.impl.ResultSetHandlerFactory;
 import by.epamtc.shamuradova.ishop.dao.pool.ConnectionPool;
 import by.epamtc.shamuradova.ishop.dao.util.JDBCUtil;
 
@@ -27,14 +24,12 @@ import by.epamtc.shamuradova.ishop.dao.util.JDBCUtil;
  * @author Шамурадова Виктория 2020
  */
 
-public class SQLSignUpImplDAO implements SignUpDAO {
+public class SQLSignUpDAOImpl implements SignUpDAO {
 
 	private ConnectionPool pool;
-	ResultSetHandler2<User> resultSetHandlerUser;
 
-	public SQLSignUpImplDAO() {
+	public SQLSignUpDAOImpl() {
 		pool = ConnectionPool.getInstance();
-		resultSetHandlerUser = ResultSetHandlerFactory.getSingleResultSetHandler(ResultSetHandlerFactory.USER_RESULT_SET_HANDLER);
 	}
 
 	@Override

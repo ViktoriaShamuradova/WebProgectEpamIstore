@@ -6,30 +6,39 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import by.epamtc.shamuradova.ishop.bean.StatusOrder;
 import by.epamtc.shamuradova.ishop.bean.entity.Cart;
+import by.epamtc.shamuradova.ishop.bean.entity.CartItem;
+import by.epamtc.shamuradova.ishop.bean.entity.Category;
 import by.epamtc.shamuradova.ishop.bean.entity.Model;
+import by.epamtc.shamuradova.ishop.bean.entity.Order;
 import by.epamtc.shamuradova.ishop.bean.entity.OrderItem;
+import by.epamtc.shamuradova.ishop.bean.entity.Producer;
 import by.epamtc.shamuradova.ishop.bean.entity.User;
 import by.epamtc.shamuradova.ishop.constant.database_column_name.CartColumnName;
+import by.epamtc.shamuradova.ishop.constant.database_column_name.CartItemColumnName;
+import by.epamtc.shamuradova.ishop.constant.database_column_name.CategotyColumnName;
 import by.epamtc.shamuradova.ishop.constant.database_column_name.ModelColumnName;
+import by.epamtc.shamuradova.ishop.constant.database_column_name.OrderColumnName;
 import by.epamtc.shamuradova.ishop.constant.database_column_name.OrderItemColumnName;
+import by.epamtc.shamuradova.ishop.constant.database_column_name.ProducerColumnName;
 import by.epamtc.shamuradova.ishop.constant.database_column_name.UserColumnName;
-import by.epamtc.shamuradova.ishop.dao.handler.ResultSetHandler2;
+import by.epamtc.shamuradova.ishop.dao.handler.ResultSetHandler;
 
 /**
- * Класс-фабрика, в котором определены анонимные классы, которые реализуют
+ * Класс-фабрика, который содержит лбъекты анонимных классов, которые реализуют
  * интерфейс ResultSetHandler2<T>(определят правила формирования объекта типа
- * ResultSet в java объект) и параметризированы по соответствующему объекту
+ * ResultSet в java объект) и параметризированы по соответствующему типу
  * 
  * В случае выплнения запроса может возникнуть несколько вариантов получения
  * объекта: коллекцию или один объект, в заисимости от того, что возвращает
  * запрос: лист ResultSet или один объект ResultSet
  * 
- * метод getListResultSetHandler - возвращает анонимный класс типа
+ * метод getListResultSetHandler - возвращает объкт типа
  * ResultSetHandler2<List<T>>, который из списка ResultSet преобразует в список
  * соответствующих объектов
  * 
- * метод getSingleResultSetHandler - возвращает анонимный класс типа
+ * метод getSingleResultSetHandler - возвращает объект типа
  * ResultSetHandler2<T>, который из объекта ResultSet преобразует в
  * соответствующий объект
  * 
@@ -62,7 +71,7 @@ public class ResultSetHandlerFactory {
 	 * Анонимный класс, который обрабатывает одну строчку ResultSet-а и возвращает
 	 * нужный объект
 	 */
-	public final static ResultSetHandler2<Model> MODEL_RESULT_SET_HANDLER = new ResultSetHandler2<Model>() {
+	public final static ResultSetHandler<Model> MODEL_RESULT_SET_HANDLER = new ResultSetHandler<Model>() {
 		@Override
 		public Model handle(ResultSet rs) throws SQLException {
 			Model model = new Model();
@@ -78,7 +87,62 @@ public class ResultSetHandlerFactory {
 		}
 	};
 
-	public final static ResultSetHandler2<User> USER_RESULT_SET_HANDLER = new ResultSetHandler2<User>() {
+	public final static ResultSetHandler<CartItem> CART_ITEM_RESULT_SET_HANDLER = new ResultSetHandler<CartItem>() {
+
+		@Override
+		public CartItem handle(ResultSet rs) throws SQLException {
+
+			CartItem cartItem = new CartItem();
+
+			cartItem.setId(rs.getInt(CartItemColumnName.ID));
+			cartItem.setModelId(rs.getInt(CartItemColumnName.MODEL_ID));
+			cartItem.setCartId(rs.getInt(CartItemColumnName.CART_ID));
+			cartItem.setCount(rs.getInt(CartItemColumnName.COUNT));
+
+			return cartItem;
+		}
+
+	};
+
+	public final static ResultSetHandler<Order> ORDER_RESULT_SET_HANDLER = new ResultSetHandler<Order>() {
+		@Override
+		public Order handle(ResultSet resultSet) throws SQLException {
+			Order order = new Order();
+			order.setId(resultSet.getInt(OrderColumnName.ID));
+			order.setCreated(resultSet.getDate(OrderColumnName.CREATED));
+			order.setIdUser(resultSet.getInt(OrderColumnName.ID_USER));
+			order.setStatus(StatusOrder.valueOf(resultSet.getString(OrderColumnName.STATUS)));
+
+			return order;
+
+		}
+	};
+
+	public final static ResultSetHandler<Producer> PRODUCER_RESULT_SET_HANDLER = new ResultSetHandler<Producer>() {
+		@Override
+		public Producer handle(ResultSet rs) throws SQLException {
+			Producer producer = new Producer();
+
+			producer.setName(rs.getString(ProducerColumnName.NAME));
+			producer.setId(rs.getInt(ProducerColumnName.ID));
+			return producer;
+		}
+	};
+
+	public final static ResultSetHandler<Category> CATEGORY_RESULT_SET_HANDLER = new ResultSetHandler<Category>() {
+		@Override
+		public Category handle(ResultSet rs) throws SQLException {
+			Category category = new Category();
+			category.setName(rs.getString(CategotyColumnName.NAME));
+			category.setId(rs.getInt(CategotyColumnName.ID));
+			category.setModelCount(rs.getInt(CategotyColumnName.COUNT));
+
+
+			return category;
+		}
+	};
+
+	public final static ResultSetHandler<User> USER_RESULT_SET_HANDLER = new ResultSetHandler<User>() {
 		@Override
 		public User handle(ResultSet rs) throws SQLException {
 			User user = new User();
@@ -94,7 +158,7 @@ public class ResultSetHandlerFactory {
 		}
 	};
 
-	public final static ResultSetHandler2<OrderItem> ORDER_ITEM_RESULT_SET_HANDLER = new ResultSetHandler2<OrderItem>() {
+	public final static ResultSetHandler<OrderItem> ORDER_ITEM_RESULT_SET_HANDLER = new ResultSetHandler<OrderItem>() {
 		@Override
 		public OrderItem handle(ResultSet rs) throws SQLException {
 
@@ -110,26 +174,26 @@ public class ResultSetHandlerFactory {
 		}
 
 	};
-	
-	public final static ResultSetHandler2<Cart> CART_RESULT_SET_HANDLER = new ResultSetHandler2<Cart>() {
-		
+
+	public final static ResultSetHandler<Cart> CART_RESULT_SET_HANDLER = new ResultSetHandler<Cart>() {
+
 		@Override
 		public Cart handle(ResultSet resultSet) throws SQLException {
 			Cart cart = new Cart();
 			cart.setUserId(resultSet.getInt(CartColumnName.ID_USER));
 			cart.setCreated(resultSet.getDate(CartColumnName.CREATED));
 			cart.setId(resultSet.getInt(CartColumnName.ID));
-			
-			return cart;	
-		}	
+
+			return cart;
+		}
 	};
-	
+
 	/**
 	 * Анонимный класс, который обрабатывает одну строчку ResultSet-а и возвращает
 	 * количество
 	 * 
 	 */
-	public final static ResultSetHandler2<Integer> COUNT_RESULT_SET_HANDLER = new ResultSetHandler2<Integer>() {
+	public final static ResultSetHandler<Integer> COUNT_RESULT_SET_HANDLER = new ResultSetHandler<Integer>() {
 		@Override
 		public Integer handle(ResultSet rs) throws SQLException {
 			if (rs.next()) {
@@ -140,9 +204,9 @@ public class ResultSetHandlerFactory {
 		}
 	};
 
-	public static <T> ResultSetHandler2<List<T>> getListResultSetHandler(ResultSetHandler2<T> oneRowResultSetHandler) {
+	public static <T> ResultSetHandler<List<T>> getListResultSetHandler(ResultSetHandler<T> oneRowResultSetHandler) {
 
-		return new ResultSetHandler2<List<T>>() {
+		return new ResultSetHandler<List<T>>() {
 			/**
 			 * Создается коллекция ArrayList соответствующего типа и добавляется в нее
 			 * обработчик каждой строчки ResultSet-а, который возращает объект
@@ -163,9 +227,9 @@ public class ResultSetHandlerFactory {
 	 * Испоьзуется этот метод, если понадобится один объект из ResultSet-а
 	 * 
 	 */
-	public static <T> ResultSetHandler2<T> getSingleResultSetHandler(ResultSetHandler2<T> oneRowResultSetHandler) {
+	public static <T> ResultSetHandler<T> getSingleResultSetHandler(ResultSetHandler<T> oneRowResultSetHandler) {
 
-		return new ResultSetHandler2<T>() {
+		return new ResultSetHandler<T>() {
 			@Override
 			public T handle(ResultSet rs) throws SQLException {
 				if (rs.next()) {
@@ -181,9 +245,8 @@ public class ResultSetHandlerFactory {
 	 * метод, который возвращает поток InputStream, нужен для считывания двоичных
 	 * объектов из базы данных типа BLOB
 	 */
-	public static ResultSetHandler2<InputStream> getImageResultSetHandler() {
-
-		return new ResultSetHandler2<InputStream>() {
+	public static ResultSetHandler<InputStream> getImageResultSetHandler() {
+		return new ResultSetHandler<InputStream>() {
 
 			@Override
 			public InputStream handle(ResultSet rs) throws SQLException {

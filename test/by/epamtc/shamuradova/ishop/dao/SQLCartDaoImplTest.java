@@ -13,7 +13,7 @@ import org.junit.Test;
 import by.epamtc.shamuradova.ishop.bean.entity.Cart;
 import by.epamtc.shamuradova.ishop.dao.exception.ConnectionPoolException;
 import by.epamtc.shamuradova.ishop.dao.exception.DAOException;
-import by.epamtc.shamuradova.ishop.dao.handler.ResultSetHandler2;
+import by.epamtc.shamuradova.ishop.dao.handler.ResultSetHandler;
 import by.epamtc.shamuradova.ishop.dao.handler.impl.ResultSetHandlerFactory;
 import by.epamtc.shamuradova.ishop.dao.impl.SQLCartDAOImpl;
 import by.epamtc.shamuradova.ishop.dao.util.JDBCUtil;
@@ -44,7 +44,7 @@ public class SQLCartDaoImplTest {
 		dao.deleteCartByidUser(idUser);
 
 		Connection connection2 = pool.getConnection();
-		ResultSetHandler2<Cart> handler = ResultSetHandlerFactory
+		ResultSetHandler<Cart> handler = ResultSetHandlerFactory
 				.getSingleResultSetHandler(ResultSetHandlerFactory.CART_RESULT_SET_HANDLER);
 		Cart cart = JDBCUtil.select(connection2, sqlSelect, handler, idUser);
 		pool.free(connection2);

@@ -21,11 +21,14 @@ import by.epamtc.shamuradova.ishop.service.factory.ServiceFactory;
 
 /**
  * Класс, который в зависимости от наличия или роли объекта User, переданный в
- * сессии, связываемся с соответствующим jsp объектом, передавая в объект типа
+ * сессии, связываеся с соответствующим jsp объектом, передавая в объект типа
  * HttpServletRequest список моделей и категорий моделей
  * 
+ * A class that, depending on the presence or role of the User object, passed to
+ * session, connecting with the corresponding jsp object, passing it to an
+ * object of type HttpServletRequest list of models and model categories
  * 
- * @author Виктория Шамурадова 2020
+ * @author Victoria Shamuradova 2020
  */
 public class ModelsByCategoryCommand implements Command {
 
@@ -37,16 +40,18 @@ public class ModelsByCategoryCommand implements Command {
 	private static final String MODELS_PARAM = "models";
 	private static final String CATEGORIES = "categories";
 	private static final String MODELS_COUNT = "modelsCount";
-	private static final String CURRENT_CATEGORY_URL_PARAM = "category";
+	private static final String CURRENT_CATEGORY = "category";
 	private static final String CURRENT_MESSAGE = "current_message";
 	private static final String COMMAND = "command";
 	private static final String CATEGORY = "category";
 	private static final String PAGE_NUMBER = "pageNumber";
 	private static final String PAGE_COUNT = "pageCount";
 	private static final String PER_PAGE = "modelsPerPage";
+	private static final String USER = "user";
+	private static final String REDIRECT_TO = "redirectTo";
 
 	private static final String MAIN_PAGE = "/main.jsp";
-	private static final String SHOPPER_PAGE = "/WEB-INF/jsp/shopper_page.jsp";
+	private static final String SHOPPER_PAGE = "/WEB-INF/jsp/page/shopper_page.jsp";
 	private static final String ADMIN_PAGE = "/WEB-INF/jsp/model_list_admin.jsp";
 
 	private ModelService modelService;
@@ -60,15 +65,15 @@ public class ModelsByCategoryCommand implements Command {
 
 		try {
 			HttpSession session = req.getSession(true);
-			
+
 			String message = (String) session.getAttribute(CURRENT_MESSAGE);
 			session.removeAttribute(CURRENT_MESSAGE);
 			req.setAttribute(CURRENT_MESSAGE, message);
 
-			User user = (User) session.getAttribute("user");
-			
-			req.setAttribute("redirectTo", CURRENT_COMMAND);
-			
+			User user = (User) session.getAttribute(USER);
+
+			req.setAttribute(REDIRECT_TO, CURRENT_COMMAND);
+
 			if (user == null) {
 				setCategories(req, resp);
 				setModels(req, resp);
@@ -97,14 +102,14 @@ public class ModelsByCategoryCommand implements Command {
 		if (category == null || category.isEmpty()) {
 			return modelService.listAllModels(pageNumber, PerPage.MODELS_ON_PAGE);
 		}
-		return modelService.listModelsByCategory(category, pageNumber, PerPage.MODELS_ON_PAGE);
+		return modelService.listModelsByCategory(Integer.parseInt(category), pageNumber, PerPage.MODELS_ON_PAGE);
 	}
 
 	private int getTotalModelCount(String category) throws ServiceException {
 		if (category == null || category.isEmpty()) {
 			return modelService.countModels();
 		}
-		return modelService.countModelsByCategoryUrl(category);
+		return modelService.countModelsByCategoryId(Integer.parseInt(category));
 	}
 
 	private int getPageCount(int totalCount, int itemsPerCount) {
@@ -135,7 +140,7 @@ public class ModelsByCategoryCommand implements Command {
 		String category = req.getParameter(CATEGORY);
 		List<Category> categories = modelService.listAllCategories();
 		req.setAttribute(CATEGORIES, categories);
-		req.setAttribute(CURRENT_CATEGORY_URL_PARAM, category); // сохранить текущую выбранную категорию, чтобы
+		req.setAttribute(CURRENT_CATEGORY, category); // сохранить текущую выбранную категорию, чтобы
 		// загружать далее по категориям
 	}
 }

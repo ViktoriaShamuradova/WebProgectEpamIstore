@@ -8,7 +8,7 @@ import by.epamtc.shamuradova.ishop.bean.entity.User;
 import by.epamtc.shamuradova.ishop.constant.ErrorMessage;
 import by.epamtc.shamuradova.ishop.dao.SignInDAO;
 import by.epamtc.shamuradova.ishop.dao.exception.DAOException;
-import by.epamtc.shamuradova.ishop.dao.impl.SQLSignInDAOImpl2;
+import by.epamtc.shamuradova.ishop.dao.factory.DAOFactory;
 import by.epamtc.shamuradova.ishop.service.SignInService;
 import by.epamtc.shamuradova.ishop.service.exception.AccessDeniedServiceException;
 import by.epamtc.shamuradova.ishop.service.exception.InternalServiceException;
@@ -21,7 +21,7 @@ public class SignInServiceImpl implements SignInService {
 	private SignInDAO signIn;
 
 	public SignInServiceImpl() {
-		signIn = new SQLSignInDAOImpl2();
+		signIn = DAOFactory.getInstance().getSignInDAO();
 	}
 
 	@Override

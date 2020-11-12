@@ -19,18 +19,9 @@ public class Category extends AbstractEntity<Integer> {
 	
 	private String name;
 	private int modelCount;
-	private String url;
+	
 
 	public Category() {}
-
-
-	public String getUrl() {
-		return url;
-	}
-
-	public void setUrl(String url) {
-		this.url = url;
-	}
 
 	public String getName() {
 		return name;
@@ -55,7 +46,6 @@ public class Category extends AbstractEntity<Integer> {
 		int result = super.hashCode();
 		result = prime * result + modelCount;
 		result = prime * result + ((name == null) ? 0 : name.hashCode());
-		result = prime * result + ((url == null) ? 0 : url.hashCode());
 		return result;
 	}
 
@@ -75,16 +65,12 @@ public class Category extends AbstractEntity<Integer> {
 				return false;
 		} else if (!name.equals(other.name))
 			return false;
-		if (url == null) {
-			if (other.url != null)
-				return false;
-		} else if (!url.equals(other.url))
-			return false;
+
 		return true;
 	}
 
 	@Override
 	public String toString() {
-		return "Category [name=" + name + ", modelCount=" + modelCount + ", url=" + url + "]";
+		return "Category [name=" + name + ", modelCount=" + modelCount + "]";
 	}
 }

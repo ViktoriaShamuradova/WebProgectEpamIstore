@@ -28,7 +28,7 @@
 			
 			<c:forEach var="category" items="${categories}">
 				<li class="list-group-item">
-				<a class="text-dark " href="controller?command=ALL_MODELS_OR_BY_CATEGORY&category=${category.url}"><c:out value="${category.name}" /></a></li>
+				<a class="text-dark " href="controller?command=ALL_MODELS_OR_BY_CATEGORY&category=${category.id}"><c:out value="${category.name}" /></a></li>
 			</c:forEach>
 			
 		</ul>

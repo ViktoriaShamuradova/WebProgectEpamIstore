@@ -12,7 +12,7 @@ import by.epamtc.shamuradova.ishop.constant.PatternContainer;
 import by.epamtc.shamuradova.ishop.dao.SignUpDAO;
 import by.epamtc.shamuradova.ishop.dao.UserDAO;
 import by.epamtc.shamuradova.ishop.dao.exception.DAOException;
-import by.epamtc.shamuradova.ishop.dao.impl.SQLSignUpImplDAO;
+import by.epamtc.shamuradova.ishop.dao.factory.DAOFactory;
 import by.epamtc.shamuradova.ishop.dao.impl.SQLUserDAOImpl;
 import by.epamtc.shamuradova.ishop.service.SignUpService;
 import by.epamtc.shamuradova.ishop.service.exception.ServiceException;
@@ -24,7 +24,7 @@ public class SignUpServiceImpl implements SignUpService {
 	private SignUpDAO signUpDAO;
 
 	public SignUpServiceImpl() {
-		signUpDAO = new SQLSignUpImplDAO();
+		signUpDAO = DAOFactory.getInstance().getSignUpDAO();
 	}
 
 	@Override

@@ -23,7 +23,7 @@ public interface ModelDAO {
 
 	public Model getModelById(int modelId) throws DAOException;
 
-	public List<Model> listModelsByCategory(String categoryUrl, int page, int limit) throws DAOException;
+	public List<Model> listModelsByCategory(int categoryId, int page, int limit) throws DAOException;
 
 	public List<Category> listAllCategories() throws DAOException;
 
@@ -31,7 +31,7 @@ public interface ModelDAO {
 
 	public int countModels() throws DAOException;
 
-	public int countModelsByVategoryUrl(String categoryUrl) throws DAOException;
+	public int countModelsByCategoryId(int categoryId) throws DAOException;
 
 	public void updateModel(ModelEdition modelEdition) throws DAOException;
 

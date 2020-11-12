@@ -12,6 +12,8 @@ import by.epamtc.shamuradova.ishop.controller.command.CommandProvider;
 
 public class Controller extends HttpServlet{
 	
+	private static final long serialVersionUID = -4759062715314634329L;
+	
 	private final CommandProvider provider = new CommandProvider();
 	private final static String COMMAND_NAME = "command";
 	

@@ -24,7 +24,7 @@
 </head>
 <body>
 
-<%@ include file="header.jsp"%>
+<%@ include file="../header.jsp"%>
 
 	<div class= container mt-5>
 		<c:if test="${ not empty current_message }">	
@@ -34,7 +34,7 @@
 
 	<div class="container-fluid">
 		<div class="row">
-			<%@ include file="shopper_navbar.jsp"%>
+			<%@ include file="../shopper_navbar.jsp"%>
 			
 			<pag:modelPagination totalModels="${modelsCount}" modelsPerPage="${modelsPerPage}" 
 				currentPage="${pageNumber}" models="${models}" category="${category}"/>	

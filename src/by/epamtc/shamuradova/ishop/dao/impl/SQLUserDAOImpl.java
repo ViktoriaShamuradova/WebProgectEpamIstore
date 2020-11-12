@@ -10,12 +10,11 @@ import by.epamtc.shamuradova.ishop.constant.SQLQuery;
 import by.epamtc.shamuradova.ishop.dao.UserDAO;
 import by.epamtc.shamuradova.ishop.dao.exception.ConnectionPoolException;
 import by.epamtc.shamuradova.ishop.dao.exception.DAOException;
-import by.epamtc.shamuradova.ishop.dao.handler.ResultSetHandler2;
 import by.epamtc.shamuradova.ishop.dao.handler.impl.ResultSetHandlerFactory;
 import by.epamtc.shamuradova.ishop.dao.pool.ConnectionPool;
 import by.epamtc.shamuradova.ishop.dao.util.JDBCUtil;
 
-/* Класс, реализующий интерфейс UserDAO, использующий sql- запросы
+/** Класс, реализующий интерфейс UserDAO, использующий sql- запросы
  * 
  * Class that implements the UserDAO interface using sql queries
  *
@@ -25,16 +24,9 @@ public class SQLUserDAOImpl implements UserDAO {
 
 	private ConnectionPool pool;
 
-	private ResultSetHandler2<User> resultSetHandlerUser;
-	private ResultSetHandler2<List<User>> resultSetHandlerUsers;
-	private ResultSetHandler2<Integer> countResultSetHandler;
 
 	public SQLUserDAOImpl() {
 		pool = ConnectionPool.getInstance();
-
-		resultSetHandlerUser = ResultSetHandlerFactory.getSingleResultSetHandler(ResultSetHandlerFactory.USER_RESULT_SET_HANDLER);
-		resultSetHandlerUsers = ResultSetHandlerFactory.getListResultSetHandler(ResultSetHandlerFactory.USER_RESULT_SET_HANDLER);
-		countResultSetHandler = ResultSetHandlerFactory.COUNT_RESULT_SET_HANDLER;
 	}
 
 	@Override
@@ -44,7 +36,7 @@ public class SQLUserDAOImpl implements UserDAO {
 			connection = pool.getConnection();
 			String sql = SQLQuery.USER_BY_LOGIN;
 
-			return JDBCUtil.select(connection, sql, resultSetHandlerUser, login);
+			return JDBCUtil.select(connection, sql, ResultSetHandlerFactory.getSingleResultSetHandler(ResultSetHandlerFactory.USER_RESULT_SET_HANDLER), login);
 
 		} catch (ConnectionPoolException | SQLException e) {
 			throw new DAOException(ErrorMessage.DATABASE_ERROR, e);
@@ -60,7 +52,7 @@ public class SQLUserDAOImpl implements UserDAO {
 			connection = pool.getConnection();
 			String sql = SQLQuery.USER_BY_ID;
 
-			return JDBCUtil.select(connection, sql, resultSetHandlerUser, userId);
+			return JDBCUtil.select(connection, sql, ResultSetHandlerFactory.getSingleResultSetHandler(ResultSetHandlerFactory.USER_RESULT_SET_HANDLER), userId);
 
 		} catch (ConnectionPoolException | SQLException e) {
 			throw new DAOException(ErrorMessage.DATABASE_ERROR, e);
@@ -79,7 +71,7 @@ public class SQLUserDAOImpl implements UserDAO {
 
 			String sql = SQLQuery.BLACK_LIST;
 
-			return JDBCUtil.select(connection, sql, resultSetHandlerUsers, limit, offset);
+			return JDBCUtil.select(connection, sql, ResultSetHandlerFactory.getListResultSetHandler(ResultSetHandlerFactory.USER_RESULT_SET_HANDLER), limit, offset);
 
 		} catch (ConnectionPoolException | SQLException e) {
 			throw new DAOException(ErrorMessage.DATABASE_ERROR, e);
@@ -101,7 +93,7 @@ public class SQLUserDAOImpl implements UserDAO {
 			connection = pool.getConnection();
 			int offset = (page - 1) * limit;
 
-			return JDBCUtil.select(connection, SQLQuery.ALL_USERS, resultSetHandlerUsers, limit, offset);
+			return JDBCUtil.select(connection, SQLQuery.ALL_USERS, ResultSetHandlerFactory.getListResultSetHandler(ResultSetHandlerFactory.USER_RESULT_SET_HANDLER), limit, offset);
 
 		} catch (ConnectionPoolException | SQLException e) {
 			throw new DAOException(ErrorMessage.DATABASE_ERROR, e);
@@ -139,7 +131,7 @@ public class SQLUserDAOImpl implements UserDAO {
 			connection = pool.getConnection();
 			int offset = (page - 1) * limit;
 
-			return JDBCUtil.select(connection, SQLQuery.USERS_BY_ROLE, resultSetHandlerUsers, roleId, limit, offset);
+			return JDBCUtil.select(connection, SQLQuery.USERS_BY_ROLE, ResultSetHandlerFactory.getListResultSetHandler(ResultSetHandlerFactory.USER_RESULT_SET_HANDLER), roleId, limit, offset);
 
 		} catch (ConnectionPoolException | SQLException e) {
 			throw new DAOException(ErrorMessage.DATABASE_ERROR, e);
@@ -158,10 +150,9 @@ public class SQLUserDAOImpl implements UserDAO {
 	private int getCount(String sql, Object... parameters) throws DAOException {
 		Connection connection = null;
 		try {
-			pool.initPoolData();
 			connection = pool.getConnection();
 
-			return JDBCUtil.select(connection, sql, countResultSetHandler, parameters);
+			return JDBCUtil.select(connection, sql, ResultSetHandlerFactory.COUNT_RESULT_SET_HANDLER, parameters);
 
 		} catch (ConnectionPoolException | SQLException e) {
 			throw new DAOException(e);

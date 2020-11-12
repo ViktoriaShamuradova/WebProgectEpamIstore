@@ -3,8 +3,8 @@ package by.epamtc.shamuradova.ishop.dao.handler;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-/** Интерфейс ResultSetHandler2<T>, который определяет правила преобразования объекта типа ResultSet
- * в соответствующий объект
+/**Параметризированный интерфейс ResultSetHandler2<T>, который определяет правила преобразования объекта типа ResultSet
+ * в соответствующий тип
  * 
  * @param ResultSet - объект, содержащий в себе результат запроса из базы данных 
  *
@@ -13,11 +13,11 @@ import java.sql.SQLException;
  * 
  * @param ResultSet - an object containing the query result from the database
  * 
- * @author Шамурадова Виктория 2020
+ * @author Victoria Shamuradova 2020
  */
 
 
-public interface ResultSetHandler2<T> {
+public interface ResultSetHandler<T> {
 
 	public T handle(ResultSet rs) throws SQLException;
 

@@ -26,18 +26,15 @@
 </head>
 <body>
 
-<%@ include file="header.jsp"%>
+<%@ include file="../header.jsp"%>
 
 <c:out value="Hello ${sessionScope.user.login}!" />
 
 <div class="container-fluid">
 		<div class="row">
-			<%@ include file="admin_navbar.jsp"%>
-			
-		</div>
-		
+			<%@ include file="../admin_navbar.jsp"%>		
+		</div>		
 </div>
 	
-
 </body>
 </html>

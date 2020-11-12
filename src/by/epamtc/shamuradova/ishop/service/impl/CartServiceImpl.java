@@ -2,9 +2,7 @@ package by.epamtc.shamuradova.ishop.service.impl;
 
 import java.math.BigDecimal;
 import java.sql.Date;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import by.epamtc.shamuradova.ishop.bean.CartContent;
 import by.epamtc.shamuradova.ishop.bean.ShopCart;
@@ -17,8 +15,7 @@ import by.epamtc.shamuradova.ishop.constant.ErrorMessage;
 import by.epamtc.shamuradova.ishop.dao.CartDAO;
 import by.epamtc.shamuradova.ishop.dao.ModelDAO;
 import by.epamtc.shamuradova.ishop.dao.exception.DAOException;
-import by.epamtc.shamuradova.ishop.dao.impl.SQLCartDAOImpl;
-import by.epamtc.shamuradova.ishop.dao.impl.SQLModelDAOImpl;
+import by.epamtc.shamuradova.ishop.dao.factory.DAOFactory;
 import by.epamtc.shamuradova.ishop.service.CartService;
 import by.epamtc.shamuradova.ishop.service.exception.ResourceNotFoundServiceException;
 import by.epamtc.shamuradova.ishop.service.exception.ServiceException;
@@ -29,11 +26,10 @@ public class CartServiceImpl implements CartService {
 	private ModelDAO modelDAO;
 
 	public CartServiceImpl() {
-		cartDAO = new SQLCartDAOImpl();
-		modelDAO = new SQLModelDAOImpl();
+		cartDAO =  DAOFactory.getInstance().getCartDAO();
+		modelDAO = DAOFactory.getInstance().getModelDAO();
 	}
 
-	//запись о корзине может отсуствовать
 	@Override
 	public Cart getCartByUserId(User user) throws ServiceException {
 		try {
@@ -174,47 +170,4 @@ public class CartServiceImpl implements CartService {
 			throw new ServiceException(e);
 		}
 	}
-
-	public static void main(String[] args) throws ServiceException {
-		CartServiceImpl cartS = new CartServiceImpl();
-//		System.out.println(cart.formNewShopCart(16));
-		ShopCart cart = new ShopCart();
-		ShopCart cart2 = new ShopCart();
-
-		// create model, item
-		Model m57 = new Model();
-		m57.setId(57);
-		m57.setPrice(new BigDecimal(5000));
-		ShopCartItem item1 = new ShopCartItem(m57, 4);
-
-		Model m58 = new Model();
-		m58.setId(58);
-		m58.setPrice(new BigDecimal(5000));
-		ShopCartItem item2 = new ShopCartItem(m58, 1);
-
-//create shopcart
-		Map<Integer, ShopCartItem> ex = new HashMap();
-		ex.put(57, item1);
-		cart.setShopCartItems(ex);
-
-		Map<Integer, ShopCartItem> ex2 = new HashMap();
-		ex2.put(58, item2);
-		cart2.setShopCartItems(ex2);
-
-		// work, если товаров больше 1
-//		cartS.updateCartReduce(cart, 57, 1, 19);
-//
-//		cartS.updateCartReduce(cart2, 58, 1, 20);
-
-//		System.out.println(cart.getShopCartItems().contains(53));
-//		System.out.println(cart.getShopCartItems().contains(52));
-//		System.out.println(cart.getShopCartItems().contains(50));
-//		System.out.println(ex.containsKey(50));
-//		System.out.println(cart.getShopCartItems());
-//		System.out.println(count);
-//
-//		ShopCart c = new ShopCart();
-//		System.out.println(c.getShopCartItems().isEmpty());
-	}
-
 }

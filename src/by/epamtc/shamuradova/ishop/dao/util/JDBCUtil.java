@@ -8,13 +8,12 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import by.epamtc.shamuradova.ishop.constant.ErrorMessage;
-import by.epamtc.shamuradova.ishop.dao.handler.ResultSetHandler2;
+import by.epamtc.shamuradova.ishop.dao.handler.ResultSetHandler;
 
-/** Класс, который умеет выполнять запросы и преобразовывать результаты запросов в объект
+
+/** Класс, который умеет выполнять запросы и преобразовывать результаты запросов в объект нужного типа
  * 
- * @param Connection connection - объект для соединения с базой данных
- * @param String sql- sql запрос
- * @param ResultSetHandler2<T> - объект, который преобразовывает результат запроса в java-объект
+ * A class that can execute queries and convert query results into an object of the desired type
  *
  * @author Шамурадова Виктория 2020
  */
@@ -23,12 +22,21 @@ public final class JDBCUtil {
 
 	private JDBCUtil() {
 	}
-
-	public static <T> T select(Connection connection, String sql, ResultSetHandler2<T> resultSetHandler,
+	/** 
+	 *  параметризированный метод, выполняющий select запросы
+	 *  
+	 *  a parameterized method that executes select queries
+	 *  
+	 * @param Connection connection - объект для соединения с базой данных
+	 * @param String sql- sql запрос
+	 * @param ResultSetHandler2<T> - объект, который преобразовывает результат запроса в java-объект
+	 * @param Object... parameters - параметры для 
+	 * @throws SQLException
+	 */
+	public static <T> T select(Connection connection, String sql, ResultSetHandler<T> resultSetHandler,
 			Object... parameters) throws SQLException {
 
 		PreparedStatement prStatement = null;
-		ResultSet resultSet = null;
 
 		try {
 			prStatement = connection.prepareStatement(sql);
@@ -38,9 +46,7 @@ public final class JDBCUtil {
 
 		} finally {
 			closeStatement(prStatement);
-			closeResultSet(resultSet);
 		}
-
 	}
 
 	public static void insertDeleteUpdate(Connection connection, String sql, Object... parameters) throws SQLException {
@@ -59,15 +65,11 @@ public final class JDBCUtil {
 		CallableStatement callableStatement = null;
 		ResultSet results = null;
 
-//		try {
 		callableStatement = connection.prepareCall(sql);
 		setParameters(callableStatement, parameters);
 		results = callableStatement.executeQuery();
 		return results;
 
-//		} finally {
-//			closeStatement(callableStatement);
-//		}
 	}
 
 	private static void setParameters(PreparedStatement prStatement, Object[] parameters) throws SQLException {
@@ -84,16 +86,6 @@ public final class JDBCUtil {
 				statement.close();
 			} catch (SQLException e) {
 				throw new SQLException(ErrorMessage.UNABLE_TO_CLOSE_STATEMENT, e);
-			}
-		}
-	}
-
-	private static void closeResultSet(ResultSet rs) throws SQLException {
-		if (rs != null) {
-			try {
-				rs.close();
-			} catch (SQLException e) {
-				throw new SQLException(ErrorMessage.UNABLE_TO_CLOSE_STATEMENT);
 			}
 		}
 	}
@@ -115,7 +107,6 @@ public final class JDBCUtil {
 
 		} finally {
 			closeStatement(prStatement);
-			closeResultSet(resultSet);
 		}
 	}
 }

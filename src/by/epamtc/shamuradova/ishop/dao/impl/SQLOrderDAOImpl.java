@@ -14,13 +14,12 @@ import by.epamtc.shamuradova.ishop.constant.SQLQuery;
 import by.epamtc.shamuradova.ishop.dao.OrderDAO;
 import by.epamtc.shamuradova.ishop.dao.exception.ConnectionPoolException;
 import by.epamtc.shamuradova.ishop.dao.exception.DAOException;
-import by.epamtc.shamuradova.ishop.dao.handler.ResultSetHandler2;
 import by.epamtc.shamuradova.ishop.dao.handler.impl.ResultSetHandlerFactory;
-import by.epamtc.shamuradova.ishop.dao.handler.impl.ResultSetHandlerOrder2;
 import by.epamtc.shamuradova.ishop.dao.pool.ConnectionPool;
 import by.epamtc.shamuradova.ishop.dao.util.JDBCUtil;
 
-/** Класс, реализующий интерфейс OrderDAO, использующий sql- запросы
+/**
+ * Класс, реализующий интерфейс OrderDAO, использующий sql- запросы
  * 
  * Class that implements the OrderDAO interface using sql queries
  *
@@ -31,20 +30,8 @@ public class SQLOrderDAOImpl implements OrderDAO {
 
 	private ConnectionPool connectionPool;
 
-	private ResultSetHandler2<Integer> countResultSetHandler;
-	private ResultSetHandler2<Order> resultSetHandlerOrder;
-
-	private ResultSetHandler2<List<Order>> resultSetHandlerOrders;
-	private ResultSetHandler2<List<OrderItem>> resultSetHandlerOrderItems;
-
 	public SQLOrderDAOImpl() {
 		connectionPool = ConnectionPool.getInstance();
-
-		countResultSetHandler = ResultSetHandlerFactory.COUNT_RESULT_SET_HANDLER;
-		resultSetHandlerOrder = ResultSetHandlerFactory.getSingleResultSetHandler(new ResultSetHandlerOrder2());
-
-		resultSetHandlerOrders = ResultSetHandlerFactory.getListResultSetHandler(new ResultSetHandlerOrder2());
-		resultSetHandlerOrderItems = ResultSetHandlerFactory.getListResultSetHandler(ResultSetHandlerFactory.ORDER_ITEM_RESULT_SET_HANDLER);
 	}
 
 	@Override
@@ -114,9 +101,7 @@ public class SQLOrderDAOImpl implements OrderDAO {
 
 		} finally {
 			freeConnection(connection);
-
 		}
-
 	}
 
 	@Override
@@ -126,16 +111,16 @@ public class SQLOrderDAOImpl implements OrderDAO {
 		try {
 			connection = connectionPool.getConnection();
 
-			return JDBCUtil.select(connection, SQLQuery.ORDER_BY_ID, resultSetHandlerOrder, id);
+			return JDBCUtil.select(connection, SQLQuery.ORDER_BY_ID,
+					ResultSetHandlerFactory.getSingleResultSetHandler(ResultSetHandlerFactory.ORDER_RESULT_SET_HANDLER),
+					id);
 
 		} catch (ConnectionPoolException | SQLException e) {
 			throw new DAOException(e);
 
 		} finally {
 			freeConnection(connection);
-
 		}
-
 	}
 
 	@Override
@@ -145,8 +130,8 @@ public class SQLOrderDAOImpl implements OrderDAO {
 		try {
 			connection = connectionPool.getConnection();
 
-			return JDBCUtil.select(connection, SQLQuery.LIST_ORDER_ITEMS_BY_ID_ORDER, resultSetHandlerOrderItems,
-					idOrder);
+			return JDBCUtil.select(connection, SQLQuery.LIST_ORDER_ITEMS_BY_ID_ORDER, ResultSetHandlerFactory
+					.getListResultSetHandler(ResultSetHandlerFactory.ORDER_ITEM_RESULT_SET_HANDLER), idOrder);
 
 		} catch (ConnectionPoolException | SQLException e) {
 			throw new DAOException(e);
@@ -163,8 +148,9 @@ public class SQLOrderDAOImpl implements OrderDAO {
 		try {
 			connection = connectionPool.getConnection();
 
-			return JDBCUtil.select(connection, SQLQuery.LIST_ORDER_BY_ID_USER, resultSetHandlerOrders, userId, limit,
-					offset);
+			return JDBCUtil.select(connection, SQLQuery.LIST_ORDER_BY_ID_USER,
+					ResultSetHandlerFactory.getListResultSetHandler(ResultSetHandlerFactory.ORDER_RESULT_SET_HANDLER),
+					userId, limit, offset);
 
 		} catch (ConnectionPoolException | SQLException e) {
 			throw new DAOException(e);
@@ -181,7 +167,9 @@ public class SQLOrderDAOImpl implements OrderDAO {
 		try {
 			connection = connectionPool.getConnection();
 
-			return JDBCUtil.select(connection, SQLQuery.LIST_ORDER, resultSetHandlerOrders, limit, offset);
+			return JDBCUtil.select(connection, SQLQuery.LIST_ORDER,
+					ResultSetHandlerFactory.getListResultSetHandler(ResultSetHandlerFactory.ORDER_RESULT_SET_HANDLER),
+					limit, offset);
 
 		} catch (ConnectionPoolException | SQLException e) {
 			throw new DAOException(e);
@@ -198,7 +186,8 @@ public class SQLOrderDAOImpl implements OrderDAO {
 		try {
 			connection = connectionPool.getConnection();
 
-			return JDBCUtil.select(connection, SQLQuery.COUNT_ORDERS_BY_ID_USER, countResultSetHandler, idUser);
+			return JDBCUtil.select(connection, SQLQuery.COUNT_ORDERS_BY_ID_USER,
+					ResultSetHandlerFactory.COUNT_RESULT_SET_HANDLER, idUser);
 
 		} catch (ConnectionPoolException | SQLException e) {
 			throw new DAOException(e);
@@ -229,7 +218,7 @@ public class SQLOrderDAOImpl implements OrderDAO {
 		try {
 			connection = connectionPool.getConnection();
 
-			return JDBCUtil.select(connection, SQLQuery.COUNT_ORDERS, countResultSetHandler);
+			return JDBCUtil.select(connection, SQLQuery.COUNT_ORDERS, ResultSetHandlerFactory.COUNT_RESULT_SET_HANDLER);
 
 		} catch (ConnectionPoolException | SQLException e) {
 			throw new DAOException(e);
@@ -245,7 +234,9 @@ public class SQLOrderDAOImpl implements OrderDAO {
 
 			connection = connectionPool.getConnection();
 
-			return JDBCUtil.select(connection, SQLQuery.ORDER_BY_ID, resultSetHandlerOrder, orderId);
+			return JDBCUtil.select(connection, SQLQuery.ORDER_BY_ID,
+					ResultSetHandlerFactory.getSingleResultSetHandler(ResultSetHandlerFactory.ORDER_RESULT_SET_HANDLER),
+					orderId);
 
 		} catch (ConnectionPoolException | SQLException e) {
 			throw new DAOException(e);
@@ -262,36 +253,5 @@ public class SQLOrderDAOImpl implements OrderDAO {
 				throw new DAOException(e);
 			}
 		}
-	}
-
-	public static void main(String[] args) throws DAOException {
-		SQLOrderDAOImpl dao = new SQLOrderDAOImpl();
-//
-//		ShopCart cart = new ShopCart();
-//
-//		// create model, item
-//		Model m57 = new Model();
-//		m57.setId(57);
-//		m57.setPrice(new BigDecimal(5000));
-//		ShopCartItem item1 = new ShopCartItem(m57, 4);
-//
-//		Model m58 = new Model();
-//		m58.setId(58);
-//		m58.setPrice(new BigDecimal(5000));
-//		ShopCartItem item2 = new ShopCartItem(m58, 1);
-//
-////create shopcart
-//		Map<Integer, ShopCartItem> ex = new HashMap();
-//		ex.put(57, item1);
-//		ex.put(58, item2);
-//		cart.setShopCartItems(ex);
-//
-//		// dao.addOrder(17, cart);
-//
-//		// System.out.println(dao.addOrder(18, cart));
-//		System.out.println(dao.countOrdersByIdUser(17));
-
-		dao.updateOrderStatus(2, StatusOrder.NEW);
-
 	}
 }
