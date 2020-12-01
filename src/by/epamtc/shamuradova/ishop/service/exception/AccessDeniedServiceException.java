@@ -6,6 +6,7 @@ import javax.servlet.http.HttpServletResponse;
  * Класс наследуется от AbstractApplicationException
  * 
  * 403 - запрещен доступ к ресурсу
+ * 
  * @author Шамурадова Виктория
  * 
  */

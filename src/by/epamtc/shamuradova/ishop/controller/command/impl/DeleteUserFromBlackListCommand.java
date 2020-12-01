@@ -13,11 +13,24 @@ import by.epamtc.shamuradova.ishop.service.UserService;
 import by.epamtc.shamuradova.ishop.service.exception.ServiceException;
 import by.epamtc.shamuradova.ishop.service.factory.ServiceFactory;
 
+/**
+ * Класс-комманда для удаления пользователя из черного списка
+ * 
+ * Command class for removing a user from the blacklist
+ *
+ * @author Victoria Shamuradova 2020
+ */
 public class DeleteUserFromBlackListCommand implements Command {
 
 	private UserService userService;
-	private static final String ERROR_PAGE = "controller?command=GET_ERROR_PAGE";
-	private static final String CURRENT_PAGE = "controller?command=BLACK_LIST";
+
+	private static final String ERROR_COMMAND = "controller?command=GET_ERROR_PAGE";
+	private static final String BLACK_LIST_COMMAND = "controller?command=BLACK_LIST";
+	private static final String NAME_CURRENT_COMMAND = "controller?command=DELETE_USER_FROM_BLACK_LIST";
+
+	private static final String USER = "user";
+	private static final String USER_ID = "userId";
+	private static final String CURRENT_COMMAND = "command";
 
 	public DeleteUserFromBlackListCommand() {
 		userService = ServiceFactory.getInstance().getUserService();
@@ -27,17 +40,19 @@ public class DeleteUserFromBlackListCommand implements Command {
 	public void execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		try {
 			final HttpSession session = req.getSession(true);
-			User user = (User) session.getAttribute("user");
+			session.removeAttribute(CURRENT_COMMAND);
+			session.setAttribute(CURRENT_COMMAND, NAME_CURRENT_COMMAND);
+			User user = (User) session.getAttribute(USER);
 
-			int userBlackListId = Integer.parseInt(req.getParameter("userId"));
+			int userBlackListId = Integer.parseInt(req.getParameter(USER_ID));
 
 			userService.deleteUserBlackList(user, userBlackListId);
 
-			resp.sendRedirect(CURRENT_PAGE);
+			resp.sendRedirect(BLACK_LIST_COMMAND);
 
 		} catch (ServiceException e) {
 			e.printStackTrace();
-			resp.sendRedirect(ERROR_PAGE);
+			resp.sendRedirect(ERROR_COMMAND);
 		}
 	}
 }

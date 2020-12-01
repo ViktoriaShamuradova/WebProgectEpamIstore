@@ -4,15 +4,24 @@ import java.io.Serializable;
 
 import by.epamtc.shamuradova.ishop.bean.entity.Model;
 
-public class ShopCartItem implements Serializable{
-	
+/**
+ * 
+ * Объект этого класса представляет собой пару: модель и его количество. Объект
+ * этого класса является частью корзины ShopCart
+ * 
+ * An object of this class represents a pair: a model and its quantity. An
+ * object this class is part of the ShopCart
+ * 
+ * @author Victoria Shamuradova 2020
+ */
+public class ShopCartItem implements Serializable {
+
 	private static final long serialVersionUID = 5720727113433815909L;
-	
+
 	private Model model;
 	private int count;
-	
+
 	public ShopCartItem() {
-	
 	}
 
 	public ShopCartItem(Model model, int count) {

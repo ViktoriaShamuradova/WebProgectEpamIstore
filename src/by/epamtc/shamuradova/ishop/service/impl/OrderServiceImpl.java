@@ -3,6 +3,9 @@ package by.epamtc.shamuradova.ishop.service.impl;
 import java.util.Collection;
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import by.epamtc.shamuradova.ishop.bean.ShopCart;
 import by.epamtc.shamuradova.ishop.bean.ShopCartItem;
 import by.epamtc.shamuradova.ishop.bean.StatusOrder;
@@ -16,9 +19,9 @@ import by.epamtc.shamuradova.ishop.dao.CartDAO;
 import by.epamtc.shamuradova.ishop.dao.OrderDAO;
 import by.epamtc.shamuradova.ishop.dao.exception.DAOException;
 import by.epamtc.shamuradova.ishop.dao.factory.DAOFactory;
+import by.epamtc.shamuradova.ishop.dao.impl.SQLUserDAOImpl;
 import by.epamtc.shamuradova.ishop.service.OrderService;
 import by.epamtc.shamuradova.ishop.service.exception.AccessDeniedServiceException;
-import by.epamtc.shamuradova.ishop.service.exception.InternalServiceException;
 import by.epamtc.shamuradova.ishop.service.exception.ResourceNotFoundServiceException;
 import by.epamtc.shamuradova.ishop.service.exception.ServiceException;
 import by.epamtc.shamuradova.ishop.service.validation.OrderValidation;
@@ -29,6 +32,8 @@ public class OrderServiceImpl implements OrderService {
 	private OrderDAO orderDAO;
 	private CartDAO cartDAO;
 	private StatusOrderLine statusOrderLine;
+	
+	private static final Logger logger = LogManager.getLogger(SQLUserDAOImpl.class);
 
 	public OrderServiceImpl() {
 		orderDAO = DAOFactory.getInstance().getOrderDAO();
@@ -38,7 +43,6 @@ public class OrderServiceImpl implements OrderService {
 
 	@Override
 	public int makeOrder(ShopCart shopCart, User user) throws ServiceException {
-
 		OrderValidation.validate(shopCart);
 
 		try {
@@ -49,7 +53,8 @@ public class OrderServiceImpl implements OrderService {
 
 			return idOrder;
 		} catch (DAOException e) {
-			throw new InternalServiceException("not make order", e);
+			logger.error("Could not make order.", e);
+			throw new ServiceException(e);
 		}
 	}
 
@@ -69,14 +74,14 @@ public class OrderServiceImpl implements OrderService {
 			return idOrder;
 		} catch (DAOException e) {
 
-			throw new InternalServiceException("not make order ", e);
+			throw new ServiceException( e);
 		}
 	}
 
 	@Override
 	public Order findOrderById(User user, int orderId) throws ServiceException {
 		try {
-			Order order = orderDAO.findOrderById(orderId);
+			Order order = orderDAO.getOrderById(orderId);
 
 			if (order == null) {
 				throw new ResourceNotFoundServiceException("Order not found by id: " + orderId);
@@ -95,7 +100,7 @@ public class OrderServiceImpl implements OrderService {
 			return order;
 
 		} catch (DAOException e) {
-			throw new InternalServiceException(e);
+			throw new ServiceException(e);
 		}
 	}
 
@@ -110,7 +115,7 @@ public class OrderServiceImpl implements OrderService {
 
 			return orders;
 		} catch (DAOException e) {
-			throw new InternalServiceException(e);
+			throw new ServiceException(e);
 		}
 	}
 
@@ -119,7 +124,7 @@ public class OrderServiceImpl implements OrderService {
 		try {
 			return orderDAO.countOrdersByIdUser(idUser);
 		} catch (DAOException e) {
-			throw new InternalServiceException(e);
+			throw new ServiceException(e);
 		}
 	}
 
@@ -128,7 +133,7 @@ public class OrderServiceImpl implements OrderService {
 		try {
 			return orderDAO.countOrders();
 		} catch (DAOException e) {
-			throw new InternalServiceException(e);
+			throw new ServiceException(e);
 		}
 	}
 
@@ -140,7 +145,7 @@ public class OrderServiceImpl implements OrderService {
 			return orderDAO.getListOrders(limit, offset);
 
 		} catch (DAOException e) {
-			throw new InternalServiceException(e);
+			throw new ServiceException(e);
 		}
 	}
 
@@ -152,7 +157,7 @@ public class OrderServiceImpl implements OrderService {
 		try {
 			order = orderDAO.getOrderById(orderId);
 		} catch (DAOException e) {
-			throw new InternalServiceException(e);
+			throw new ServiceException(e);
 		}
 
 		if (order == null)
@@ -170,9 +175,7 @@ public class OrderServiceImpl implements OrderService {
 			orderDAO.updateOrderStatus(order.getId(), order.getStatus());
 		} catch (DAOException e) {
 			order.setStatus(currentStatus);
-			throw new InternalServiceException(e);
+			throw new ServiceException(e);
 		}
 	}
-
-
 }

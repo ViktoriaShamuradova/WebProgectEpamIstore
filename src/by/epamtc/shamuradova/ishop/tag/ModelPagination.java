@@ -10,14 +10,18 @@ import javax.servlet.jsp.tagext.TagSupport;
 import by.epamtc.shamuradova.ishop.bean.entity.Model;
 
 /**
- * Пользовательский тег, предназначенный для отображения моделей Поля класса:
+ * Пользовательский тег, предназначенный для отображения моделей. Поля класса:
  * List<Model> models - список моделей int totalModels - количество всех моделей
  * int currentPage - текущая страница, которую нужно отобразить int
  * modelsPerPage - количество моделей, которые нужно отобразить на странице
  * String category - какой категории нужно отобразить модели
  * 
+ * A custom tag for displaying models. Class fields: List <Model> models - list
+ * of models int totalModels - the number of all models int currentPage - the
+ * current page to be displayed int modelsPerPage - the number of models to be
+ * displayed on the page String category - which category to display the models
  * 
- * @author Виктория Шамурадова 2020
+ * @author Victoria Shamuradova 2020
  */
 
 public class ModelPagination extends TagSupport {
@@ -87,7 +91,7 @@ public class ModelPagination extends TagSupport {
 			String categoryParam = category == null || category.isEmpty() ? "" : "&category=" + category;
 			if (pageCount != 1) {
 				for (int i = 1; i <= pageCount; i++) {
-					String active = i == currentPage ? " active" : "";
+					String active = i == currentPage ? " active" : ""; //подсветка кнопки
 					out.append("<a class=\"btn btn-secondary btn-sm " + active
 							+ "\" href=\"controller?command=ALL_MODELS_OR_BY_CATEGORY" + categoryParam + "&pageNumber="
 							+ i + "\">" + i + " </a> ");

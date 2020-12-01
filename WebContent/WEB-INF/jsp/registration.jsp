@@ -62,8 +62,9 @@
 			  
 			  
 		  	<button type="submit" required class="btn btn-secondary"><c:out value="${send_button}" /></button>
+		  	
 		  	<div class="row mx-md-n5" style="margin-top: 20px;">
-		  							<div class="col px-md-5"><a href="controller?command=SAVE_NEW_SHOPPER"><button type="button" class="btn btn-light"><c:out value="${back_button}" /></button></a></div>
+		  	<div class="col px-md-5"><a href="controller?command=ALL_MODELS_OR_BY_CATEGORY"><button type="button" class="btn btn-light"><c:out value="${back_button}" /></button></a></div>
 		  							
 			</div>
 		</form>

@@ -11,7 +11,7 @@
 		<ul class="nav flex-column">
 			
 			<li class="nav-item"><a class="nav-link text-dark"
-				href="controller?command=my_orders"> <span data-feather="file"></span>
+				href="controller?command=ALL_ORDERS"> <span data-feather="file"></span>
 					<c:out value="${orders}" />
 			</a></li>
 

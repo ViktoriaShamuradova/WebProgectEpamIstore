@@ -96,5 +96,4 @@ public class DAOFactory {
 		}
 		return signUpDAO;
 	}
-
 }

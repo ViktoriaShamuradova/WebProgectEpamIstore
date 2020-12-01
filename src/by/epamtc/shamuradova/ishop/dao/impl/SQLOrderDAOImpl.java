@@ -6,6 +6,9 @@ import java.sql.SQLException;
 import java.util.Collection;
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import by.epamtc.shamuradova.ishop.bean.ShopCartItem;
 import by.epamtc.shamuradova.ishop.bean.StatusOrder;
 import by.epamtc.shamuradova.ishop.bean.entity.Order;
@@ -23,12 +26,13 @@ import by.epamtc.shamuradova.ishop.dao.util.JDBCUtil;
  * 
  * Class that implements the OrderDAO interface using sql queries
  *
- * @author Шамурадова Виктория 2020
+ * @author Victoria Shamuradova 2020
  */
 
 public class SQLOrderDAOImpl implements OrderDAO {
 
 	private ConnectionPool connectionPool;
+	private static final Logger logger = LogManager.getLogger(SQLCartDAOImpl.class);
 
 	public SQLOrderDAOImpl() {
 		connectionPool = ConnectionPool.getInstance();
@@ -46,11 +50,11 @@ public class SQLOrderDAOImpl implements OrderDAO {
 
 			}
 		} catch (ConnectionPoolException | SQLException e) {
-			throw new DAOException(e);
+			logger.error("Database error! Could not add OrderItem.", e);
+			throw new DAOException("Could not add OrderItem.", e);
 		} finally {
 			freeConnection(connection);
 		}
-
 	}
 
 //возвращает последний id in order
@@ -64,7 +68,8 @@ public class SQLOrderDAOImpl implements OrderDAO {
 			return JDBCUtil.selectSingleWithOUTPUT(connection, SQLQuery.LAST_INSERT_ID);
 
 		} catch (ConnectionPoolException | SQLException e) {
-			throw new DAOException(e);
+			logger.error("Database error! Could not add Order.", e);
+			throw new DAOException("Could not add Order.", e);
 		} finally {
 			freeConnection(connection);
 		}
@@ -78,10 +83,9 @@ public class SQLOrderDAOImpl implements OrderDAO {
 			connection = connectionPool.getConnection();
 
 			JDBCUtil.insertDeleteUpdate(connection, SQLQuery.DELETE_ORDER_BY_ID, id);
-
 		} catch (ConnectionPoolException | SQLException e) {
-			throw new DAOException(e);
-
+			logger.error("Database error! Could not delete Order", e);
+			throw new DAOException("Could not delete Order", e);
 		} finally {
 			freeConnection(connection);
 		}
@@ -90,34 +94,31 @@ public class SQLOrderDAOImpl implements OrderDAO {
 	@Override
 	public void deleteOrderItemByIdOrder(int idOrder) throws DAOException {
 		Connection connection = null;
-
+		
 		try {
 			connection = connectionPool.getConnection();
-
 			JDBCUtil.insertDeleteUpdate(connection, SQLQuery.DELETE_ORDER_ITEM_BY_ID_ORDER, idOrder);
-
 		} catch (ConnectionPoolException | SQLException e) {
-			throw new DAOException(e);
-
+			logger.error("Database error! Could not delete OrderItem.", e);
+			throw new DAOException("Could not delete OrderItem.", e);
 		} finally {
 			freeConnection(connection);
 		}
 	}
 
 	@Override
-	public Order findOrderById(int id) throws DAOException {
+	public Order getOrderById(int id) throws DAOException {
 		Connection connection = null;
 
 		try {
 			connection = connectionPool.getConnection();
-
 			return JDBCUtil.select(connection, SQLQuery.ORDER_BY_ID,
 					ResultSetHandlerFactory.getSingleResultSetHandler(ResultSetHandlerFactory.ORDER_RESULT_SET_HANDLER),
 					id);
 
 		} catch (ConnectionPoolException | SQLException e) {
-			throw new DAOException(e);
-
+			logger.error("Database error! Could not get Order.", e);
+			throw new DAOException("Could not get Order.", e);
 		} finally {
 			freeConnection(connection);
 		}
@@ -125,17 +126,16 @@ public class SQLOrderDAOImpl implements OrderDAO {
 
 	@Override
 	public List<OrderItem> getOrderItemsByIdOrder(int idOrder) throws DAOException {
-
 		Connection connection = null;
+		
 		try {
 			connection = connectionPool.getConnection();
-
 			return JDBCUtil.select(connection, SQLQuery.LIST_ORDER_ITEMS_BY_ID_ORDER, ResultSetHandlerFactory
 					.getListResultSetHandler(ResultSetHandlerFactory.ORDER_ITEM_RESULT_SET_HANDLER), idOrder);
 
 		} catch (ConnectionPoolException | SQLException e) {
-			throw new DAOException(e);
-
+			logger.error("Database error! Could not get List of OrderItems.", e);
+			throw new DAOException("Could not get List of OrderItems", e);
 		} finally {
 			freeConnection(connection);
 		}
@@ -147,14 +147,13 @@ public class SQLOrderDAOImpl implements OrderDAO {
 
 		try {
 			connection = connectionPool.getConnection();
-
 			return JDBCUtil.select(connection, SQLQuery.LIST_ORDER_BY_ID_USER,
 					ResultSetHandlerFactory.getListResultSetHandler(ResultSetHandlerFactory.ORDER_RESULT_SET_HANDLER),
 					userId, limit, offset);
 
 		} catch (ConnectionPoolException | SQLException e) {
-			throw new DAOException(e);
-
+			logger.error("Database error! Could not get List of Orders.", e);
+			throw new DAOException("Could not get List of Orders", e);
 		} finally {
 			freeConnection(connection);
 		}
@@ -166,14 +165,13 @@ public class SQLOrderDAOImpl implements OrderDAO {
 
 		try {
 			connection = connectionPool.getConnection();
-
 			return JDBCUtil.select(connection, SQLQuery.LIST_ORDER,
 					ResultSetHandlerFactory.getListResultSetHandler(ResultSetHandlerFactory.ORDER_RESULT_SET_HANDLER),
 					limit, offset);
 
 		} catch (ConnectionPoolException | SQLException e) {
-			throw new DAOException(e);
-
+			logger.error("Database error! Could not get List of Orders.", e);
+			throw new DAOException("Could not get List of Orders", e);
 		} finally {
 			freeConnection(connection);
 		}
@@ -181,16 +179,16 @@ public class SQLOrderDAOImpl implements OrderDAO {
 
 	@Override
 	public int countOrdersByIdUser(int idUser) throws DAOException {
-
 		Connection connection = null;
+		
 		try {
 			connection = connectionPool.getConnection();
-
 			return JDBCUtil.select(connection, SQLQuery.COUNT_ORDERS_BY_ID_USER,
 					ResultSetHandlerFactory.COUNT_RESULT_SET_HANDLER, idUser);
 
 		} catch (ConnectionPoolException | SQLException e) {
-			throw new DAOException(e);
+			logger.error("Database error! Could not get count of Orders.", e);
+			throw new DAOException("Could not get count of Orders", e);
 		} finally {
 			freeConnection(connection);
 		}
@@ -199,17 +197,16 @@ public class SQLOrderDAOImpl implements OrderDAO {
 	@Override
 	public void updateOrderStatus(int orderId, StatusOrder status) throws DAOException {
 		Connection connection = null;
+		
 		try {
 			connection = connectionPool.getConnection();
-
 			JDBCUtil.insertDeleteUpdate(connection, SQLQuery.UPDATE_ORDER_STATUS_BY_ID, status.toString(), orderId);
-
 		} catch (ConnectionPoolException | SQLException e) {
-			throw new DAOException(e);
+			logger.error("Database error! Could not update Order Status.", e);
+			throw new DAOException("Could not update Order Status", e);
 		} finally {
 			freeConnection(connection);
 		}
-
 	}
 
 	@Override
@@ -217,33 +214,15 @@ public class SQLOrderDAOImpl implements OrderDAO {
 		Connection connection = null;
 		try {
 			connection = connectionPool.getConnection();
-
 			return JDBCUtil.select(connection, SQLQuery.COUNT_ORDERS, ResultSetHandlerFactory.COUNT_RESULT_SET_HANDLER);
-
 		} catch (ConnectionPoolException | SQLException e) {
-			throw new DAOException(e);
+			logger.error("Database error! Could not get count of Order.", e);
+			throw new DAOException("Could not get count of Order", e);
 		} finally {
 			freeConnection(connection);
 		}
 	}
 
-	@Override
-	public Order getOrderById(int orderId) throws DAOException {
-		Connection connection = null;
-		try {
-
-			connection = connectionPool.getConnection();
-
-			return JDBCUtil.select(connection, SQLQuery.ORDER_BY_ID,
-					ResultSetHandlerFactory.getSingleResultSetHandler(ResultSetHandlerFactory.ORDER_RESULT_SET_HANDLER),
-					orderId);
-
-		} catch (ConnectionPoolException | SQLException e) {
-			throw new DAOException(e);
-		} finally {
-			freeConnection(connection);
-		}
-	}
 
 	private void freeConnection(Connection connection) throws DAOException {
 		if (connection != null) {

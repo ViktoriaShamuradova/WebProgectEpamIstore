@@ -20,7 +20,6 @@ import by.epamtc.shamuradova.ishop.controller.command.impl.ImageByModelIdCommand
 import by.epamtc.shamuradova.ishop.controller.command.impl.IncreaseCountOfModelPerUnitCommand;
 import by.epamtc.shamuradova.ishop.controller.command.impl.ModelsByCategoryCommand;
 import by.epamtc.shamuradova.ishop.controller.command.impl.MoreOrdersCommand;
-import by.epamtc.shamuradova.ishop.controller.command.impl.MyOrdersCommand;
 import by.epamtc.shamuradova.ishop.controller.command.impl.OrderDetailesPageCommand;
 import by.epamtc.shamuradova.ishop.controller.command.impl.ReduceCountOfModelPerUnitCommand;
 import by.epamtc.shamuradova.ishop.controller.command.impl.RegistrationPageCommand;
@@ -53,7 +52,6 @@ public class CommandProvider {
 		commands.put(ParameterNameCommand.INCREASE_COUNT_OF_GOODS_PER_UNIT, new IncreaseCountOfModelPerUnitCommand());
 		commands.put(ParameterNameCommand.FORM_ORDER, new FormOrderCommand());
 		commands.put(ParameterNameCommand.ORDER_DETAILES, new OrderDetailesPageCommand());
-		commands.put(ParameterNameCommand.MY_ORDERS, new MyOrdersCommand());
 		commands.put(ParameterNameCommand.LOAD_MORE_ORDERS, new MoreOrdersCommand());
 		commands.put(ParameterNameCommand.GET_IMAGE_BY_MODEL_ID, new ImageByModelIdCommand());
 

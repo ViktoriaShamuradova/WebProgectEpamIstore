@@ -4,8 +4,10 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import by.epamtc.shamuradova.ishop.bean.entity.User;
-import by.epamtc.shamuradova.ishop.constant.ErrorMessage;
 import by.epamtc.shamuradova.ishop.constant.SQLQuery;
 import by.epamtc.shamuradova.ishop.dao.UserDAO;
 import by.epamtc.shamuradova.ishop.dao.exception.ConnectionPoolException;
@@ -14,16 +16,17 @@ import by.epamtc.shamuradova.ishop.dao.handler.impl.ResultSetHandlerFactory;
 import by.epamtc.shamuradova.ishop.dao.pool.ConnectionPool;
 import by.epamtc.shamuradova.ishop.dao.util.JDBCUtil;
 
-/** Класс, реализующий интерфейс UserDAO, использующий sql- запросы
+/**
+ * Класс, реализующий интерфейс UserDAO, использующий sql- запросы
  * 
  * Class that implements the UserDAO interface using sql queries
  *
- * @author Шамурадова Виктория 2020
+ * @author Victoria Shamuradova 2020
  */
 public class SQLUserDAOImpl implements UserDAO {
 
 	private ConnectionPool pool;
-
+	private static final Logger logger = LogManager.getLogger(SQLUserDAOImpl.class);
 
 	public SQLUserDAOImpl() {
 		pool = ConnectionPool.getInstance();
@@ -36,15 +39,17 @@ public class SQLUserDAOImpl implements UserDAO {
 			connection = pool.getConnection();
 			String sql = SQLQuery.USER_BY_LOGIN;
 
-			return JDBCUtil.select(connection, sql, ResultSetHandlerFactory.getSingleResultSetHandler(ResultSetHandlerFactory.USER_RESULT_SET_HANDLER), login);
-
+			return JDBCUtil.select(connection, sql,
+					ResultSetHandlerFactory.getSingleResultSetHandler(ResultSetHandlerFactory.USER_RESULT_SET_HANDLER),
+					login);
 		} catch (ConnectionPoolException | SQLException e) {
-			throw new DAOException(ErrorMessage.DATABASE_ERROR, e);
-
+			logger.error("Database error! Could not get User.", e);
+			throw new DAOException("Could not get User.", e);
 		} finally {
 			freeConnection(connection);
 		}
 	}
+
 	@Override
 	public User getUserById(int userId) throws DAOException {
 		Connection connection = null;
@@ -52,11 +57,13 @@ public class SQLUserDAOImpl implements UserDAO {
 			connection = pool.getConnection();
 			String sql = SQLQuery.USER_BY_ID;
 
-			return JDBCUtil.select(connection, sql, ResultSetHandlerFactory.getSingleResultSetHandler(ResultSetHandlerFactory.USER_RESULT_SET_HANDLER), userId);
+			return JDBCUtil.select(connection, sql,
+					ResultSetHandlerFactory.getSingleResultSetHandler(ResultSetHandlerFactory.USER_RESULT_SET_HANDLER),
+					userId);
 
 		} catch (ConnectionPoolException | SQLException e) {
-			throw new DAOException(ErrorMessage.DATABASE_ERROR, e);
-
+			logger.error("Database error! Could not get User.", e);
+			throw new DAOException("Could not get User.", e);
 		} finally {
 			freeConnection(connection);
 		}
@@ -71,10 +78,12 @@ public class SQLUserDAOImpl implements UserDAO {
 
 			String sql = SQLQuery.BLACK_LIST;
 
-			return JDBCUtil.select(connection, sql, ResultSetHandlerFactory.getListResultSetHandler(ResultSetHandlerFactory.USER_RESULT_SET_HANDLER), limit, offset);
-
+			return JDBCUtil.select(connection, sql,
+					ResultSetHandlerFactory.getListResultSetHandler(ResultSetHandlerFactory.USER_RESULT_SET_HANDLER),
+					limit, offset);
 		} catch (ConnectionPoolException | SQLException e) {
-			throw new DAOException(ErrorMessage.DATABASE_ERROR, e);
+			logger.error("Database error! Could not get List of User BlackList.", e);
+			throw new DAOException("Could not get List of User BlackList.", e);
 
 		} finally {
 			freeConnection(connection);
@@ -93,11 +102,12 @@ public class SQLUserDAOImpl implements UserDAO {
 			connection = pool.getConnection();
 			int offset = (page - 1) * limit;
 
-			return JDBCUtil.select(connection, SQLQuery.ALL_USERS, ResultSetHandlerFactory.getListResultSetHandler(ResultSetHandlerFactory.USER_RESULT_SET_HANDLER), limit, offset);
-
+			return JDBCUtil.select(connection, SQLQuery.ALL_USERS,
+					ResultSetHandlerFactory.getListResultSetHandler(ResultSetHandlerFactory.USER_RESULT_SET_HANDLER),
+					limit, offset);
 		} catch (ConnectionPoolException | SQLException e) {
-			throw new DAOException(ErrorMessage.DATABASE_ERROR, e);
-
+			logger.error("Database error! Could not get List of User.", e);
+			throw new DAOException("Could not get List of User.", e);
 		} finally {
 			freeConnection(connection);
 		}
@@ -117,11 +127,11 @@ public class SQLUserDAOImpl implements UserDAO {
 			JDBCUtil.insertDeleteUpdate(connection, SQLQuery.UPDATE_USERS_BLACK_LIST, b, userId);
 
 		} catch (ConnectionPoolException | SQLException e) {
-			throw new DAOException(e);
+			logger.error("Database error! Could not toggle BlackList.", e);
+			throw new DAOException("Could not toggle BlackList.", e);
 		} finally {
 			freeConnection(connection);
 		}
-
 	}
 
 	@Override
@@ -131,11 +141,12 @@ public class SQLUserDAOImpl implements UserDAO {
 			connection = pool.getConnection();
 			int offset = (page - 1) * limit;
 
-			return JDBCUtil.select(connection, SQLQuery.USERS_BY_ROLE, ResultSetHandlerFactory.getListResultSetHandler(ResultSetHandlerFactory.USER_RESULT_SET_HANDLER), roleId, limit, offset);
-
+			return JDBCUtil.select(connection, SQLQuery.USERS_BY_ROLE,
+					ResultSetHandlerFactory.getListResultSetHandler(ResultSetHandlerFactory.USER_RESULT_SET_HANDLER),
+					roleId, limit, offset);
 		} catch (ConnectionPoolException | SQLException e) {
-			throw new DAOException(ErrorMessage.DATABASE_ERROR, e);
-
+			logger.error("Database error! Could not get List of User.", e);
+			throw new DAOException("Could not get List of User.", e);
 		} finally {
 			freeConnection(connection);
 		}
@@ -144,7 +155,6 @@ public class SQLUserDAOImpl implements UserDAO {
 	@Override
 	public int countUsersByRole(int roleId) throws DAOException {
 		return getCount(SQLQuery.COUNT_USERS_BY_ROLE, roleId);
-
 	}
 
 	private int getCount(String sql, Object... parameters) throws DAOException {
@@ -153,9 +163,9 @@ public class SQLUserDAOImpl implements UserDAO {
 			connection = pool.getConnection();
 
 			return JDBCUtil.select(connection, sql, ResultSetHandlerFactory.COUNT_RESULT_SET_HANDLER, parameters);
-
 		} catch (ConnectionPoolException | SQLException e) {
-			throw new DAOException(e);
+			logger.error("Database error! Could not get count of Users.", e);
+			throw new DAOException("Could not get count of Users", e);
 		} finally {
 			freeConnection(connection);
 		}
@@ -166,7 +176,8 @@ public class SQLUserDAOImpl implements UserDAO {
 			try {
 				pool.free(connection);
 			} catch (ConnectionPoolException e) {
-				throw new DAOException(ErrorMessage.UNABLE_TO_FREE_CONNECTION);
+				logger.error("Database error! Unable to free connection", e);
+				throw new DAOException(e);
 			}
 		}
 	}

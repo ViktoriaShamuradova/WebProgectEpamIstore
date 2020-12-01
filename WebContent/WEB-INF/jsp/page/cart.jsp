@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=utf-8"
+ <%@ page language="java" contentType="text/html; charset=utf-8"
 	pageEncoding="utf-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
@@ -21,7 +21,13 @@
 </head>
 <body>
 
-	<%@ include file="header.jsp"%>
+	<%@ include file="../header.jsp"%>
+	
+	<div class= container mt-5>
+		<c:if test="${ not empty current_message }">	
+			<h2><c:out value="${current_message }"></c:out></h2>				
+		</c:if>	
+	</div>
 	
 	<div class="container">
 		<table class="table">
@@ -45,7 +51,7 @@
 			</tbody>
 		</table>
 	</div>
-	
+
 	
 	<div class = "container">
 	
@@ -54,8 +60,7 @@
 	  		<ol class="breadcrumb">
 	    		<li class="breadcrumb-item">Total sum <h5><c:out value=" ${sessionScope.shopcart.totalSum}" /></h5></li>
 	    		<li class="breadcrumb-item">Total count <h5><c:out value="${sessionScope.shopcart.totalCount}" /></h5></li>
-	    		<li class="breadcrumb-item"><a href="controller?command=form_order" class="btn btn-light"><c:out value="${formOrderLoc}" /></a></li>
-	    		  			
+	    		<li class="breadcrumb-item"><a href="controller?command=form_order" class="btn btn-light"><c:out value="${formOrderLoc}" /></a></li>		  			
 	  		</ol>
 	  	</nav>
 	  	
@@ -63,9 +68,5 @@
 		<a class="btn btn-secondary " href="controller?command=ALL_MODELS_OR_BY_CATEGORY" role="button"><c:out value="${back}" /></a>
 	</div>
 	
-	
-
-
-
 </body>
 </html>

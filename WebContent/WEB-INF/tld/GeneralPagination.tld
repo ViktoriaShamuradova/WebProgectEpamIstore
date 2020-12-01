@@ -14,7 +14,7 @@
 		<body-content>empty</body-content>
 		<attribute>
 			<name>models</name>
-			<required>true</required>
+			<required>true</required>  
 			<rtexprvalue>true</rtexprvalue>
 			<type>java.util.List</type>
 		</attribute>

@@ -12,7 +12,7 @@ package by.epamtc.shamuradova.ishop.bean.entity;
  *
  * Корзина, в которой хранится модель и ее кол-во  и id из таблицы всех корзин, представляет собой таблицу из бд
  * 
- * @author Шамурадова Виктория 2020
+ * @author Victoria Shamuradova 2020
  */
 
 public class CartItem extends AbstractEntity<Integer> {

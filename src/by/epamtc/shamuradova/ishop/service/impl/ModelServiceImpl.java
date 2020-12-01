@@ -15,7 +15,6 @@ import by.epamtc.shamuradova.ishop.dao.ModelDAO;
 import by.epamtc.shamuradova.ishop.dao.exception.DAOException;
 import by.epamtc.shamuradova.ishop.dao.factory.DAOFactory;
 import by.epamtc.shamuradova.ishop.service.ModelService;
-import by.epamtc.shamuradova.ishop.service.exception.InternalServiceException;
 import by.epamtc.shamuradova.ishop.service.exception.ResourceNotFoundServiceException;
 import by.epamtc.shamuradova.ishop.service.exception.ServiceException;
 import by.epamtc.shamuradova.ishop.service.validation.ModelValidation;
@@ -36,7 +35,7 @@ import by.epamtc.shamuradova.ishop.service.validation.UserValidation;
  * @param int limit - максимальное количество товаров, которое должно вернуться
  *            данным запросом
  *
- * @author Шамурадова Виктория 2020
+ * @author Victoria Shamuradova 2020
  */
 
 public class ModelServiceImpl implements ModelService {
@@ -105,7 +104,7 @@ public class ModelServiceImpl implements ModelService {
 				throw new ResourceNotFoundServiceException("model " + ErrorMessage.NOT_FOUND);
 			return model;
 		} catch (DAOException e) {
-			throw new InternalServiceException(e);
+			throw new ServiceException(e);
 		}
 	}
 
@@ -114,7 +113,7 @@ public class ModelServiceImpl implements ModelService {
 		try {
 			return modelDao.countModels();
 		} catch (DAOException e) {
-			throw new InternalServiceException(e);
+			throw new ServiceException(e);
 		}
 	}
 
@@ -125,7 +124,7 @@ public class ModelServiceImpl implements ModelService {
 			return modelDao.countModelsByCategoryId(categoryId);
 
 		} catch (DAOException e) {
-			throw new InternalServiceException(e);
+			throw new ServiceException(e);
 		}
 	}
 
@@ -136,7 +135,7 @@ public class ModelServiceImpl implements ModelService {
 		try {
 			modelDao.updateModel(modelEdition);
 		} catch (DAOException e) {
-			throw new InternalServiceException(e);
+			throw new ServiceException(e);
 		}
 	}
 
@@ -147,7 +146,7 @@ public class ModelServiceImpl implements ModelService {
 		try {
 			modelDao.addNewModel(modelEdition);
 		} catch (DAOException e) {
-			throw new InternalServiceException(e);
+			throw new ServiceException(e);
 		}
 	}
 
@@ -165,7 +164,7 @@ public class ModelServiceImpl implements ModelService {
 
 			return os.toByteArray();
 		} catch (DAOException | IOException e) {
-			throw new InternalServiceException(e);
+			throw new ServiceException(e);
 		}
 	}
 

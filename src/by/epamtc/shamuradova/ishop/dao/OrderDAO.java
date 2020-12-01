@@ -26,8 +26,6 @@ public interface OrderDAO {
 
 	public void deleteOrderItemByIdOrder(int idOrder) throws DAOException;
 
-	public Order findOrderById(int id) throws DAOException;
-
 	public List<OrderItem> getOrderItemsByIdOrder(int idOrder) throws DAOException;
 
 	public List<Order> getListOrdersByUserId(int userId, int limit, int offset) throws DAOException;

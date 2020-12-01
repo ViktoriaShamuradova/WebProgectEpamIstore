@@ -3,15 +3,18 @@ package by.epamtc.shamuradova.ishop.service.impl;
 import java.io.UnsupportedEncodingException;
 import java.security.NoSuchAlgorithmException;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import by.epamtc.shamuradova.ishop.bean.AuthData;
 import by.epamtc.shamuradova.ishop.bean.entity.User;
 import by.epamtc.shamuradova.ishop.constant.ErrorMessage;
 import by.epamtc.shamuradova.ishop.dao.SignInDAO;
 import by.epamtc.shamuradova.ishop.dao.exception.DAOException;
 import by.epamtc.shamuradova.ishop.dao.factory.DAOFactory;
+import by.epamtc.shamuradova.ishop.dao.impl.SQLCartDAOImpl;
 import by.epamtc.shamuradova.ishop.service.SignInService;
 import by.epamtc.shamuradova.ishop.service.exception.AccessDeniedServiceException;
-import by.epamtc.shamuradova.ishop.service.exception.InternalServiceException;
 import by.epamtc.shamuradova.ishop.service.exception.ServiceException;
 import by.epamtc.shamuradova.ishop.service.exception.ValidationException;
 import by.epamtc.shamuradova.ishop.service.util.MD5Encryptor;
@@ -19,6 +22,12 @@ import by.epamtc.shamuradova.ishop.service.util.MD5Encryptor;
 public class SignInServiceImpl implements SignInService {
 
 	private SignInDAO signIn;
+	private static final Logger logger = LogManager.getLogger(SQLCartDAOImpl.class);
+	
+	private static final String LOGIN = "Login";
+	private static final String PASSWORD = "Password";
+	private static final String  MESSAGE_ABOUT_INCORRECT_DATA= "Incorrect login or password";
+	private static final String  MESSAGE_ABOUT_DELETED_ACCOUNT= "Your account has been deleted";
 
 	public SignInServiceImpl() {
 		signIn = DAOFactory.getInstance().getSignInDAO();
@@ -30,9 +39,7 @@ public class SignInServiceImpl implements SignInService {
 
 			validate(data);
 
-			String hashPasswword;
-
-			hashPasswword = MD5Encryptor.getHashCode(new String(data.getPassword()));
+			String hashPasswword = MD5Encryptor.getHashCode(new String(data.getPassword()));
 
 			data.setPassword(hashPasswword.toCharArray());
 			hashPasswword = null;
@@ -40,22 +47,22 @@ public class SignInServiceImpl implements SignInService {
 			User user = signIn.signIn(data);
 			
 			if (user == null) {
-				throw new ValidationException("incorrect login or password");
+				logger.info(MESSAGE_ABOUT_INCORRECT_DATA);
+				throw new ValidationException(MESSAGE_ABOUT_INCORRECT_DATA);
 			}
 			
 			if (user.isBlackList()) {
-				throw new AccessDeniedServiceException("your account has been deleted");
+				logger.info(MESSAGE_ABOUT_DELETED_ACCOUNT);
+				throw new AccessDeniedServiceException(MESSAGE_ABOUT_DELETED_ACCOUNT);
 			}
 		
 			return user;
 
 		} catch (NoSuchAlgorithmException | UnsupportedEncodingException | DAOException e) {
-			throw new InternalServiceException(e);
+			throw new ServiceException(e);
 		}
-
 	}
 
-	// уборать маг значения
 	private void validate(AuthData data) throws ValidationException {
 		StringBuilder error = new StringBuilder();
 
@@ -63,15 +70,14 @@ public class SignInServiceImpl implements SignInService {
 		String password = new String(data.getPassword());
 
 		if (login == null || login.trim().isEmpty()) {
-			error.append("login" + " " + ErrorMessage.CANT_BE_EMPTY + " ");
+			error.append(SignInServiceImpl.LOGIN + " " + ErrorMessage.CANT_BE_EMPTY + " ");
 		}
 		if (password == null || password.trim().isEmpty()) {
-			error.append("password" + " " + ErrorMessage.CANT_BE_EMPTY + " ");
+			error.append(SignInServiceImpl.PASSWORD + " " + ErrorMessage.CANT_BE_EMPTY + " ");
 		}
 		password = null;
 		if (error.length() != 0) {
-			throw new ValidationException(new String(error));
+			throw new ValidationException(error.toString());
 		}
 	}
-
 }

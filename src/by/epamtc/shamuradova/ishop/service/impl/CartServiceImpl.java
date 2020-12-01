@@ -1,6 +1,5 @@
 package by.epamtc.shamuradova.ishop.service.impl;
 
-import java.math.BigDecimal;
 import java.sql.Date;
 import java.util.List;
 
@@ -19,22 +18,36 @@ import by.epamtc.shamuradova.ishop.dao.factory.DAOFactory;
 import by.epamtc.shamuradova.ishop.service.CartService;
 import by.epamtc.shamuradova.ishop.service.exception.ResourceNotFoundServiceException;
 import by.epamtc.shamuradova.ishop.service.exception.ServiceException;
+import by.epamtc.shamuradova.ishop.service.validation.CartValidation;
+import by.epamtc.shamuradova.ishop.service.validation.ModelValidation;
+import by.epamtc.shamuradova.ishop.service.validation.UserValidation;
 
+/**
+ * Класс, реализующий интерфейс CartService, в котром содержатся методы для
+ * объектов Cart, CartItem, ShopCart, ShopCartItem. В этом классе проводится их
+ * валидация
+ * 
+ * A class that implements the CartService interface, which contains methods for
+ * Cart, CartItem, ShopCart, ShopCartItem objects. In this class, they are
+ * validated.
+ *
+ * @author Victoria Shamuradova 2020
+ */
 public class CartServiceImpl implements CartService {
 
 	private CartDAO cartDAO;
 	private ModelDAO modelDAO;
 
 	public CartServiceImpl() {
-		cartDAO =  DAOFactory.getInstance().getCartDAO();
+		cartDAO = DAOFactory.getInstance().getCartDAO();
 		modelDAO = DAOFactory.getInstance().getModelDAO();
 	}
 
 	@Override
 	public Cart getCartByUserId(User user) throws ServiceException {
 		try {
+			UserValidation.checkRoleShopper(user);
 			Cart cart = cartDAO.getCartByUserId(user.getId());
-		
 			return cart;
 		} catch (DAOException e) {
 			throw new ServiceException(e);
@@ -43,8 +56,9 @@ public class CartServiceImpl implements CartService {
 
 	@Override
 	public void createCart(User user) throws ServiceException {
-		Date date = new Date(System.currentTimeMillis());
 		try {
+			UserValidation.checkRoleShopper(user);
+			Date date = new Date(System.currentTimeMillis());
 			cartDAO.addCart(user.getId(), date);
 		} catch (DAOException e) {
 			throw new ServiceException(e);
@@ -58,67 +72,62 @@ public class CartServiceImpl implements CartService {
 		} catch (DAOException e) {
 			throw new ServiceException(e);
 		}
-
 	}
 
 	@Override
 	public ShopCart formNewShopCart(User user) throws ServiceException {
-		ShopCart shopCart = new ShopCart();
-
-		List<ShopCartItem> items = null;
-		int totalCount;
-		BigDecimal totalSum;
-
 		try {
+			UserValidation.checkRoleShopper(user);
+
+			ShopCart shopCart = new ShopCart();
+
 			Cart cart = cartDAO.getCartByUserId(user.getId());
 
-			if (cart == null)
-				throw new ResourceNotFoundServiceException(ErrorMessage.NOT_FOUND);
+			CartValidation.checkCart(cart);
 
-			items = cartDAO.getShopCartItems(cart.getId());
-			totalCount = cartDAO.getTotalCountOfModelsInCart(user.getId());
-			totalSum = cartDAO.getTotalSumCart(user.getId());
+			List<ShopCartItem> items = cartDAO.getShopCartItems(cart.getId());
 
 			for (ShopCartItem item : items) {
 				shopCart.addShopCartItem(item);
 			}
-			shopCart.setTotalCount(totalCount);
-			shopCart.setTotalSum(totalSum);
 
+			return shopCart;
 		} catch (DAOException e) {
 			throw new ServiceException(e);
 		}
-		return shopCart;
 	}
 
 	@Override
 	public void updateCartReduce(ShopCart shopCart, int idModel, int countToReduce, User user) throws ServiceException {
 
 		try {
+			UserValidation.checkRoleShopper(user);
+
+			ModelValidation.checkModel(modelDAO.getModelById(idModel));
+
+			if (shopCart.getShopCartItem(idModel) == null) {
+				throw new ResourceNotFoundServiceException(ErrorMessage.NOT_FOUND);
+			}
+
 			Cart cart = cartDAO.getCartByUserId(user.getId());
 
-			if (cart == null)
-				throw new ResourceNotFoundServiceException(ErrorMessage.NOT_FOUND);
-
 			shopCart.removeModel(idModel, countToReduce);
-			int count;
 
 			if (shopCart.isEmpty()) {
-				cartDAO.deleteCartByidUser(user.getId());// одновременно удалится и последняя запись в cart_item
+				cartDAO.deleteCartByidUser(user.getId());
 
 			} else {
 				// если содержит модель, то корректируем количество, иначе удаляем запись этой
 				// модели в cart_item
 				if (shopCart.containsIdModel(idModel)) {
 					ShopCartItem item = shopCart.getShopCartItem(idModel);
-					count = item.getCount();
+					int count = item.getCount();
 					cartDAO.updateCartItemCountByModelIdCartId(idModel, count, cart.getId());
 
 				} else {
-					cartDAO.deleteCartItemByIdModel(idModel);
+					cartDAO.deleteCartItemByIdModelCartId(idModel, cart.getId());
 				}
 			}
-
 		} catch (DAOException e) {
 			throw new ServiceException(e);
 		}
@@ -129,16 +138,19 @@ public class CartServiceImpl implements CartService {
 
 		try {
 			Model model = modelDAO.getModelById(modelId);
-			if (model == null)
+			ModelValidation.checkModel(model);
+
+			if (shopCart.getShopCartItem(modelId) == null) {
 				throw new ResourceNotFoundServiceException(ErrorMessage.NOT_FOUND);
+			}
 
 			shopCart.addShopCartItem(model, count);
+			int countAfterIncrease = shopCart.getShopCartItem(modelId).getCount();
 
 			Cart cart = cartDAO.getCartByUserId(user.getId());
-			if (cart == null)
-				throw new ResourceNotFoundServiceException(ErrorMessage.NOT_FOUND);
+			CartValidation.checkCart(cart);
 
-			cartDAO.updateCartItemCountByModelIdCartId(modelId, count, cart.getId());
+			cartDAO.updateCartItemCountByModelIdCartId(modelId, countAfterIncrease, cart.getId());
 
 		} catch (DAOException e) {
 			throw new ServiceException(e);
@@ -150,12 +162,9 @@ public class CartServiceImpl implements CartService {
 
 		try {
 			Cart cart = getCartByUserId(user);
-			if (cart == null)
-				throw new ResourceNotFoundServiceException(ErrorMessage.NOT_FOUND);
+			CartValidation.checkCart(cart);
 
-			Model model = modelDAO.getModelById(modelId);
-			if (model == null)
-				throw new ResourceNotFoundServiceException(ErrorMessage.NOT_FOUND);
+			ModelValidation.checkModel(modelDAO.getModelById(modelId));
 
 			CartItem c = cartDAO.getCartItemByCartIdModelId(cart.getId(), modelId);
 
@@ -165,7 +174,6 @@ public class CartServiceImpl implements CartService {
 				c.setCount(c.getCount() + 1);
 				cartDAO.updateCartItemCountByModelIdCartId(modelId, c.getCount(), cart.getId());
 			}
-
 		} catch (DAOException e) {
 			throw new ServiceException(e);
 		}

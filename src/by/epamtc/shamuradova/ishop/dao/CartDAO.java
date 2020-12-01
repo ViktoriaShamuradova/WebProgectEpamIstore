@@ -14,7 +14,7 @@ import by.epamtc.shamuradova.ishop.dao.exception.DAOException;
 * 
 * ModelDAO interface, containing methods for working with objects of the Cart, CartItem
 *
-* @author Шамурадова Виктория 2020
+* @author Victoria Shamuradova 2020
 */
 
 public interface CartDAO {
@@ -33,7 +33,7 @@ public interface CartDAO {
 
 	public void deleteCartByidUser(int idUser) throws DAOException;
 
-	public void deleteCartItemByIdModel(int idModel) throws DAOException;
+	public void deleteCartItemByIdModelCartId(int idModel, int cartId) throws DAOException;
 
 	public void deleteCartItemByIdCart(int idCart) throws DAOException;
 

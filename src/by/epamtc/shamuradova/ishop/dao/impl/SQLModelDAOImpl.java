@@ -5,11 +5,13 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import by.epamtc.shamuradova.ishop.bean.ModelEdition;
 import by.epamtc.shamuradova.ishop.bean.entity.Category;
 import by.epamtc.shamuradova.ishop.bean.entity.Model;
 import by.epamtc.shamuradova.ishop.bean.entity.Producer;
-import by.epamtc.shamuradova.ishop.constant.ErrorMessage;
 import by.epamtc.shamuradova.ishop.constant.SQLQuery;
 import by.epamtc.shamuradova.ishop.dao.ModelDAO;
 import by.epamtc.shamuradova.ishop.dao.exception.ConnectionPoolException;
@@ -29,6 +31,7 @@ import by.epamtc.shamuradova.ishop.dao.util.JDBCUtil;
 public class SQLModelDAOImpl implements ModelDAO {
 
 	private ConnectionPool pool;
+	private static final Logger logger = LogManager.getLogger(SQLModelDAOImpl.class);
 
 	public SQLModelDAOImpl() {
 		pool = ConnectionPool.getInstance();
@@ -48,7 +51,8 @@ public class SQLModelDAOImpl implements ModelDAO {
 					limit, offset);
 
 		} catch (ConnectionPoolException | SQLException e) {
-			throw new DAOException("can not execute query", e);
+			logger.error("Database error! Could not get List of Model", e);
+			throw new DAOException("Could not get List of Model ", e);
 		} finally {
 			freeConnection(connection);
 		}
@@ -65,7 +69,8 @@ public class SQLModelDAOImpl implements ModelDAO {
 					idModel);
 
 		} catch (ConnectionPoolException | SQLException e) {
-			throw new DAOException(ErrorMessage.DATABASE_ERROR, e);
+			logger.error("Database error! Could not get Model", e);
+			throw new DAOException("Could not get Model ", e);
 
 		} finally {
 			freeConnection(connection);
@@ -85,7 +90,8 @@ public class SQLModelDAOImpl implements ModelDAO {
 					categoryId, limit, offset);
 
 		} catch (ConnectionPoolException | SQLException e) {
-			throw new DAOException(e);
+			logger.error("Database error! Could not get List of Model", e);
+			throw new DAOException("Could not get List of Model ", e);
 		} finally {
 			freeConnection(connection);
 		}
@@ -94,7 +100,6 @@ public class SQLModelDAOImpl implements ModelDAO {
 	@Override
 	public List<Category> listAllCategories() throws DAOException {
 		Connection connection = null;
-
 		try {
 			connection = pool.getConnection();
 
@@ -102,7 +107,8 @@ public class SQLModelDAOImpl implements ModelDAO {
 					.getListResultSetHandler(ResultSetHandlerFactory.CATEGORY_RESULT_SET_HANDLER));
 
 		} catch (ConnectionPoolException | SQLException e) {
-			throw new DAOException(e);
+			logger.error("Database error! Could not get List of Category", e);
+			throw new DAOException("Could not get List of Category ", e);
 		} finally {
 			freeConnection(connection);
 		}
@@ -119,7 +125,8 @@ public class SQLModelDAOImpl implements ModelDAO {
 					.getListResultSetHandler(ResultSetHandlerFactory.PRODUCER_RESULT_SET_HANDLER));
 
 		} catch (ConnectionPoolException | SQLException e) {
-			throw new DAOException(e);
+			logger.error("Database error! Could not get List of Producer", e);
+			throw new DAOException("Could not get List of Producer ", e);
 		} finally {
 			freeConnection(connection);
 		}
@@ -130,7 +137,8 @@ public class SQLModelDAOImpl implements ModelDAO {
 			try {
 				pool.free(connection);
 			} catch (ConnectionPoolException e) {
-				throw new DAOException(ErrorMessage.UNABLE_TO_FREE_CONNECTION);
+				logger.error("Database error! Could not free Connection", e);
+				throw new DAOException("Could not free Connection", e);
 			}
 		}
 	}
@@ -144,7 +152,8 @@ public class SQLModelDAOImpl implements ModelDAO {
 			return JDBCUtil.select(connection, SQLQuery.COUNT_MODELS, ResultSetHandlerFactory.COUNT_RESULT_SET_HANDLER);
 
 		} catch (ConnectionPoolException | SQLException e) {
-			throw new DAOException(e);
+			logger.error("Database error! Could not get count of Models", e);
+			throw new DAOException("Could not get count of Models", e);
 		} finally {
 			freeConnection(connection);
 		}
@@ -160,7 +169,8 @@ public class SQLModelDAOImpl implements ModelDAO {
 					ResultSetHandlerFactory.COUNT_RESULT_SET_HANDLER, categoryId);
 
 		} catch (ConnectionPoolException | SQLException e) {
-			throw new DAOException(e);
+			logger.error("Database error! Could not get count of Models", e);
+			throw new DAOException("Could not get count of Models", e);
 		} finally {
 			freeConnection(connection);
 		}
@@ -177,7 +187,8 @@ public class SQLModelDAOImpl implements ModelDAO {
 					modelEdition.getCount(), modelEdition.getPrice(), modelEdition.getId());
 
 		} catch (ConnectionPoolException | SQLException e) {
-			throw new DAOException(e);
+			logger.error("Database error! Could not update Models", e);
+			throw new DAOException("Could not update Models", e);
 		} finally {
 			freeConnection(connection);
 		}
@@ -195,7 +206,8 @@ public class SQLModelDAOImpl implements ModelDAO {
 					modelEdition.getProducer(), modelEdition.getCount());
 
 		} catch (ConnectionPoolException | SQLException e) {
-			throw new DAOException(e);
+			logger.error("Database error! Could not add Model", e);
+			throw new DAOException("Could not add Model", e);
 		} finally {
 			freeConnection(connection);
 		}
@@ -211,7 +223,8 @@ public class SQLModelDAOImpl implements ModelDAO {
 					ResultSetHandlerFactory.getImageResultSetHandler(), modelId);
 
 		} catch (ConnectionPoolException | SQLException e) {
-			throw new DAOException(e);
+			logger.error("Database error! Could not get Model image", e);
+			throw new DAOException("Could not get Model image", e);
 		} finally {
 			freeConnection(connection);
 		}

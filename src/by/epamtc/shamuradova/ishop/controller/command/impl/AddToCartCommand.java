@@ -11,18 +11,27 @@ import by.epamtc.shamuradova.ishop.bean.CartContent;
 import by.epamtc.shamuradova.ishop.bean.ShopCart;
 import by.epamtc.shamuradova.ishop.bean.entity.Cart;
 import by.epamtc.shamuradova.ishop.bean.entity.User;
+import by.epamtc.shamuradova.ishop.constant.RequestNameParameters;
+import by.epamtc.shamuradova.ishop.constant.SessionNameParameters;
 import by.epamtc.shamuradova.ishop.controller.command.Command;
 import by.epamtc.shamuradova.ishop.service.CartService;
 import by.epamtc.shamuradova.ishop.service.exception.ServiceException;
 import by.epamtc.shamuradova.ishop.service.factory.ServiceFactory;
 
+/**
+ * Комманда, предназначенная для добавления товара в корзину
+ * 
+ * Command for adding a product to the cart
+ * 
+ * @author Victoria Shamuradova 2020
+ */
 public class AddToCartCommand implements Command {
 
 	private CartService cartService;
 
-	private static final String GET_ENTER_PAGE_COMMAND = "controller?command=enter_page";
+	private static final String ENTER_PAGE_COMMAND = "controller?command=enter_page";
 	private static final String SHOPPER_PAGE = "controller?command=ALL_MODELS_OR_BY_CATEGORY";
-	private static final String ERROR_PAGE = "controller?command=GET_ERROR_PAGE";
+	private static final String ERROR_COMMAND = "controller?command=GET_ERROR_PAGE";
 
 	private static final int FIRST_PRODUCT = 1;
 
@@ -32,12 +41,13 @@ public class AddToCartCommand implements Command {
 
 	@Override
 	public void execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		HttpSession session = req.getSession();
-		User user = (User) session.getAttribute("user");
-		int idModel = Integer.parseInt(req.getParameter("modelId"));
+		final HttpSession session = req.getSession();
+
+		User user = (User) session.getAttribute(SessionNameParameters.USER);
+		int idModel = Integer.parseInt(req.getParameter(RequestNameParameters.MODEL_ID));
 
 		if (user == null) {
-			req.getRequestDispatcher(GET_ENTER_PAGE_COMMAND).forward(req, resp);
+			req.getRequestDispatcher(ENTER_PAGE_COMMAND).forward(req, resp);
 		}
 
 		try {
@@ -46,22 +56,20 @@ public class AddToCartCommand implements Command {
 			if (cart == null) {
 				cartService.createCart(user);
 				cart = cartService.getCartByUserId(user);
-
 				cartService.createCartItem(formCartContent(cart.getId(), FIRST_PRODUCT, idModel));
 
 			} else {
-				cart = cartService.getCartByUserId(user);
 				cartService.updateCart(user, idModel);
 			}
 
 			ShopCart shopCart = cartService.formNewShopCart(user);
 
-			session.setAttribute("shopcart", shopCart);
+			session.setAttribute(SessionNameParameters.SHOP_CART, shopCart);
 			resp.sendRedirect(SHOPPER_PAGE);
 
 		} catch (ServiceException e) {
 			e.printStackTrace();
-			resp.sendRedirect(ERROR_PAGE);	
+			resp.sendRedirect(ERROR_COMMAND);
 		}
 	}
 

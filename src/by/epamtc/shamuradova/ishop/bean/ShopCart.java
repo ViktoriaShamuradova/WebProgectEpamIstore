@@ -7,13 +7,32 @@ import java.util.HashMap;
 import java.util.Map;
 
 import by.epamtc.shamuradova.ishop.bean.entity.Model;
+import by.epamtc.shamuradova.ishop.constant.ConstantsShopCart;
+import by.epamtc.shamuradova.ishop.service.exception.ValidationException;
 
+/**
+ * Класс, представляющий корзину пользователя
+ * 
+ * Class representing the user's cart
+ *
+ * @author Victoria Shamuradova 2020
+ */
 public class ShopCart implements Serializable {
 
 	private static final long serialVersionUID = 4905506574371844621L;
-
+	/**
+	 * shopCartItems are stored by ShopCartItem. Integer - model id ShopCartItem -
+	 * object containing Model and its quantity
+	 */
 	private Map<Integer, ShopCartItem> shopCartItems;
+	/**
+	 * sum of cart
+	 */
 	private BigDecimal totalSum;
+
+	/**
+	 * total number of models
+	 */
 	private int totalCount;
 
 	public ShopCart() {
@@ -76,21 +95,44 @@ public class ShopCart implements Serializable {
 	}
 
 	public void addShopCartItem(Model model, int count) {
+		validateShoppingCartSize();
 		ShopCartItem item = shopCartItems.get(model.getId());
 
 		if (item == null) {
+			validateModelsCount(count);
 			item = new ShopCartItem(model, count);
 			shopCartItems.put(model.getId(), item);
 		} else {
+			validateModelsCount(item.getCount() + count);
 			item.setCount(item.getCount() + count);
 		}
 		refreshData();
+	}
+
+	private void validateModelsCount(int count) {
+		if (count >= ConstantsShopCart.MAX_COUNT_OF_ONE_MODEL) {
+			throw new ValidationException("Limit for model count reached");
+		}
 
 	}
 
-	// убрать и починить другие методы из-за него
+	private void validateShoppingCartSize() {
+		if (shopCartItems.size() >= ConstantsShopCart.MAX_DIFFERENT_MODELS_IN_SHOPPING_CART) {
+			throw new ValidationException("Limit for Shopping cart size reached");
+		}
+
+	}
+
 	public void addShopCartItem(ShopCartItem item) {
-		shopCartItems.put(item.getModel().getId(), item);
+
+		if (shopCartItems.containsValue(item)) {
+			ShopCartItem itemBeforeUpdate = shopCartItems.get(item.getModel().getId());
+			itemBeforeUpdate.setCount(itemBeforeUpdate.getCount() + item.getCount());
+			shopCartItems.put(item.getModel().getId(), itemBeforeUpdate);
+		} else {
+			shopCartItems.put(item.getModel().getId(), item);
+		}
+		refreshData();
 	}
 
 	private void refreshData() {
@@ -142,5 +184,4 @@ public class ShopCart implements Serializable {
 		return "ShopCart [shopCartItems=" + shopCartItems + ", totalSum=" + totalSum + ", totalCount=" + totalCount
 				+ "]";
 	}
-
 }

@@ -13,15 +13,7 @@
 		<welcome-file>default.jsp</welcome-file>
 	</welcome-file-list>
 
-	<context-param>
-		<param-name>category_list</param-name>
-		<param-value></param-value>
-	</context-param>
 
-	<context-param>
-		<param-name>producer_list</param-name>
-		<param-value></param-value>
-	</context-param>
 
 	<filter>
 		<display-name>ErrorHandlerFilter</display-name>
@@ -44,10 +36,9 @@
 	</filter>
 	<filter-mapping>
 		<filter-name>CharsetFilter</filter-name>
-		<url-pattern>/controller</url-pattern>
+		<url-pattern>/*</url-pattern>
 	</filter-mapping>
-	
-	
+
 
 	<servlet>
 		<servlet-name>Controller</servlet-name>
@@ -65,10 +56,5 @@
 		</taglib>
 	</jsp-config>
 
-
-
-	<listener>
-		<listener-class>by.epamtc.shamuradova.ishop.listener.SourceInitListener</listener-class>
-	</listener>
 
 </web-app>

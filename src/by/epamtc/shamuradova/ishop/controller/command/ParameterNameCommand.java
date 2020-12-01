@@ -2,7 +2,6 @@ package by.epamtc.shamuradova.ishop.controller.command;
 
 public enum ParameterNameCommand {
 	SAVE_NEW_SHOPPER, 
-	WELCOME_USER, 
 	SIGN_IN, 
 	SET_LOCALE, 
 	REGISTRATION_PAGE, 
@@ -18,7 +17,6 @@ public enum ParameterNameCommand {
 	REDUCE_COUNT_OF_GOODS_PER_UNIT,
 	INCREASE_COUNT_OF_GOODS_PER_UNIT,
 	FORM_ORDER,
-	MY_ORDERS, 
 	LOAD_MORE_ORDERS,
 	ORDER_DETAILES,
 	ALL_MODELS_OR_BY_CATEGORY,
@@ -31,7 +29,8 @@ public enum ParameterNameCommand {
 	SAVE_EDIT_MODEL, 
 	USERS_BY_ROLE, 
 	SAVE_NEW_MODEL,
-	GET_IMAGE_BY_MODEL_ID, ALL_ORDERS, 
+	GET_IMAGE_BY_MODEL_ID, 
+	ALL_ORDERS, 
 	CHANGE_STATUS_ORDER, 
 	USER_DETAILES
 	

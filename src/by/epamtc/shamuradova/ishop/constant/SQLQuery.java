@@ -41,7 +41,7 @@ public class SQLQuery {
 			+ "FROM models m, cart_items c, producers p, categories \r\n"
 			+ "where c.id_model=m.id and c.id_cart= ? and categories.id=m.id_category and p.id=m.id_producer";
 	public static final String DELETE_CART_BY_ID = "delete from carts where id_user=?";
-	public static final String DELETE_CARTITEM_BY_ID_MODEL = "delete from cart_items where id_model=?";
+	public static final String DELETE_CARTITEM_BY_ID_MODEL_AND_CART_ID = "delete from cart_items where id_model=? and id_cart=?";
 	public static final String ADD_ORDER = "INSERT INTO orders(id_user, created, id_status_order ) VALUES (?,?, (select s.id from status_order s where s.name=?))";
 	public static final String ADD_ORDER_ITEM = "INSERT INTO order_items(id_order, id_model, count) VALUES (?,?,?)";
 	public static final String ORDER_BY_ID_USER = "select * from orders where id_user= ?";

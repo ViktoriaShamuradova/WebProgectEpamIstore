@@ -2,72 +2,63 @@ package by.epamtc.shamuradova.ishop.filter;
 
 import java.io.IOException;
 
-import javax.servlet.Filter;
 import javax.servlet.FilterChain;
-import javax.servlet.FilterConfig;
 import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import by.epamtc.shamuradova.ishop.service.exception.AbstractApplicationException;
 import by.epamtc.shamuradova.ishop.service.exception.ServiceException;
 
 /**
- * Фильтр, который перехватывает все исключения и обрабатывает
+ * Класс-фильтр для обработки всех исключений
  * 
- * @author Шамурадова Виктория
- * 
+ * Filter class to handle all exceptions
+ *
+ * @author Victoria Shamuradova 2020
  */
 
-public class ErrorHandlerFilter implements Filter {
+public class ErrorHandlerFilter extends AbstractFilter {
+
+	private static final String STATUS_CODE = "statusCode";
+	private static final String ERROR_PAGE = "/WEB-INF/jsp/page/error.jsp";
 
 	public ErrorHandlerFilter() {
 	}
 
 	@Override
-	public void doFilter(ServletRequest reqSer, ServletResponse respSer, FilterChain chain)
-			throws IOException, ServletException {
+	public void doFilter(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
+			throws ServletException, IOException {
 		try {
-			chain.doFilter(reqSer, respSer);
-		} catch (Throwable th) {
-			HttpServletRequest req = (HttpServletRequest) reqSer;
-			HttpServletResponse resp = (HttpServletResponse) respSer;
 
-			String reqUri = req.getRequestURI();
-			// лоируем ошибки .error("Request"+reqUrl + "failed" + th.getMessage(), th);
-			handleException(reqUri, th, req, resp);
-			
+			chain.doFilter(request, response);
+		} catch (Throwable th) {
+
+			String reqUri = request.getRequestURI();
+			System.out.println(reqUri);
+			logger.info("Request" + reqUri + "failed. " + th.getMessage(), th);
+			handleException(th, request, response);
 		}
 	}
 
-	private void handleException(String reqUri, Throwable th, HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		
+	private void handleException(Throwable th, HttpServletRequest req, HttpServletResponse resp)
+			throws ServletException, IOException {
+
 		int statusCode = getStatusCode(th);
-		//resp.setStatus(statusCode);
-		req.setAttribute("statusCode", statusCode);
-		
-		System.out.println("here!!!");
-		
+		req.setAttribute(STATUS_CODE, statusCode);
+
 		th.printStackTrace();
-		req.getRequestDispatcher("/WEB-INF/jsp/page/error.jsp").forward(req, resp);
+		req.getRequestDispatcher(ERROR_PAGE).forward(req, resp);
 	}
 
 	private int getStatusCode(Throwable th) {
+		if (th instanceof AbstractApplicationException) {
+			return (((AbstractApplicationException) th).getCode());
+		}
 		if (th instanceof ServiceException) {
-			return (((ServiceException) th).getCode());
+			return HttpServletResponse.SC_INTERNAL_SERVER_ERROR;
 		} else {
-			return (HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+			return HttpServletResponse.SC_INTERNAL_SERVER_ERROR;
 		}
 	}
-
-	@Override
-	public void destroy() {
-	}
-
-	@Override
-	public void init(FilterConfig filterConfig) throws ServletException {
-
-	}
-
 }

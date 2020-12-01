@@ -4,8 +4,10 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import by.epamtc.shamuradova.ishop.bean.RegInfo;
-import by.epamtc.shamuradova.ishop.constant.ErrorMessage;
 import by.epamtc.shamuradova.ishop.constant.SQLQuery;
 import by.epamtc.shamuradova.ishop.constant.UserRole;
 import by.epamtc.shamuradova.ishop.constant.UserStatus;
@@ -21,12 +23,13 @@ import by.epamtc.shamuradova.ishop.dao.util.JDBCUtil;
  * 
  * Class for checking user data in database and signing up user
  * 
- * @author Шамурадова Виктория 2020
+ * @author Victoria Shamuradova 2020
  */
 
 public class SQLSignUpDAOImpl implements SignUpDAO {
 
 	private ConnectionPool pool;
+	private static final Logger logger = LogManager.getLogger(SQLCartDAOImpl.class);
 
 	public SQLSignUpDAOImpl() {
 		pool = ConnectionPool.getInstance();
@@ -50,13 +53,14 @@ public class SQLSignUpDAOImpl implements SignUpDAO {
 				regInfo.deletePassword();
 
 			} else {
-				throw new DAOException(ErrorMessage.USER_LOGIN_IS_ALREADY_EXISTS + " " + regInfo.getLogin());
+				logger.error("User login is already exist");
+				throw new DAOException("User login is already exist");
 			}
 
 		} catch (ConnectionPoolException | SQLException e) {
+			logger.error("Database error! Could not to sign up.", e);
 			throw new DAOException(e);
 		} finally {
-
 			if (connection != null) {
 				try {
 					pool.free(connection);
@@ -82,13 +86,15 @@ public class SQLSignUpDAOImpl implements SignUpDAO {
 			}
 			return false;
 		} catch (SQLException e) {
-			throw new DAOException(ErrorMessage.DATABASE_ERROR, e);
+			logger.error("Database error!", e);
+			throw new DAOException(e);
 		} finally {
 			if (results != null) {
 				try {
 					results.close();
 				} catch (SQLException e) {
-					throw new DAOException(ErrorMessage.UNABLE_TO_CLOSE_RESULTSET, e);
+					logger.error("Database error! Unable to close ResultSet", e);
+					throw new DAOException(e);
 				}
 			}
 		}

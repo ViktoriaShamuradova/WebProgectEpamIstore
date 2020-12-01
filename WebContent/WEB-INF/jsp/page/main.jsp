@@ -30,7 +30,7 @@
 </head>
 <body>
 
-	<%@ include file="../WEB-INF/jsp/header.jsp"%>
+	<%@ include file="../header.jsp"%>
 
 	<div class= container mt-5>
 		<c:if test="${ not empty current_message }">	
@@ -40,15 +40,12 @@
 	
 	<div class="container-fluid">
 		<div class="row">
-			<%@ include file="../WEB-INF/jsp/category_navbar.jsp"%>
+			<%@ include file="../category_navbar.jsp"%>
 			
 			<pag:modelPagination totalModels="${modelsCount}" modelsPerPage="${modelsPerPage}" 
 				currentPage="${pageNumber}" models="${models}" category="${category}"/>			
 		
-		</div>
-		
-		<!-- <input type="file" accept="image/png">ФАЙЛ ВЫБРАЛ</input> -->
-		
+		</div>	
 	</div>
 </body>
 </html>

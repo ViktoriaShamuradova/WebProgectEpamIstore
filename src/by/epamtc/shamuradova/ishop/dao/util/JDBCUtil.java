@@ -7,13 +7,14 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import by.epamtc.shamuradova.ishop.constant.ErrorMessage;
 import by.epamtc.shamuradova.ishop.dao.handler.ResultSetHandler;
 
-
-/** Класс, который умеет выполнять запросы и преобразовывать результаты запросов в объект нужного типа
+/**
+ * Класс, который умеет выполнять запросы и преобразовывать результаты запросов
+ * в объект нужного типа
  * 
- * A class that can execute queries and convert query results into an object of the desired type
+ * A class that can execute queries and convert query results into an object of
+ * the desired type
  *
  * @author Шамурадова Виктория 2020
  */
@@ -22,15 +23,17 @@ public final class JDBCUtil {
 
 	private JDBCUtil() {
 	}
-	/** 
-	 *  параметризированный метод, выполняющий select запросы
-	 *  
-	 *  a parameterized method that executes select queries
-	 *  
-	 * @param Connection connection - объект для соединения с базой данных
-	 * @param String sql- sql запрос
-	 * @param ResultSetHandler2<T> - объект, который преобразовывает результат запроса в java-объект
-	 * @param Object... parameters - параметры для 
+
+	/**
+	 * параметризированный метод, выполняющий select запросы
+	 * 
+	 * a parameterized method that executes select queries
+	 * 
+	 * @param Connection           connection - объект для соединения с базой данных
+	 * @param String               sql- sql запрос
+	 * @param ResultSetHandler2<T> - объект, который преобразовывает результат
+	 *                             запроса в java-объект
+	 * @param Object...            parameters - параметры для
 	 * @throws SQLException
 	 */
 	public static <T> T select(Connection connection, String sql, ResultSetHandler<T> resultSetHandler,
@@ -82,11 +85,7 @@ public final class JDBCUtil {
 
 	private static void closeStatement(Statement statement) throws SQLException {
 		if (statement != null && !statement.isClosed()) {
-			try {
-				statement.close();
-			} catch (SQLException e) {
-				throw new SQLException(ErrorMessage.UNABLE_TO_CLOSE_STATEMENT, e);
-			}
+			statement.close();
 		}
 	}
 

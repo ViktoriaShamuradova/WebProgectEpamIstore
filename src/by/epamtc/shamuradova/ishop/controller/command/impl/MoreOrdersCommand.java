@@ -20,25 +20,39 @@ import by.epamtc.shamuradova.ishop.service.factory.ServiceFactory;
 /**
  * Комманда, предназначенная для загрузки следующей "порции" заказов для
  * пользователя Shopper, отображается конкретная страница, считываемая с запроса
- * С запроса считываются:
- * int pageNumber - конкретная страница для отображения заказов
- * int pageCount - количество всех страниц, нужен для того, чтобы отображать или не отображать кнопку "загрузить дальше"
+ * С запроса считываются: int pageNumber - конкретная страница для отображения
+ * заказов int pageCount - количество всех страниц, нужен для того, чтобы
+ * отображать или не отображать кнопку "загрузить дальше"
  * 
- * В объект класса HttpServletRequest передаются pageNumber, pageCount, List<Order>
+ * В объект класса HttpServletRequest передаются pageNumber, pageCount,
+ * List<Order>
  * 
- * @author Шамурадова Виктория
+ * Command designed to load the next "portion" of orders for User Shopper, the
+ * specific page read from the request is displayed Read from the request: int
+ * pageNumber - specific page to display orders int pageCount - the number of
+ * all pages, needed to display or not display the "load next" button
+ *
+ * The object of the HttpServletRequest class is passed pageNumber, pageCount,
+ * List <Order>
+ * 
+ * @author Victoria Shamuradova 2020
  * 
  */
 
 public class MoreOrdersCommand implements Command {
 
 	private OrderService orderService;
-	
+
 	private static final String PAGE_NUMBER = "pageNumber";
 	private static final String NAME_BEANS = "orders";
 	private static final String PAGE_COUNT = "pageCount";
-	
+	private static final String USER = "user";
+	private static final String REDIRECT_TO = "redirectTo";
+	private static final String CURRENT_COMMAND = "command";
+
 	private static final String NAME_CURRENT_PAGE = "/WEB-INF/jsp/all_my_orders.jsp";
+	private static final String NAME_CURRENT_COMMAND = "controller?command=LOAD_MORE_ORDERS";
+	private static final String ERROR_COMMAND = "controller?command=GET_ERROR_PAGE";
 
 	public MoreOrdersCommand() {
 		orderService = ServiceFactory.getInstance().getOrderService();
@@ -47,10 +61,13 @@ public class MoreOrdersCommand implements Command {
 	@Override
 	public void execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		try {
+
+			final HttpSession session = req.getSession();
+			session.removeAttribute(CURRENT_COMMAND);
+			session.setAttribute(CURRENT_COMMAND, NAME_CURRENT_COMMAND);
 			
-			HttpSession session = req.getSession();
-			User user = (User) session.getAttribute("user");
-			
+			User user = (User) session.getAttribute(USER);
+
 			int pageNumber = Integer.parseInt(req.getParameter(PAGE_NUMBER));
 			int pageCount = Integer.parseInt(req.getParameter(PAGE_COUNT));
 
@@ -59,11 +76,13 @@ public class MoreOrdersCommand implements Command {
 			req.setAttribute(NAME_BEANS, orders);
 			req.setAttribute(PAGE_NUMBER, pageNumber);
 			req.setAttribute(PAGE_COUNT, pageCount);
+			req.setAttribute(REDIRECT_TO, NAME_CURRENT_COMMAND);
 
 			req.getRequestDispatcher(NAME_CURRENT_PAGE).forward(req, resp);
-		
+
 		} catch (ServiceException e) {
 			e.printStackTrace();
+			resp.sendRedirect(ERROR_COMMAND);
 		}
 	}
 }
