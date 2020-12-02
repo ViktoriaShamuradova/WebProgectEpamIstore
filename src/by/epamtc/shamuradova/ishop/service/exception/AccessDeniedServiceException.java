@@ -13,11 +13,13 @@ import javax.servlet.http.HttpServletResponse;
 
 public class AccessDeniedServiceException extends AbstractApplicationException {
 
-	
 	private static final long serialVersionUID = 6366557251443220625L;
 
 	public AccessDeniedServiceException(String message) {
 		super(message, HttpServletResponse.SC_FORBIDDEN);
 	}
-	
+
+	public AccessDeniedServiceException() {
+		super(HttpServletResponse.SC_FORBIDDEN);
+	}
 }

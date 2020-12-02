@@ -10,7 +10,6 @@ import by.epamtc.shamuradova.ishop.bean.entity.Cart;
 import by.epamtc.shamuradova.ishop.bean.entity.CartItem;
 import by.epamtc.shamuradova.ishop.bean.entity.Model;
 import by.epamtc.shamuradova.ishop.bean.entity.User;
-import by.epamtc.shamuradova.ishop.constant.ErrorMessage;
 import by.epamtc.shamuradova.ishop.dao.CartDAO;
 import by.epamtc.shamuradova.ishop.dao.ModelDAO;
 import by.epamtc.shamuradova.ishop.dao.exception.DAOException;
@@ -106,7 +105,7 @@ public class CartServiceImpl implements CartService {
 			ModelValidation.checkModel(modelDAO.getModelById(idModel));
 
 			if (shopCart.getShopCartItem(idModel) == null) {
-				throw new ResourceNotFoundServiceException(ErrorMessage.NOT_FOUND);
+				throw new ResourceNotFoundServiceException("not found");
 			}
 
 			Cart cart = cartDAO.getCartByUserId(user.getId());
@@ -141,7 +140,7 @@ public class CartServiceImpl implements CartService {
 			ModelValidation.checkModel(model);
 
 			if (shopCart.getShopCartItem(modelId) == null) {
-				throw new ResourceNotFoundServiceException(ErrorMessage.NOT_FOUND);
+				throw new ResourceNotFoundServiceException("not found");
 			}
 
 			shopCart.addShopCartItem(model, count);

@@ -10,7 +10,6 @@ import by.epamtc.shamuradova.ishop.bean.entity.Category;
 import by.epamtc.shamuradova.ishop.bean.entity.Model;
 import by.epamtc.shamuradova.ishop.bean.entity.Producer;
 import by.epamtc.shamuradova.ishop.bean.entity.User;
-import by.epamtc.shamuradova.ishop.constant.ErrorMessage;
 import by.epamtc.shamuradova.ishop.dao.ModelDAO;
 import by.epamtc.shamuradova.ishop.dao.exception.DAOException;
 import by.epamtc.shamuradova.ishop.dao.factory.DAOFactory;
@@ -55,7 +54,7 @@ public class ModelServiceImpl implements ModelService {
 			List<Model> models = modelDao.listAllModels(page, limit);
 
 			if (models == null)
-				throw new ResourceNotFoundServiceException("models " + ErrorMessage.NOT_FOUND);
+				throw new ResourceNotFoundServiceException("models not found");
 
 			addImageLinkToModel(models);
 
@@ -71,7 +70,7 @@ public class ModelServiceImpl implements ModelService {
 			List<Model> models = modelDao.listModelsByCategory(categoryId, page, limit);
 
 			if (models == null)
-				throw new ResourceNotFoundServiceException("models " + ErrorMessage.NOT_FOUND);
+				throw new ResourceNotFoundServiceException("models  not found");
 
 			addImageLinkToModel(models);
 
@@ -88,7 +87,7 @@ public class ModelServiceImpl implements ModelService {
 			List<Category> categories = modelDao.listAllCategories();
 
 			if (categories == null)
-				throw new ResourceNotFoundServiceException("categories " + ErrorMessage.NOT_FOUND);
+				throw new ResourceNotFoundServiceException("categories  not found");
 
 			return categories;
 		} catch (DAOException e) {
@@ -101,7 +100,7 @@ public class ModelServiceImpl implements ModelService {
 		try {
 			Model model = modelDao.getModelById(idModel);
 			if (model == null)
-				throw new ResourceNotFoundServiceException("model " + ErrorMessage.NOT_FOUND);
+				throw new ResourceNotFoundServiceException("model  not found");
 			return model;
 		} catch (DAOException e) {
 			throw new ServiceException(e);

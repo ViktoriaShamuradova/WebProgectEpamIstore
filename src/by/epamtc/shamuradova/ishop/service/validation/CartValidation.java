@@ -1,7 +1,6 @@
 package by.epamtc.shamuradova.ishop.service.validation;
 
 import by.epamtc.shamuradova.ishop.bean.entity.Cart;
-import by.epamtc.shamuradova.ishop.constant.ErrorMessage;
 import by.epamtc.shamuradova.ishop.service.exception.ResourceNotFoundServiceException;
 
 public class CartValidation {
@@ -11,7 +10,7 @@ public class CartValidation {
 
 	public static void checkCart(Cart cart) throws ResourceNotFoundServiceException {
 		if (cart == null)
-			throw new ResourceNotFoundServiceException(ErrorMessage.NOT_FOUND);
+			throw new ResourceNotFoundServiceException("not found model");
 
 	}
 }

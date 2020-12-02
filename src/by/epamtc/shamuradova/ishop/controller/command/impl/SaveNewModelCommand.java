@@ -10,6 +10,8 @@ import javax.servlet.http.HttpSession;
 
 import by.epamtc.shamuradova.ishop.bean.ModelEdition;
 import by.epamtc.shamuradova.ishop.bean.entity.User;
+import by.epamtc.shamuradova.ishop.constant.RequestNameParameters;
+import by.epamtc.shamuradova.ishop.constant.SessionNameParameters;
 import by.epamtc.shamuradova.ishop.controller.command.Command;
 import by.epamtc.shamuradova.ishop.service.ModelService;
 import by.epamtc.shamuradova.ishop.service.exception.ServiceException;
@@ -27,16 +29,10 @@ public class SaveNewModelCommand implements Command {
 
 	private static final String MAIN_COMMAND= "controller?command=ALL_MODELS_OR_BY_CATEGORY";
 	private static final String ERROR_COMMAND = "controller?command=GET_ERROR_PAGE";
-	private static final String NAME_CURRENT_COMMAND = "controller?command=SAVE_NEW_MODEL";
+	
 
-	private static final String USER = "user";
-	private static final String CURRENT_COMMAND = "command";
-	private static final String MODEL_NAME = "modelName";
-	private static final String MODEL_DESCRIPTION = "modelDescription";
-	private static final String MODEL_CATEGORY = "controller?command=GET_ERROR_PAGE";
-	private static final String MODEL_PRICE = "modelPrice";
-	private static final String MODEL_COUNT = "modelCount";
-	private static final String MODEL_PRODUCER = "modelProducer";
+	//private static final String MODEL_CATEGORY = "controller?command=GET_ERROR_PAGE";
+	
 
 	private ModelService modelService;
 
@@ -47,20 +43,18 @@ public class SaveNewModelCommand implements Command {
 	@Override
 	public void execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		try {
-
 			final HttpSession session = req.getSession();
-			session.removeAttribute(CURRENT_COMMAND);
-			session.setAttribute(CURRENT_COMMAND, NAME_CURRENT_COMMAND);
-			User user = (User) session.getAttribute(USER);
+			
+			User user = (User) session.getAttribute(SessionNameParameters.USER);
 
 			ModelEdition modelEdition = new ModelEdition();
 
-			modelEdition.setName(req.getParameter(MODEL_NAME));
-			modelEdition.setPrice(new BigDecimal(req.getParameter(MODEL_PRICE).replace(',', '.')).setScale(2));
-			modelEdition.setDescription(req.getParameter(MODEL_DESCRIPTION));
-			modelEdition.setCount(Integer.parseInt(req.getParameter(MODEL_COUNT)));
-			modelEdition.setCategory(req.getParameter(MODEL_CATEGORY));
-			modelEdition.setProducer(req.getParameter(MODEL_PRODUCER));
+			modelEdition.setName(req.getParameter(RequestNameParameters.MODEL_NAME));
+			modelEdition.setPrice(new BigDecimal(req.getParameter(RequestNameParameters.MODEL_PRICE).replace(',', '.')).setScale(2));
+			modelEdition.setDescription(req.getParameter(RequestNameParameters.MODEL_DESCRIPTION));
+			modelEdition.setCount(Integer.parseInt(req.getParameter(RequestNameParameters.MODEL_COUNT)));
+			//modelEdition.setCategory(req.getParameter(MODEL_CATEGORY));
+			modelEdition.setProducer(req.getParameter(RequestNameParameters.MODEL_PRODUCER));
 
 			modelService.saveNewModel(user, modelEdition);
 

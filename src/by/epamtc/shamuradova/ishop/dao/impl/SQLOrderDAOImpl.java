@@ -2,6 +2,7 @@ package by.epamtc.shamuradova.ishop.dao.impl;
 
 import java.sql.Connection;
 import java.sql.Date;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Collection;
 import java.util.List;
@@ -14,9 +15,11 @@ import by.epamtc.shamuradova.ishop.bean.StatusOrder;
 import by.epamtc.shamuradova.ishop.bean.entity.Order;
 import by.epamtc.shamuradova.ishop.bean.entity.OrderItem;
 import by.epamtc.shamuradova.ishop.constant.SQLQuery;
+import by.epamtc.shamuradova.ishop.constant.database_column_name.OrderColumnName;
 import by.epamtc.shamuradova.ishop.dao.OrderDAO;
 import by.epamtc.shamuradova.ishop.dao.exception.ConnectionPoolException;
 import by.epamtc.shamuradova.ishop.dao.exception.DAOException;
+import by.epamtc.shamuradova.ishop.dao.handler.ResultSetHandler;
 import by.epamtc.shamuradova.ishop.dao.handler.impl.ResultSetHandlerFactory;
 import by.epamtc.shamuradova.ishop.dao.pool.ConnectionPool;
 import by.epamtc.shamuradova.ishop.dao.util.JDBCUtil;
@@ -53,7 +56,7 @@ public class SQLOrderDAOImpl implements OrderDAO {
 			logger.error("Database error! Could not add OrderItem.", e);
 			throw new DAOException("Could not add OrderItem.", e);
 		} finally {
-			freeConnection(connection);
+			connectionPool.free(connection);
 		}
 	}
 
@@ -71,7 +74,7 @@ public class SQLOrderDAOImpl implements OrderDAO {
 			logger.error("Database error! Could not add Order.", e);
 			throw new DAOException("Could not add Order.", e);
 		} finally {
-			freeConnection(connection);
+			connectionPool.free(connection);
 		}
 	}
 
@@ -87,14 +90,14 @@ public class SQLOrderDAOImpl implements OrderDAO {
 			logger.error("Database error! Could not delete Order", e);
 			throw new DAOException("Could not delete Order", e);
 		} finally {
-			freeConnection(connection);
+			connectionPool.free(connection);
 		}
 	}
 
 	@Override
 	public void deleteOrderItemByIdOrder(int idOrder) throws DAOException {
 		Connection connection = null;
-		
+
 		try {
 			connection = connectionPool.getConnection();
 			JDBCUtil.insertDeleteUpdate(connection, SQLQuery.DELETE_ORDER_ITEM_BY_ID_ORDER, idOrder);
@@ -102,7 +105,7 @@ public class SQLOrderDAOImpl implements OrderDAO {
 			logger.error("Database error! Could not delete OrderItem.", e);
 			throw new DAOException("Could not delete OrderItem.", e);
 		} finally {
-			freeConnection(connection);
+			connectionPool.free(connection);
 		}
 	}
 
@@ -120,14 +123,14 @@ public class SQLOrderDAOImpl implements OrderDAO {
 			logger.error("Database error! Could not get Order.", e);
 			throw new DAOException("Could not get Order.", e);
 		} finally {
-			freeConnection(connection);
+			connectionPool.free(connection);
 		}
 	}
 
 	@Override
 	public List<OrderItem> getOrderItemsByIdOrder(int idOrder) throws DAOException {
 		Connection connection = null;
-		
+
 		try {
 			connection = connectionPool.getConnection();
 			return JDBCUtil.select(connection, SQLQuery.LIST_ORDER_ITEMS_BY_ID_ORDER, ResultSetHandlerFactory
@@ -137,7 +140,7 @@ public class SQLOrderDAOImpl implements OrderDAO {
 			logger.error("Database error! Could not get List of OrderItems.", e);
 			throw new DAOException("Could not get List of OrderItems", e);
 		} finally {
-			freeConnection(connection);
+			connectionPool.free(connection);
 		}
 	}
 
@@ -155,7 +158,31 @@ public class SQLOrderDAOImpl implements OrderDAO {
 			logger.error("Database error! Could not get List of Orders.", e);
 			throw new DAOException("Could not get List of Orders", e);
 		} finally {
-			freeConnection(connection);
+			connectionPool.free(connection);
+		}
+	}
+
+	@Override
+	public List<String> getListStatuses() throws DAOException {
+		Connection connection = null;
+		try {
+			connection = connectionPool.getConnection();
+
+			ResultSetHandler<String> oneRowResultSetHandler = new ResultSetHandler<String>() {
+				@Override
+				public String handle(ResultSet rs) throws SQLException {
+					return new String(rs.getString(1));
+				}
+			};
+
+			return JDBCUtil.select(connection, SQLQuery.LIST_STATUS,
+					ResultSetHandlerFactory.getListResultSetHandler(oneRowResultSetHandler));
+
+		} catch (ConnectionPoolException | SQLException e) {
+			logger.error("Database error! Could not get List of ststuses.", e);
+			throw new DAOException("Could not get List of statuses", e);
+		} finally {
+			connectionPool.free(connection);
 		}
 	}
 
@@ -173,14 +200,14 @@ public class SQLOrderDAOImpl implements OrderDAO {
 			logger.error("Database error! Could not get List of Orders.", e);
 			throw new DAOException("Could not get List of Orders", e);
 		} finally {
-			freeConnection(connection);
+			connectionPool.free(connection);
 		}
 	}
 
 	@Override
 	public int countOrdersByIdUser(int idUser) throws DAOException {
 		Connection connection = null;
-		
+
 		try {
 			connection = connectionPool.getConnection();
 			return JDBCUtil.select(connection, SQLQuery.COUNT_ORDERS_BY_ID_USER,
@@ -190,14 +217,14 @@ public class SQLOrderDAOImpl implements OrderDAO {
 			logger.error("Database error! Could not get count of Orders.", e);
 			throw new DAOException("Could not get count of Orders", e);
 		} finally {
-			freeConnection(connection);
+			connectionPool.free(connection);
 		}
 	}
 
 	@Override
 	public void updateOrderStatus(int orderId, StatusOrder status) throws DAOException {
 		Connection connection = null;
-		
+
 		try {
 			connection = connectionPool.getConnection();
 			JDBCUtil.insertDeleteUpdate(connection, SQLQuery.UPDATE_ORDER_STATUS_BY_ID, status.toString(), orderId);
@@ -205,7 +232,7 @@ public class SQLOrderDAOImpl implements OrderDAO {
 			logger.error("Database error! Could not update Order Status.", e);
 			throw new DAOException("Could not update Order Status", e);
 		} finally {
-			freeConnection(connection);
+			connectionPool.free(connection);
 		}
 	}
 
@@ -219,18 +246,7 @@ public class SQLOrderDAOImpl implements OrderDAO {
 			logger.error("Database error! Could not get count of Order.", e);
 			throw new DAOException("Could not get count of Order", e);
 		} finally {
-			freeConnection(connection);
-		}
-	}
-
-
-	private void freeConnection(Connection connection) throws DAOException {
-		if (connection != null) {
-			try {
-				connectionPool.free(connection);
-			} catch (ConnectionPoolException e) {
-				throw new DAOException(e);
-			}
+			connectionPool.free(connection);
 		}
 	}
 }

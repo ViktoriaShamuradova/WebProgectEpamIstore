@@ -56,5 +56,8 @@
 		</taglib>
 	</jsp-config>
 
+<listener>
+<listener-class>by.epamtc.shamuradova.ishop.listener.SourceInitListener</listener-class>
+</listener>
 
 </web-app>

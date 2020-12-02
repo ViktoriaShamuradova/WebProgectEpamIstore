@@ -8,6 +8,8 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import by.epamtc.shamuradova.ishop.bean.entity.User;
+import by.epamtc.shamuradova.ishop.constant.RequestNameParameters;
+import by.epamtc.shamuradova.ishop.constant.SessionNameParameters;
 import by.epamtc.shamuradova.ishop.controller.command.Command;
 import by.epamtc.shamuradova.ishop.service.UserService;
 import by.epamtc.shamuradova.ishop.service.exception.ServiceException;
@@ -26,11 +28,6 @@ public class DeleteUserFromBlackListCommand implements Command {
 
 	private static final String ERROR_COMMAND = "controller?command=GET_ERROR_PAGE";
 	private static final String BLACK_LIST_COMMAND = "controller?command=BLACK_LIST";
-	private static final String NAME_CURRENT_COMMAND = "controller?command=DELETE_USER_FROM_BLACK_LIST";
-
-	private static final String USER = "user";
-	private static final String USER_ID = "userId";
-	private static final String CURRENT_COMMAND = "command";
 
 	public DeleteUserFromBlackListCommand() {
 		userService = ServiceFactory.getInstance().getUserService();
@@ -40,11 +37,10 @@ public class DeleteUserFromBlackListCommand implements Command {
 	public void execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		try {
 			final HttpSession session = req.getSession(true);
-			session.removeAttribute(CURRENT_COMMAND);
-			session.setAttribute(CURRENT_COMMAND, NAME_CURRENT_COMMAND);
-			User user = (User) session.getAttribute(USER);
+			
+			User user = (User) session.getAttribute(SessionNameParameters.USER);
 
-			int userBlackListId = Integer.parseInt(req.getParameter(USER_ID));
+			int userBlackListId = Integer.parseInt(req.getParameter(RequestNameParameters.USER_ID));
 
 			userService.deleteUserBlackList(user, userBlackListId);
 

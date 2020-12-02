@@ -148,6 +148,17 @@ public class OrderServiceImpl implements OrderService {
 			throw new ServiceException(e);
 		}
 	}
+	
+	@Override
+	public List<String> getAllStatuses() throws ServiceException {
+		try {
+		
+			return orderDAO.getListStatuses();
+
+		} catch (DAOException e) {
+			throw new ServiceException(e);
+		}
+	}
 
 	@Override
 	public void changeStatusOrder(User user, int orderId) throws ServiceException {
@@ -178,4 +189,6 @@ public class OrderServiceImpl implements OrderService {
 			throw new ServiceException(e);
 		}
 	}
+
+	
 }

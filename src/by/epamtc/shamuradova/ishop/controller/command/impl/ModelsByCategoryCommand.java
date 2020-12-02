@@ -117,16 +117,16 @@ public class ModelsByCategoryCommand implements Command {
 		req.setAttribute(RequestNameParameters.PAGE_COUNT, getPageCount(modelsCount, PerPage.MODELS_ON_PAGE));
 		req.setAttribute(RequestNameParameters.MODEL_PER_PAGE, PerPage.MODELS_ON_PAGE);
 		req.setAttribute(RequestNameParameters.PAGE_NUMBER, pageNumber);
-		req.setAttribute(RequestNameParameters.MODEL_COUNT, modelsCount);
+		req.setAttribute(RequestNameParameters.MODELS_COUNT, modelsCount);
 	}
 	/**
 	 * Метод, который помещает в объект HttpServletRequest список всех категорий
 	 * моделей, и текущую категорию
 	 */
 	private void setCategories(HttpServletRequest req, HttpServletResponse resp) throws ServiceException {
-		String category = req.getParameter(RequestNameParameters.MODEL_CATEGORY);
+		String category = req.getParameter(RequestNameParameters.CATEGORY);
 		List<Category> categories = modelService.listAllCategories();
-		req.setAttribute(RequestNameParameters.MODELS_CATEGORIES, categories);
+		req.setAttribute(RequestNameParameters.CATEGORIES, categories);
 		req.setAttribute(RequestNameParameters.MODEL_CURRENT_CATEGORY, category); // сохранить текущую выбранную категорию, чтобы
 		// загружать далее по категориям
 	}

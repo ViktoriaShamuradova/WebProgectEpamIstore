@@ -54,8 +54,8 @@ public class SignInCommand implements Command {
 		final HttpSession session = req.getSession();
 		try {	
 			AuthData authData = new AuthData();
-			authData.setLogin(req.getParameter(RequestNameParameters.LOGIN));
-			authData.setPassword(req.getParameter(RequestNameParameters.PASSWORD).toCharArray());
+			authData.setLogin(req.getParameter(RequestNameParameters.USER_LOGIN));
+			authData.setPassword(req.getParameter(RequestNameParameters.USER_PASSWORD).toCharArray());
 
 			User user = signInService.signIn(authData);
 

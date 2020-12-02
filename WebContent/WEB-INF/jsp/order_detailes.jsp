@@ -64,14 +64,9 @@
 	  		</ol>
 	  	</nav>
 	  	
-	  	<c:choose>
-	  		<c:when test="${sessionScope.user.role == 'ADMIN'}">
+	  	
 	  			<a class="btn btn-secondary" href="controller?command=all_orders" role="button"><c:out value="${back}" /></a>
-	  		</c:when>
-	  		<c:otherwise>
-	  			<a class="btn btn-secondary" href="controller?command=my_orders" role="button"><c:out value="${back}" /></a>
-	  		</c:otherwise>
-	  	</c:choose>
+	  		
 	  	
 	</div>
 	

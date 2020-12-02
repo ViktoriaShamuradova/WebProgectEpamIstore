@@ -23,4 +23,6 @@ public interface OrderService {
 
 	public void changeStatusOrder(User user, int orderId) throws ServiceException;
 
+	public List<String> getAllStatuses() throws ServiceException;
+
 }

@@ -8,7 +8,6 @@ import org.apache.logging.log4j.Logger;
 
 import by.epamtc.shamuradova.ishop.bean.AuthData;
 import by.epamtc.shamuradova.ishop.bean.entity.User;
-import by.epamtc.shamuradova.ishop.constant.ErrorMessage;
 import by.epamtc.shamuradova.ishop.dao.SignInDAO;
 import by.epamtc.shamuradova.ishop.dao.exception.DAOException;
 import by.epamtc.shamuradova.ishop.dao.factory.DAOFactory;
@@ -70,10 +69,10 @@ public class SignInServiceImpl implements SignInService {
 		String password = new String(data.getPassword());
 
 		if (login == null || login.trim().isEmpty()) {
-			error.append(SignInServiceImpl.LOGIN + " " + ErrorMessage.CANT_BE_EMPTY + " ");
+			error.append(SignInServiceImpl.LOGIN + " cant be empty ");
 		}
 		if (password == null || password.trim().isEmpty()) {
-			error.append(SignInServiceImpl.PASSWORD + " " + ErrorMessage.CANT_BE_EMPTY + " ");
+			error.append(SignInServiceImpl.PASSWORD + " cant be empty ");
 		}
 		password = null;
 		if (error.length() != 0) {

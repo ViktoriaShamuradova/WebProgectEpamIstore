@@ -3,7 +3,6 @@ package by.epamtc.shamuradova.ishop.service.impl;
 import java.util.List;
 
 import by.epamtc.shamuradova.ishop.bean.entity.User;
-import by.epamtc.shamuradova.ishop.constant.ErrorMessage;
 import by.epamtc.shamuradova.ishop.constant.UserRole;
 import by.epamtc.shamuradova.ishop.dao.UserDAO;
 import by.epamtc.shamuradova.ishop.dao.exception.DAOException;
@@ -29,7 +28,7 @@ public class UserServiceImpl implements UserService {
 			List<User> users = userDAO.getBlackList(page, limit);
 
 			if (users == null)
-				throw new ResourceNotFoundServiceException("users " + ErrorMessage.NOT_FOUND);
+				throw new ResourceNotFoundServiceException("users not found");
 
 			return users;
 		} catch (DAOException e) {
@@ -54,7 +53,7 @@ public class UserServiceImpl implements UserService {
 			List<User> users = userDAO.getUsers(page, limit);
 
 			if (users == null)
-				throw new ResourceNotFoundServiceException("users " + ErrorMessage.NOT_FOUND);
+				throw new ResourceNotFoundServiceException("users not found");
 
 			return users;
 		} catch (DAOException e) {
@@ -101,7 +100,7 @@ public class UserServiceImpl implements UserService {
 			List<User> users = userDAO.getUsersByRole(page, limit, roleId);
 
 			if (users == null)
-				throw new ResourceNotFoundServiceException("users " + ErrorMessage.NOT_FOUND);
+				throw new ResourceNotFoundServiceException("users not found");
 
 			return users;
 		} catch (DAOException e) {
@@ -126,7 +125,7 @@ public class UserServiceImpl implements UserService {
 			User userRes = userDAO.getUserById(userId);
 
 			if (userRes == null)
-				throw new ResourceNotFoundServiceException("user " + ErrorMessage.NOT_FOUND);
+				throw new ResourceNotFoundServiceException("user not found");
 
 			if (user.getRole().equals(UserRole.ADMIN) || user.getId() == userId) {
 				return userRes;

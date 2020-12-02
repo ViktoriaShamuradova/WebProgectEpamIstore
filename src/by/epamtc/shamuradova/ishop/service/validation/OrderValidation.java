@@ -1,8 +1,6 @@
 package by.epamtc.shamuradova.ishop.service.validation;
 
-
 import by.epamtc.shamuradova.ishop.bean.ShopCart;
-import by.epamtc.shamuradova.ishop.constant.ErrorMessage;
 import by.epamtc.shamuradova.ishop.service.exception.ValidationException;
 
 public class OrderValidation {
@@ -14,7 +12,7 @@ public class OrderValidation {
 		StringBuilder errorMessage = new StringBuilder();
 
 		if (shopCart == null || shopCart.getShopCartItems().isEmpty()) {
-			errorMessage.append("Name " + ErrorMessage.CANT_BE_EMPTY + " ");
+			errorMessage.append("Name cant be empty ");
 		}
 
 		if (errorMessage.length() != 0) {

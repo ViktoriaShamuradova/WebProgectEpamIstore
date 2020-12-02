@@ -71,6 +71,7 @@ public class ConnectionPool {
 			busyConnections = new ArrayBlockingQueue<Connection>(poolSize);
 
 			addConnectionsInFreeConnections(url, user, password);
+			logger.info("pool initialized");
 		} catch (ClassNotFoundException e) {
 			logger.error(ERROR_FIND_DRIVER, e);
 			throw new ConnectionPoolException(ERROR_FIND_DRIVER, e);

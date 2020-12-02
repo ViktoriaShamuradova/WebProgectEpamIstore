@@ -7,7 +7,6 @@ import java.util.regex.Pattern;
 
 import by.epamtc.shamuradova.ishop.bean.RegInfo;
 import by.epamtc.shamuradova.ishop.bean.entity.User;
-import by.epamtc.shamuradova.ishop.constant.ErrorMessage;
 import by.epamtc.shamuradova.ishop.constant.PatternContainer;
 import by.epamtc.shamuradova.ishop.dao.SignUpDAO;
 import by.epamtc.shamuradova.ishop.dao.UserDAO;
@@ -56,7 +55,7 @@ public class SignUpServiceImpl implements SignUpService {
 	private void checkLoginFormat(String login, Pattern loginPattern) throws ServiceException {
 		Matcher matcher = PatternContainer.LOGIN_PATTERN.matcher(login);
 		if (!matcher.find()) {
-			throw new ValidationException(ErrorMessage.LOGIN_FORMAT);
+			throw new ValidationException("wrong login format");
 		}
 	}
 
@@ -64,7 +63,7 @@ public class SignUpServiceImpl implements SignUpService {
 		Matcher matcher = PatternContainer.PASSWORD_PATTERN.matcher(password);
 		password = null;
 		if (!matcher.find()) {
-			throw new ValidationException(ErrorMessage.PASSWORD_FORMAT);
+			throw new ValidationException("wrong password format");
 		}
 	}
 
@@ -72,19 +71,19 @@ public class SignUpServiceImpl implements SignUpService {
 		StringBuilder errorMessage = new StringBuilder();
 
 		if (info.getName() == null || "".equals(info.getName().trim())) {
-			errorMessage.append("Name " + ErrorMessage.CANT_BE_EMPTY + " ");
+			errorMessage.append("Name cant be empty ");
 		}
 		if (info.getSurname() == null || "".equals(info.getSurname().trim())) {
-			errorMessage.append("Surname " + ErrorMessage.CANT_BE_EMPTY + " ");
+			errorMessage.append("Surname cant be empty ");
 		}
 		if (info.getLogin() == null || "".equals(info.getLogin().trim())) {
-			errorMessage.append("Login " + ErrorMessage.CANT_BE_EMPTY + " ");
+			errorMessage.append("Login cant be empty ");
 		}
 		if (info.getEmail() == null || "".equals(info.getEmail().trim())) {
-			errorMessage.append("Email " + ErrorMessage.CANT_BE_EMPTY + " ");
+			errorMessage.append("Email cant be empty ");
 		}
 		if (info.getPassword() == null || "".equals(info.getPassword())) {
-			errorMessage.append("Password " + ErrorMessage.CANT_BE_EMPTY + " ");
+			errorMessage.append("Password cant be empty ");
 		}
 		if (errorMessage.length() != 0) {
 			throw new ValidationException(errorMessage.toString());

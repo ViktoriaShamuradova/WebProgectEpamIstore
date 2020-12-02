@@ -71,6 +71,8 @@ public class SQLQuery {
 	public static final String CART_ITEM_BY_CART_ID_MODEL_ID = "select * from cart_items where id_cart=? and id_model=?";
 	public static final String UPDATE_CART_ITEM_COUNT_BY_MODEL_ID_CART_ID = "update cart_items set count=? where id_model=? and id_cart=?";
 	public static final String LIST_ORDER = "select o.id, o.id_user, o.created, s.name as status from orders o, status_order s where o.id_status_order=s.id order by o.created desc limit ? offset ?";
+	public static final String LIST_STATUS = "select name from status_order";
+
 	public static final String COUNT_ORDERS = "select count(*) from orders";
 	public static final String UPDATE_ORDER_STATUS_BY_ID = "update orders set id_status_order=(select s.id from status_order s where s.name=?) where id=?";
 

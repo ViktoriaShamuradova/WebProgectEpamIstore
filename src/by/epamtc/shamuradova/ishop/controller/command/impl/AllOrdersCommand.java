@@ -48,63 +48,61 @@ public class AllOrdersCommand implements Command {
 
 	@Override
 	public void execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		try {
+			final HttpSession session = req.getSession();
 
-		final HttpSession session = req.getSession();
-	
-		User user = (User) session.getAttribute(SessionNameParameters.USER);
+			User user = (User) session.getAttribute(SessionNameParameters.USER);
 
-		if (user.getRole().equalsIgnoreCase(UserRole.ADMIN)) {
-			allOrdersForAdmin(req, resp, user);
-		}
-		if (user.getRole().equalsIgnoreCase(UserRole.SHOPPER)) {
-			allOrdersForShopper(req, resp, user);
+			List<String> statuses = orderService.getAllStatuses();
+			req.setAttribute("statuses", statuses);
+
+			if (user.getRole().equalsIgnoreCase(UserRole.ADMIN)) {
+				allOrdersForAdmin(req, resp, user);
+			}
+			if (user.getRole().equalsIgnoreCase(UserRole.SHOPPER)) {
+				allOrdersForShopper(req, resp, user);
+			}
+		} catch (ServiceException e) {
+			e.printStackTrace();
+			resp.sendRedirect(ERROR_COMMAND);
 		}
 	}
 
 	private void allOrdersForShopper(HttpServletRequest req, HttpServletResponse resp, User user)
-			throws ServletException, IOException {
-		try {
+			throws ServiceException, ServletException, IOException {
 
-			List<Order> orders = orderService.listMyOrders(user, 1, PerPage.ORDERS_ON_PAGE);
-			int orderCount = orderService.countOrders(user.getId());
+		List<Order> orders = orderService.listMyOrders(user, 1, PerPage.ORDERS_ON_PAGE);
+		int orderCount = orderService.countOrders(user.getId());
 
-			req.setAttribute(RequestNameParameters.ORDERS, orders);
-			req.setAttribute(RequestNameParameters.PAGE_COUNT, getPageCount(orderCount, PerPage.ORDERS_ON_PAGE));
-			req.setAttribute(RequestNameParameters.PAGE_NUMBER, 1);
-			req.setAttribute(RequestNameParameters.REDIRECT_TO, NAME_CURRENT_COMMAND);
-			
-			req.getRequestDispatcher(CURRENT_SHOPPER_PAGE).forward(req, resp);
+		req.setAttribute(RequestNameParameters.ORDERS, orders);
+		req.setAttribute(RequestNameParameters.PAGE_COUNT, getPageCount(orderCount, PerPage.ORDERS_ON_PAGE));
+		req.setAttribute(RequestNameParameters.PAGE_NUMBER, 1);
+		req.setAttribute(RequestNameParameters.REDIRECT_TO, NAME_CURRENT_COMMAND);
 
-		} catch (ServiceException e) {
-			e.printStackTrace();
-			resp.sendRedirect(ERROR_COMMAND);
-		}
+		req.getRequestDispatcher(CURRENT_SHOPPER_PAGE).forward(req, resp);
+
 	}
 
 	private void allOrdersForAdmin(HttpServletRequest req, HttpServletResponse resp, User user)
-			throws ServletException, IOException {
-		try {
-			String pageNumberString = req.getParameter(RequestNameParameters.PAGE_NUMBER);
-			int pageNumber = pageNumberString == null ? FIRST_PAGE : Integer.parseInt(pageNumberString);
+			throws ServiceException, ServletException, IOException {
 
-			List<Order> orders = orderService.getAllOrders(user, pageNumber, PerPage.ORDERS_ON_PAGE);
-			int orderCount = orderService.countOrders();
+		String pageNumberString = req.getParameter(RequestNameParameters.PAGE_NUMBER);
+		int pageNumber = pageNumberString == null ? FIRST_PAGE : Integer.parseInt(pageNumberString);
 
-			req.setAttribute(RequestNameParameters.ORDERS, orders);
-			req.setAttribute(RequestNameParameters.PAGE_COUNT, getPageCount(orderCount, PerPage.ORDERS_ON_PAGE));
-			req.setAttribute(RequestNameParameters.ORDER_PER_PAGE, PerPage.ORDERS_ON_PAGE);
-			req.setAttribute(RequestNameParameters.PAGE_NUMBER, pageNumber);
-			req.setAttribute(RequestNameParameters.ORDER_COUNT, orderCount);
+		List<Order> orders = orderService.getAllOrders(user, pageNumber, PerPage.ORDERS_ON_PAGE);
+		int orderCount = orderService.countOrders();
 
-			req.setAttribute(RequestNameParameters.CURRENT_COMMAND, NAME_CURRENT_COMMAND);
+		req.setAttribute(RequestNameParameters.ORDERS, orders);
+		req.setAttribute(RequestNameParameters.PAGE_COUNT, getPageCount(orderCount, PerPage.ORDERS_ON_PAGE));
+		req.setAttribute(RequestNameParameters.ORDER_PER_PAGE, PerPage.ORDERS_ON_PAGE);
+		req.setAttribute(RequestNameParameters.PAGE_NUMBER, pageNumber);
+		req.setAttribute(RequestNameParameters.ORDER_COUNT, orderCount);
 
-			RequestDispatcher dispatcher = req.getRequestDispatcher(CURRENT_ADMIN_PAGE);
-			dispatcher.forward(req, resp);
+		req.setAttribute(RequestNameParameters.CURRENT_COMMAND, NAME_CURRENT_COMMAND);
 
-		} catch (ServiceException e) {
-			e.printStackTrace();
-			resp.sendRedirect(ERROR_COMMAND);
-		}
+		RequestDispatcher dispatcher = req.getRequestDispatcher(CURRENT_ADMIN_PAGE);
+		dispatcher.forward(req, resp);
+
 	}
 
 	private int getPageCount(int totalCount, int itemsPerCount) {

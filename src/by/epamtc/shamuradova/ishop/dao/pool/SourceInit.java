@@ -1,15 +1,12 @@
 package by.epamtc.shamuradova.ishop.dao.pool;
 
-import java.io.IOException;
-
-import by.epamtc.shamuradova.ishop.dao.exception.ConnectionPoolException;
 
 /**
  * Класс инициализации пула соединений
  * 
  * Connection pool initializing class
  * 
- * @author Шамурадова Виктория, 2020
+ * @author Victoria Shamuradova  2020
  */
 public class SourceInit {
 
@@ -21,12 +18,12 @@ public class SourceInit {
 		return INSTANCE;
 	}
 	
-	public void init() throws ConnectionPoolException {
+	public void init()  {
 		ConnectionPool connectionPool = ConnectionPool.getInstance();
 		connectionPool.initPoolData();
 	}
 	
-	public void destroy() throws IOException, ConnectionPoolException {
+	public void destroy()  {
 		ConnectionPool connectionPool = ConnectionPool.getInstance();
 		connectionPool.close();
 	}
