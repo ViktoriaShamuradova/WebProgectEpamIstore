@@ -163,6 +163,43 @@ public class SQLOrderDAOImpl implements OrderDAO {
 	}
 
 	@Override
+	public List<Order> getListOrdersByStatus(int limit, int offset, String status) throws DAOException {
+		Connection connection = null;
+
+		try {
+			connection = connectionPool.getConnection();
+			return JDBCUtil.select(connection, SQLQuery.LIST_ORDER_BY_STATUS,
+					ResultSetHandlerFactory.getListResultSetHandler(ResultSetHandlerFactory.ORDER_RESULT_SET_HANDLER),
+					status, limit, offset);
+
+		} catch (ConnectionPoolException | SQLException e) {
+			logger.error("Database error! Could not get List of Orders.", e);
+			throw new DAOException("Could not get List of Orders", e);
+		} finally {
+			connectionPool.free(connection);
+		}
+	}
+
+	@Override
+	public List<Order> getListOrdersByUserIdAndStatuc(int userId, int limit, int offset, String status)
+			throws DAOException {
+		Connection connection = null;
+
+		try {
+			connection = connectionPool.getConnection();
+			return JDBCUtil.select(connection, SQLQuery.LIST_ORDER_BY_STATUS_AND_USER_ID,
+					ResultSetHandlerFactory.getListResultSetHandler(ResultSetHandlerFactory.ORDER_RESULT_SET_HANDLER),
+					userId, status, limit, offset);
+
+		} catch (ConnectionPoolException | SQLException e) {
+			logger.error("Database error! Could not get List of Orders.", e);
+			throw new DAOException("Could not get List of Orders", e);
+		} finally {
+			connectionPool.free(connection);
+		}
+	}
+
+	@Override
 	public List<String> getListStatuses() throws DAOException {
 		Connection connection = null;
 		try {
@@ -249,4 +286,19 @@ public class SQLOrderDAOImpl implements OrderDAO {
 			connectionPool.free(connection);
 		}
 	}
+
+	@Override
+	public int countOrdersByStatus(String status) throws DAOException {
+		Connection connection = null;
+		try {
+			connection = connectionPool.getConnection();
+			return JDBCUtil.select(connection, SQLQuery.COUNT_ORDERS_BY_STATUS, ResultSetHandlerFactory.COUNT_RESULT_SET_HANDLER, status);
+		} catch (ConnectionPoolException | SQLException e) {
+			logger.error("Database error! Could not get count of Order.", e);
+			throw new DAOException("Could not get count of Order", e);
+		} finally {
+			connectionPool.free(connection);
+		}
+	}
+
 }

@@ -22,6 +22,9 @@ public final class RequestNameParameters {
 	public static final String CATEGORIES = "categories";
 	public static final String CATEGORY = "category";
 	
+	public static final String STATUSES = "statuses";
+	public static final String STATUS = "status";
+	
 	public static final String MODEL_CATEGORY = "category";
 	public static final String MODELS_COUNT = "modelsCount";
 	public static final String MODELS = "models";

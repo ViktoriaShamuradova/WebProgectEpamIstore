@@ -30,7 +30,7 @@ import by.epamtc.shamuradova.ishop.controller.command.impl.SignInCommand;
 import by.epamtc.shamuradova.ishop.controller.command.impl.SignOutCommand;
 import by.epamtc.shamuradova.ishop.controller.command.impl.SignUpShopperCommand;
 import by.epamtc.shamuradova.ishop.controller.command.impl.UserDetailesCommand;
-import by.epamtc.shamuradova.ishop.controller.command.impl.UsersByRoleCommand;
+
 
 public class CommandProvider {
 
@@ -65,9 +65,7 @@ public class CommandProvider {
 		commands.put(ParameterNameCommand.SAVE_NEW_MODEL, new SaveNewModelCommand());
 		commands.put(ParameterNameCommand.ALL_ORDERS, new AllOrdersCommand());
 		commands.put(ParameterNameCommand.CHANGE_STATUS_ORDER, new ChangeStatusOrderCommand());
-		commands.put(ParameterNameCommand.USER_DETAILES, new UserDetailesCommand());
-		
-		commands.put(ParameterNameCommand.USERS_BY_ROLE, new UsersByRoleCommand());
+		commands.put(ParameterNameCommand.USER_DETAILES, new UserDetailesCommand());		
 		
 	}
 

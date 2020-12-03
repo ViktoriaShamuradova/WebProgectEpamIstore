@@ -28,9 +28,9 @@ public class EnterPageCommand implements Command {
 	public void execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		final HttpSession session = req.getSession();
 
-		session.removeAttribute(SessionNameParameters.CURRENT_MESSAGE);
-
 		String message = (String) session.getAttribute(SessionNameParameters.CURRENT_MESSAGE);
+		
+		session.removeAttribute(SessionNameParameters.CURRENT_MESSAGE);
 
 		req.setAttribute(RequestNameParameters.CURRENT_MESSAGE, message);
 		req.setAttribute(RequestNameParameters.REDIRECT_TO, NAME_CURRENT_COMMAND);

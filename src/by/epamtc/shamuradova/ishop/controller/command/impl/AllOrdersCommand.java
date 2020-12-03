@@ -54,7 +54,7 @@ public class AllOrdersCommand implements Command {
 			User user = (User) session.getAttribute(SessionNameParameters.USER);
 
 			List<String> statuses = orderService.getAllStatuses();
-			req.setAttribute("statuses", statuses);
+			req.setAttribute(RequestNameParameters.STATUSES, statuses);
 
 			if (user.getRole().equalsIgnoreCase(UserRole.ADMIN)) {
 				allOrdersForAdmin(req, resp, user);
@@ -68,29 +68,23 @@ public class AllOrdersCommand implements Command {
 		}
 	}
 
-	private void allOrdersForShopper(HttpServletRequest req, HttpServletResponse resp, User user)
-			throws ServiceException, ServletException, IOException {
-
-		List<Order> orders = orderService.listMyOrders(user, 1, PerPage.ORDERS_ON_PAGE);
-		int orderCount = orderService.countOrders(user.getId());
-
-		req.setAttribute(RequestNameParameters.ORDERS, orders);
-		req.setAttribute(RequestNameParameters.PAGE_COUNT, getPageCount(orderCount, PerPage.ORDERS_ON_PAGE));
-		req.setAttribute(RequestNameParameters.PAGE_NUMBER, 1);
-		req.setAttribute(RequestNameParameters.REDIRECT_TO, NAME_CURRENT_COMMAND);
-
-		req.getRequestDispatcher(CURRENT_SHOPPER_PAGE).forward(req, resp);
-
-	}
-
 	private void allOrdersForAdmin(HttpServletRequest req, HttpServletResponse resp, User user)
 			throws ServiceException, ServletException, IOException {
 
 		String pageNumberString = req.getParameter(RequestNameParameters.PAGE_NUMBER);
 		int pageNumber = pageNumberString == null ? FIRST_PAGE : Integer.parseInt(pageNumberString);
+		String status = req.getParameter(RequestNameParameters.STATUS);
+		List<Order> orders;
+		int orderCount;
 
-		List<Order> orders = orderService.getAllOrders(user, pageNumber, PerPage.ORDERS_ON_PAGE);
-		int orderCount = orderService.countOrders();
+		if (status == null || status.trim().isEmpty()) {
+			orders = orderService.getAllOrders(user, pageNumber, PerPage.ORDERS_ON_PAGE);
+			orderCount = orderService.countOrders();
+		} else {
+			orders = orderService.getOrdersByStatus(pageNumber, PerPage.ORDERS_ON_PAGE, user, status);
+			orderCount = orderService.countOrdersByStatus(status);
+			req.setAttribute("status", status);
+		}
 
 		req.setAttribute(RequestNameParameters.ORDERS, orders);
 		req.setAttribute(RequestNameParameters.PAGE_COUNT, getPageCount(orderCount, PerPage.ORDERS_ON_PAGE));
@@ -112,5 +106,20 @@ public class AllOrdersCommand implements Command {
 			res++;
 		}
 		return res;
+	}
+
+	private void allOrdersForShopper(HttpServletRequest req, HttpServletResponse resp, User user)
+			throws ServiceException, ServletException, IOException {
+
+		List<Order> orders = orderService.listMyOrders(user, 1, PerPage.ORDERS_ON_PAGE);
+		int orderCount = orderService.countOrders(user.getId());
+
+		req.setAttribute(RequestNameParameters.ORDERS, orders);
+		req.setAttribute(RequestNameParameters.PAGE_COUNT, getPageCount(orderCount, PerPage.ORDERS_ON_PAGE));
+		req.setAttribute(RequestNameParameters.PAGE_NUMBER, 1);
+		req.setAttribute(RequestNameParameters.REDIRECT_TO, NAME_CURRENT_COMMAND);
+
+		req.getRequestDispatcher(CURRENT_SHOPPER_PAGE).forward(req, resp);
+
 	}
 }

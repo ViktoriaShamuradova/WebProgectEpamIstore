@@ -52,6 +52,12 @@ public class SQLQuery {
 	public static final String DELETE_ORDER_ITEM_BY_ID_ORDER = "delete from order_items where id_order=?";
 	public static final String LAST_INSERT_ID = "SELECT LAST_INSERT_ID();";
 	public static final String LIST_ORDER_BY_ID_USER = "SELECT o.id, o.created,o.id_user, s.name as status from orders o, status_order s where o.id_user=? and o.id_status_order=s.id ORDER BY id DESC limit ? offset ?";
+	
+	public static final String LIST_ORDER_BY_STATUS = "SELECT o.id, o.created, o.id_user, s.name as status from orders o, status_order s where s.name=? and o.id_status_order=s.id ORDER BY id DESC limit ? offset ?";
+	public static final String LIST_ORDER = "select o.id, o.id_user, o.created, s.name as status from orders o, status_order s where o.id_status_order=s.id order by o.created desc limit ? offset ?";
+	public static final String LIST_ORDER_BY_STATUS_AND_USER_ID = "SELECT o.id, o.created, o.id_user, s.name as status from orders o, status_order s where  o.id_user =? and s.name=? and o.id_status_order=s.id ORDER BY id DESC limit ? offset ?";
+
+	
 	public static final String COUNT_ORDERS_BY_ID_USER = "select count(*) from orders where id_user=?";
 	public static final String COUNT_MODELS = "select count(*) from models";
 	public static final String COUNT_MODELS_BY_CATEGORY_ID = "select count(*) from models INNER JOIN categories ON models.id_category=categories.id where categories.id=?";
@@ -70,10 +76,11 @@ public class SQLQuery {
 	public static final String MODEL_IMAGE_BY_ID = "select image_link from models where id=?";
 	public static final String CART_ITEM_BY_CART_ID_MODEL_ID = "select * from cart_items where id_cart=? and id_model=?";
 	public static final String UPDATE_CART_ITEM_COUNT_BY_MODEL_ID_CART_ID = "update cart_items set count=? where id_model=? and id_cart=?";
-	public static final String LIST_ORDER = "select o.id, o.id_user, o.created, s.name as status from orders o, status_order s where o.id_status_order=s.id order by o.created desc limit ? offset ?";
+
 	public static final String LIST_STATUS = "select name from status_order";
 
 	public static final String COUNT_ORDERS = "select count(*) from orders";
+	public static final String COUNT_ORDERS_BY_STATUS = "select count(*) from orders inner join status_order s on orders.id_status_order=s.id where s.name=?";
 	public static final String UPDATE_ORDER_STATUS_BY_ID = "update orders set id_status_order=(select s.id from status_order s where s.name=?) where id=?";
 
 }

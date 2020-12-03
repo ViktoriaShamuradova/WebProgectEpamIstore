@@ -25,4 +25,8 @@ public interface OrderService {
 
 	public List<String> getAllStatuses() throws ServiceException;
 
+	public List<Order> getOrdersByStatus(int page, int limit, User user, String status) throws ServiceException;
+
+	public int countOrdersByStatus(String status) throws ServiceException;
+
 }

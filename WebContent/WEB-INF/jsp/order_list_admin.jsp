@@ -53,7 +53,7 @@
  									 </button>
  									 <div class="dropdown-menu">
  									 	<c:forEach var="status" items="${statuses}">
- 									 		<a class="dropdown-item font-weight-bold" href="controller?command=orders_by_status&statusName=${status}"><c:out value="${status}" /></a>
+ 									 		<a class="dropdown-item font-weight-bold" href="controller?command=ALL_ORDERS&status=${status}"><c:out value="${status}" /></a>
  									 	
  									 	</c:forEach>
 																		 
@@ -72,7 +72,7 @@
 						
 					</tbody>
 				</table>
-					<pag:pagination currentCommand ="${command}" totalEntity="${ordersCount}" perPage="${ordersPerPage}" currentPage="${pageNumber}" />
+					<pag:pagination currentCommand ="${command}" totalEntity="${ordersCount}" perPage="${ordersPerPage}" currentPage="${pageNumber}" status="${status}" />
 					
 			</div>			
 		</div>

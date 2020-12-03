@@ -60,8 +60,8 @@
    											<c:out value="${roleLoc}" />
  									 </button>
  									 <div class="dropdown-menu">
-										    <a class="dropdown-item font-weight-bold" href="controller?command=users_by_role&roleId=1"><c:out value="${adminLoc}" /></a>
-										    <a class="dropdown-item font-weight-bold" href="controller?command=users_by_role&roleId=2"><c:out value="${shopperLoc}" /></a>									 
+										    <a class="dropdown-item font-weight-bold" href="controller?command=all_users&roleId=1"><c:out value="${adminLoc}" /></a>
+										    <a class="dropdown-item font-weight-bold" href="controller?command=all_users&roleId=2"><c:out value="${shopperLoc}" /></a>									 
 										    <div class="dropdown-divider font-weight-bold"></div>
 										    <a class="dropdown-item font-weight-bold" href="controller?command=all_users"><c:out value="${allUsersLoc}" /></a>
 									 </div>

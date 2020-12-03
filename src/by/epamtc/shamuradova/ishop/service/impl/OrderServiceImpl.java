@@ -32,7 +32,7 @@ public class OrderServiceImpl implements OrderService {
 	private OrderDAO orderDAO;
 	private CartDAO cartDAO;
 	private StatusOrderLine statusOrderLine;
-	
+
 	private static final Logger logger = LogManager.getLogger(SQLUserDAOImpl.class);
 
 	public OrderServiceImpl() {
@@ -74,7 +74,7 @@ public class OrderServiceImpl implements OrderService {
 			return idOrder;
 		} catch (DAOException e) {
 
-			throw new ServiceException( e);
+			throw new ServiceException(e);
 		}
 	}
 
@@ -138,6 +138,15 @@ public class OrderServiceImpl implements OrderService {
 	}
 
 	@Override
+	public int countOrdersByStatus(String status) throws ServiceException {
+		try {
+			return orderDAO.countOrdersByStatus(status);
+		} catch (DAOException e) {
+			throw new ServiceException(e);
+		}
+	}
+
+	@Override
 	public List<Order> getAllOrders(User user, int page, int limit) throws ServiceException {
 		try {
 			UserValidation.checkRoleAdmin(user);
@@ -148,11 +157,26 @@ public class OrderServiceImpl implements OrderService {
 			throw new ServiceException(e);
 		}
 	}
-	
+
+	@Override
+	public List<Order> getOrdersByStatus(int page, int limit, User user, String status) throws ServiceException {
+		try {
+			int offset = (page - 1) * limit;
+			if (user.getRole().equals(UserRole.ADMIN)) {
+				return orderDAO.getListOrdersByStatus(limit, offset, status);
+			} else { // значит user shopper
+				return orderDAO.getListOrdersByUserIdAndStatuc(user.getId(), limit, offset, status);
+			}
+
+		} catch (DAOException e) {
+			throw new ServiceException(e);
+		}
+	}
+
 	@Override
 	public List<String> getAllStatuses() throws ServiceException {
 		try {
-		
+
 			return orderDAO.getListStatuses();
 
 		} catch (DAOException e) {
@@ -190,5 +214,4 @@ public class OrderServiceImpl implements OrderService {
 		}
 	}
 
-	
 }

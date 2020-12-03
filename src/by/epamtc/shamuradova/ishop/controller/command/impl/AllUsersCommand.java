@@ -42,20 +42,11 @@ public class AllUsersCommand implements Command {
 	public void execute(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		try {
 			final HttpSession session = req.getSession();
-			
+
 			User user = (User) session.getAttribute(SessionNameParameters.USER);
 
-			String pageNumberString = req.getParameter(RequestNameParameters.PAGE_NUMBER);
-			int pageNumber = pageNumberString == null ? FIRST_PAGE : Integer.parseInt(pageNumberString);
+			setUsers(req, resp, user);
 
-			List<User> users = userService.allUsers(user, pageNumber, PerPage.USERS_ON_PAGE);
-			int userCount = userService.countUsers();
-
-			req.setAttribute(RequestNameParameters.USERS, users);
-			req.setAttribute(RequestNameParameters.PAGE_NUMBER, pageNumber);
-			req.setAttribute(RequestNameParameters.USER_COUNT, userCount);
-			req.setAttribute(RequestNameParameters.PER_PAGE, PerPage.USERS_ON_PAGE);
-			req.setAttribute(RequestNameParameters.CURRENT_COMMAND, NAME_CURRENT_COMMAND);
 			req.setAttribute(RequestNameParameters.REDIRECT_TO, NAME_CURRENT_COMMAND);
 
 			req.getRequestDispatcher(NAME_CURRENT_PAGE).forward(req, resp);
@@ -64,5 +55,31 @@ public class AllUsersCommand implements Command {
 			e.printStackTrace();
 			resp.sendRedirect(ERROR_COMMAND);
 		}
+	}
+
+	private void setUsers(HttpServletRequest req, HttpServletResponse resp, User user) throws ServiceException {
+		String pageNumberString = req.getParameter(RequestNameParameters.PAGE_NUMBER);
+		int pageNumber = pageNumberString == null ? FIRST_PAGE : Integer.parseInt(pageNumberString);
+		String roleIdStr = req.getParameter(RequestNameParameters.USER_ROLE_ID);
+		List<User> users;
+		int userCount;
+
+		if (roleIdStr == null || roleIdStr.isEmpty()) {
+			users = userService.allUsers(user, pageNumber, PerPage.USERS_ON_PAGE);
+			userCount = userService.countUsers();
+
+		} else {
+			int roleId = Integer.parseInt(roleIdStr);
+			users = userService.getUsersByRole(user, pageNumber, PerPage.USERS_ON_PAGE, roleId);
+			req.setAttribute(RequestNameParameters.USER_ROLE_ID, roleId);
+			userCount = userService.countByRole(roleId);
+		}
+
+		req.setAttribute(RequestNameParameters.USERS, users);
+		req.setAttribute(RequestNameParameters.PAGE_NUMBER, pageNumber);
+		req.setAttribute(RequestNameParameters.USER_COUNT, userCount);
+		req.setAttribute(RequestNameParameters.PER_PAGE, PerPage.USERS_ON_PAGE);
+		req.setAttribute(RequestNameParameters.CURRENT_COMMAND, NAME_CURRENT_COMMAND);
+
 	}
 }

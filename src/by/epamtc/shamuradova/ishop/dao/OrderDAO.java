@@ -45,4 +45,11 @@ public interface OrderDAO {
 
 	public List<String> getListStatuses() throws DAOException;
 
+	public List<Order> getListOrdersByStatus(int limit, int offset, String status) throws DAOException;
+
+	public List<Order> getListOrdersByUserIdAndStatuc(int id, int limit, int offset, String status) throws DAOException;
+
+	public int countOrdersByStatus(String status) throws DAOException;
+
+	
 }
