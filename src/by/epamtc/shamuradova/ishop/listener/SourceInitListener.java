@@ -28,7 +28,7 @@ public class SourceInitListener implements ServletContextListener{
 
 	@Override
 	public void contextInitialized(ServletContextEvent arg0) {
-	
+	//коннекшен пул инициализирует себя сам в конструкторе
 	}
 
 }

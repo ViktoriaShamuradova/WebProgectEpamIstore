@@ -3,3 +3,5 @@
 [ERROR] 2020-11-17 17:04:25.402 [main] Example - Test log message
 [INFO ] 2020-11-25 15:41:48.722 [main] Ex - Test log message
 [INFO ] 2020-12-02 15:22:44.607 [main] ConnectionPool - pool initialized
+[INFO ] 2020-12-04 18:41:08.106 [main] ConnectionPool - pool initialized
+[INFO ] 2020-12-04 18:41:08.159 [main] ConnectionPool - pool initialized

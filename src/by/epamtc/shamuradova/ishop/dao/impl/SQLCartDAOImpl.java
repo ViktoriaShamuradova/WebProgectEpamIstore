@@ -66,7 +66,7 @@ public class SQLCartDAOImpl implements CartDAO {
 			logger.error("Database error! Could not delete CartItem.", e);
 			throw new DAOException("Database error! Could not delete CartItem.", e);
 		} finally {
-			freeConnection(connection);
+			pool.free(connection);
 		}
 	}
 
@@ -93,7 +93,7 @@ public class SQLCartDAOImpl implements CartDAO {
 			throw new DAOException("Could not get Cart", e);
 
 		} finally {
-			freeConnection(connection);
+			pool.free(connection);
 		}
 	}
 
@@ -118,7 +118,7 @@ public class SQLCartDAOImpl implements CartDAO {
 			logger.error("Database error! Could not get list of CartItems", e);
 			throw new DAOException("Could not get list of CartItems", e);
 		} finally {
-			freeConnection(connection);
+			pool.free(connection);
 		}
 	}
 
@@ -141,7 +141,7 @@ public class SQLCartDAOImpl implements CartDAO {
 			logger.error("Database error! Could not add Cart", e);
 			throw new DAOException("Could not add Cart", e);
 		} finally {
-			freeConnection(connection);
+			pool.free(connection);
 		}
 	}
 
@@ -166,7 +166,7 @@ public class SQLCartDAOImpl implements CartDAO {
 			logger.error("Database error! Could not add CartItem", e);
 			throw new DAOException("Could not add CartItem", e);
 		} finally {
-			freeConnection(connection);
+			pool.free(connection);
 		}
 	}
 
@@ -192,7 +192,7 @@ public class SQLCartDAOImpl implements CartDAO {
 			logger.error("Database error! Could not update CartItem", e);
 			throw new DAOException("Could not update CartItem", e);
 		} finally {
-			freeConnection(connection);
+			pool.free(connection);
 		}
 	}
 
@@ -220,7 +220,7 @@ public class SQLCartDAOImpl implements CartDAO {
 			logger.error("Database error! Could not get total sum of cart", e);
 			throw new DAOException("Could not get total sum of cart", e);
 		} finally {
-			freeConnection(connection);
+			pool.free(connection);
 		}
 	}
 
@@ -248,7 +248,7 @@ public class SQLCartDAOImpl implements CartDAO {
 			logger.error("Database error! Could not get total count of cart", e);
 			throw new DAOException("Could not get total count of cart", e);
 		} finally {
-			freeConnection(connection);
+			pool.free(connection);
 		}
 	}
 
@@ -286,7 +286,7 @@ public class SQLCartDAOImpl implements CartDAO {
 			logger.error("Database error! Could not get list of ShopCartItem", e);
 			throw new DAOException("Could not get list of ShopCartItem", e);
 		} finally {
-			freeConnection(connection);
+			pool.free(connection);
 			if (prStatement != null) {
 				try {
 					prStatement.close();
@@ -297,6 +297,7 @@ public class SQLCartDAOImpl implements CartDAO {
 			}
 		}
 	}
+
 	/**
 	 * Execute the SQL statement, removes Cart by id user
 	 *
@@ -316,13 +317,14 @@ public class SQLCartDAOImpl implements CartDAO {
 			throw new DAOException(e);
 
 		} finally {
-			freeConnection(connection);
+			pool.free(connection);
 		}
 	}
+
 	/**
 	 * Execute the SQL statement, get CartItem by cart id, model id
 	 *
-	 * @param cartId unique cart identifier in database
+	 * @param cartId  unique cart identifier in database
 	 * @param modelId unique model identifier in database
 	 * @return CartItem
 	 * @throws DAOException if occurred severe problem with database
@@ -343,13 +345,14 @@ public class SQLCartDAOImpl implements CartDAO {
 			throw new DAOException("Could not get CartItem. Could not get CartItem", e);
 
 		} finally {
-			freeConnection(connection);
+			pool.free(connection);
 		}
 	}
+
 	/**
 	 * Execute the SQL statement, delete CartItem by cart id, model id
 	 *
-	 * @param cartId unique cart identifier in database
+	 * @param cartId  unique cart identifier in database
 	 * @param modelId unique model identifier in database
 	 * @return CartItem
 	 * @throws DAOException if occurred severe problem with database
@@ -367,17 +370,8 @@ public class SQLCartDAOImpl implements CartDAO {
 			throw new DAOException("Database error! Could not get CartItem. Could not get CartItem", e);
 
 		} finally {
-			freeConnection(connection);
+			pool.free(connection);
 		}
 	}
 
-	private void freeConnection(Connection connection) throws DAOException {
-		if (connection != null) {
-			try {
-				pool.free(connection);
-			} catch (ConnectionPoolException e) {
-				throw new DAOException(e);
-			}
-		}
-	}
 }

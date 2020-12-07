@@ -50,7 +50,7 @@ public class OrderServiceImpl implements OrderService {
 			int idOrder = createOrder(shopCart, user.getId());
 
 			deleteCart(cart, user);
-
+			logger.info("Order is formed");
 			return idOrder;
 		} catch (DAOException e) {
 			logger.error("Could not make order.", e);

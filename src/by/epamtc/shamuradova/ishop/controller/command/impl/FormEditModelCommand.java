@@ -68,4 +68,8 @@ public class FormEditModelCommand implements Command {
 			resp.sendRedirect(ERROR_COMMAND);
 		}
 	}
+	public static void main(String[] args) {
+		HashMap h;
+		ArrayList
+	}
 }

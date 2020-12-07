@@ -55,7 +55,7 @@ public class ConnectionPool {
 		return instance;
 	}
 
-	public void initPoolData() throws ConnectionPoolException {
+	public void initPoolData() {
 		try {
 			ResourceProperty resProperty = new ResourceProperty(PROPERTY);
 			String driverName = resProperty.getValue(DBParameter.DB_DRIVER);
@@ -89,7 +89,7 @@ public class ConnectionPool {
 		}
 	}
 
-	public void free(Connection connection) throws ConnectionPoolException {
+	public void free(Connection connection) {
 		try {
 			busyConnections.remove(connection);
 			freeConnections.put(connection);
@@ -104,8 +104,7 @@ public class ConnectionPool {
 		clearBusyConnections();
 	}
 
-	private void addConnectionsInFreeConnections(String url, String user, String password)
-			throws ConnectionPoolException {
+	private void addConnectionsInFreeConnections(String url, String user, String password) {
 		try {
 			for (int i = 0; i < poolSize; i++) {
 				Connection conn = DriverManager.getConnection(url, user, password);

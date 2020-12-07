@@ -69,7 +69,7 @@
 		  						<div class="row">
 									<div class="col">
 										<label for="formGroupExampleInput"><c:out value="${categoryLoc}"/></label>
-										<input type="text" class="form-control" required name="modelCategory" placeholder="Category" value="${model.category }">
+										<input type="text" class="form-control" required name="category" placeholder="Category" value="${model.category }">
 									</div>
 									
 									<div class="col">
@@ -118,7 +118,7 @@
 		  						<div class="row">
 									<div class="col">
 										<label for="formGroupExampleInput"><c:out value="${categoryLoc}"/></label>
-										<input type="text" class="form-control" required name="modelCategory" placeholder="Category" value="">
+										<input type="text" class="form-control" required name="category" placeholder="Category" value="">
 									</div>
 									
 									<div class="col">

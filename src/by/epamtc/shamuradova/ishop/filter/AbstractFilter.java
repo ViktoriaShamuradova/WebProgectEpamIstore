@@ -14,6 +14,15 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+/**
+ * Базовый обработчик-фильтр, избавляет дублирование приведение типов с
+ * ServletRequest в HttpServletRequest во всех конкретных фильтрах-обработчиках
+ * 
+ * Basic filter handler, eliminates duplicate casting from ServletRequest to
+ * HttpServletRequest in all specific filter handlers
+ *
+ * @author Victoria Shamuradova 2020
+ */
 public abstract class AbstractFilter implements Filter {
 
 	protected final Logger logger = LogManager.getLogger(getClass());
@@ -28,7 +37,7 @@ public abstract class AbstractFilter implements Filter {
 
 	@Override
 	public final void doFilter(ServletRequest request, ServletResponse response, FilterChain chain)
-			throws ServletException, IOException  {
+			throws ServletException, IOException {
 		HttpServletRequest req = (HttpServletRequest) request;
 		HttpServletResponse resp = (HttpServletResponse) response;
 
@@ -36,8 +45,9 @@ public abstract class AbstractFilter implements Filter {
 
 	}
 
-	public abstract void doFilter(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException;
-	
+	public abstract void doFilter(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
+			throws ServletException, IOException;
+
 	@Override
 	public void destroy() {
 

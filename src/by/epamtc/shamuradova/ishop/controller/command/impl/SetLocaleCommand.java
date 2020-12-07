@@ -41,7 +41,7 @@ public class SetLocaleCommand implements Command {
 			break;
 		}
 
-		String redirectTo = (String) req.getAttribute(RequestNameParameters.REDIRECT_TO);
+		String redirectTo = (String) req.getParameter(RequestNameParameters.REDIRECT_TO);
 		resp.sendRedirect(redirectTo);
 	}
 }

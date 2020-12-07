@@ -31,9 +31,6 @@ public class SaveNewModelCommand implements Command {
 	private static final String ERROR_COMMAND = "controller?command=GET_ERROR_PAGE";
 	
 
-	//private static final String MODEL_CATEGORY = "controller?command=GET_ERROR_PAGE";
-	
-
 	private ModelService modelService;
 
 	public SaveNewModelCommand() {
@@ -53,7 +50,7 @@ public class SaveNewModelCommand implements Command {
 			modelEdition.setPrice(new BigDecimal(req.getParameter(RequestNameParameters.MODEL_PRICE).replace(',', '.')).setScale(2));
 			modelEdition.setDescription(req.getParameter(RequestNameParameters.MODEL_DESCRIPTION));
 			modelEdition.setCount(Integer.parseInt(req.getParameter(RequestNameParameters.MODEL_COUNT)));
-			//modelEdition.setCategory(req.getParameter(MODEL_CATEGORY));
+			modelEdition.setCategory(req.getParameter(RequestNameParameters.MODEL_CATEGORY));
 			modelEdition.setProducer(req.getParameter(RequestNameParameters.MODEL_PRODUCER));
 
 			modelService.saveNewModel(user, modelEdition);
